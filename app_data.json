@@ -1004,12 +1004,6 @@
               "completedAt": null,
               "subtasks": [
                 {
-                  "id": "5cd4445a-f9f8-49c6-ac20-a11176c1d46c",
-                  "content": "第｛num｝点",
-                  "completed": false,
-                  "order": 1
-                },
-                {
                   "id": "960c0f70-470a-4d38-b5ab-607b06180caa",
                   "content": "第｛num｝点",
                   "completed": false,
