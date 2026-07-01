@@ -948,58 +948,6 @@
                 "order": 3
               }
             ]
-          },
-          {
-            "id": "97429a1e-4c4d-494b-925d-e7a766be1235",
-            "content": "英语 预默",
-            "completed": false,
-            "order": 3,
-            "createdAt": 1782899962370,
-            "completedAt": null,
-            "subtasks": [
-              {
-                "id": "ee60f39d-78f2-482f-af6e-13e0e494a6fc",
-                "content": "第1单元",
-                "completed": false,
-                "order": 0
-              },
-              {
-                "id": "3c61f318-c46f-4c26-8406-fb8e8d94f3a1",
-                "content": "第2单元",
-                "completed": false,
-                "order": 1
-              },
-              {
-                "id": "ebc38ccc-cf64-4467-8f34-a34434f32f93",
-                "content": "第3单元",
-                "completed": false,
-                "order": 2
-              },
-              {
-                "id": "f7448b0b-ec8d-40a9-810f-77b27a49a1a2",
-                "content": "第4单元",
-                "completed": false,
-                "order": 3
-              },
-              {
-                "id": "ac88f0c5-14ef-4fc6-ac5c-df38c7af74c0",
-                "content": "第6单元",
-                "completed": false,
-                "order": 5
-              },
-              {
-                "id": "7015ddf7-b1b1-464c-b3a0-82385ac73112",
-                "content": "第7单元",
-                "completed": false,
-                "order": 6
-              },
-              {
-                "id": "43596d23-dd90-45e5-8bce-ce378b876d12",
-                "content": "第8单元",
-                "completed": false,
-                "order": 7
-              }
-            ]
           }
         ]
       }
