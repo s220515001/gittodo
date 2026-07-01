@@ -14,14 +14,7 @@
             "order": 0,
             "createdAt": 1782893176889,
             "completedAt": null,
-            "subtasks": [
-              {
-                "id": "16188f67-72dd-423b-8fd1-68f09cd8287b",
-                "content": "语文%P1-2%%U1-3%",
-                "completed": false,
-                "order": 0
-              }
-            ]
+            "subtasks": []
           },
           {
             "id": "a14bca0e-b8da-4646-a8c2-f36e0ce0d56d",
