@@ -8,28 +8,6 @@
         "createdAt": 1782885580563,
         "tasks": [
           {
-            "id": "a14bca0e-b8da-4646-a8c2-f36e0ce0d56d",
-            "content": "语文%P1-2%",
-            "completed": false,
-            "order": 1,
-            "createdAt": 1782893450239,
-            "completedAt": null,
-            "subtasks": [
-              {
-                "id": "b3a60022-5aa4-47d1-b036-be5d139d2477",
-                "content": "第1页",
-                "completed": false,
-                "order": 0
-              },
-              {
-                "id": "9eb761df-7a85-4eb8-a177-9f47e560c720",
-                "content": "第2页",
-                "completed": false,
-                "order": 1
-              }
-            ]
-          },
-          {
             "id": "e783ebd6-3827-4c07-b7ec-27ce9f626541",
             "content": "数学",
             "completed": false,
