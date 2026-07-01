@@ -986,18 +986,6 @@
                   "order": 3
                 }
               ]
-            },
-            {
-              "id": "5dd41cb3-e90c-4767-b5c9-679203607b9e",
-              "content": "语文%T1-10:2 & P1-5:2%%W1-10:1 & U1-5:3 & T1-10:2 & P1-5:2%%S1-10:1 & Q1-5:3%%T1-10:2 & P1-5:2%%W1-10:1 & U1-5:3 & T1-10:2 & P1-5:2%%S1-10:1 & Q1-5:3%",
-              "completed": false,
-              "order": 4,
-              "createdAt": 1782949077040,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
             }
           ]
         },
