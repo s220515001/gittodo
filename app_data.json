@@ -994,17 +994,7 @@
           "name": "明日必做",
           "order": 1,
           "createdAt": 1782918041910,
-          "tasks": [
-            {
-              "id": "be9aaa6d-8b49-4ead-9ea1-8f1a2d3b0ee6",
-              "content": "明天就要出分了 你紧张吗 在以下时间打勾%#7,13,16,18｛num｝点%",
-              "completed": false,
-              "order": 0,
-              "createdAt": 1782918524872,
-              "completedAt": null,
-              "subtasks": []
-            }
-          ]
+          "tasks": []
         }
       ]
     }
