@@ -1040,7 +1040,7 @@
                 {
                   "id": "faf8f5c6-6d69-4aac-a4ad-85e410fc63b6",
                   "content": "7点",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
