@@ -998,15 +998,15 @@
             {
               "id": "35592b30-3a86-4ba7-b1b1-bd8b55e382cd",
               "content": "明天就要出分了 你紧张吗 在以下时间打勾",
-              "completed": true,
+              "completed": false,
               "order": 0,
               "createdAt": 1782918613294,
-              "completedAt": 1782918746425,
+              "completedAt": null,
               "subtasks": [
                 {
                   "id": "d051bd0e-5c84-41d6-aa87-4f5118def3c7",
                   "content": "7点",
-                  "completed": true,
+                  "completed": false,
                   "order": 0
                 },
                 {
