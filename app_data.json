@@ -1024,7 +1024,7 @@
                 {
                   "id": "7848a7cd-07bb-4a6e-bd0f-3be297f8b88a",
                   "content": "18点",
-                  "completed": true,
+                  "completed": false,
                   "order": 3
                 }
               ]
