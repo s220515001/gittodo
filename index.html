@@ -1,1839 +1,1287 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>任务管理 - GitTodo</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+    <title>GitTodo · 任务管理</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet" />
     <style>
-        /* ============================================
-         * 重要提示 - 给未来的AI/开发者
-         * ============================================
-         * 1. 禁止使用 Emoji 表情符号，所有图标使用 SVG
-         * 2. 优先使用 CSS 变量，保持主题一致性
-         * 3. 所有交互元素必须有 hover 效果
-         * 4. 深色模式必须完整适配
-         * 5. 移动端需要响应式适配
-         * 6. 代码注释使用中文
-         * 7. 乐观更新：先更新 UI，再同步服务端
-         * ============================================
-         */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* ===== CSS 变量（浅色/深色） ===== */
         :root {
-            --bg-primary: #f0f3f5;
+            --bg-primary: #f6f8fa;
             --bg-secondary: #ffffff;
-            --bg-sidebar: #f3f4f6;
             --bg-card: #ffffff;
-            --bg-task: #e7ebee;
-            --bg-task-hover: #dde2e6;
-            --bg-input: #ffffff;
-            --text-primary: #2c2c2c;
-            --text-secondary: #4a4a4a;
-            --text-muted: #888888;
-            --text-white: #ffffff;
+            --bg-input: #f0f2f5;
+            --bg-hover: #eef2f7;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
             --border-color: #e5e7eb;
-            --border-task: #8ba0b1;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 10px rgba(0,0,0,0.1);
-            --primary-blue: #254e68;
-            --primary-blue-light: #3a7cae;
-            --accent-blue: #1b5077;
-            --checkbox-bg: #8d9ca8;
-            --checkbox-checked: #254e68;
-            --star-color: #f5a623;
-            --danger-color: #d32f2f;
-            --success-color: #2e7d32;
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --transition: 0.2s ease;
-            --header-bg: #254e68;
-            --header-text: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-light: #dbeafe;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --success: #22c55e;
+            --checkbox-size: 22px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         [data-theme="dark"] {
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #16213e;
-            --bg-sidebar: #0f1923;
-            --bg-card: #2a2a4a;
-            --bg-task: #2a2a4a;
-            --bg-task-hover: #3a3a5a;
-            --bg-input: #2a2a4a;
-            --text-primary: #d0d0d0;
-            --text-secondary: #a0a0a0;
-            --text-muted: #6a6a8a;
-            --text-white: #ffffff;
-            --border-color: #3a3a5a;
-            --border-task: #4a4a6a;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 10px rgba(0,0,0,0.4);
-            --primary-blue: #1a2a3a;
-            --primary-blue-light: #3a6a8a;
-            --accent-blue: #4a8aaa;
-            --checkbox-bg: #4a5a6a;
-            --checkbox-checked: #4a8aaa;
-            --header-bg: #0f1923;
-            --header-text: #d0d0d0;
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2333;
+            --bg-input: #2d3748;
+            --bg-hover: #2d3748;
+            --text-primary: #e6edf3;
+            --text-secondary: #b0c4de;
+            --text-muted: #6e7a8a;
+            --border-color: #30363d;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.6);
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --accent-light: #1f2a3f;
+            --danger: #f85149;
+            --danger-hover: #da3633;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: var(--font);
             background: var(--bg-primary);
             color: var(--text-primary);
-            height: 100vh;
-            overflow: hidden;
-            transition: background 0.3s, color 0.3s;
+            transition: background var(--transition), color var(--transition);
+            min-height: 100vh;
+            padding: 20px 16px 40px;
+            display: flex;
+            justify-content: center;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ========== 布局 ========== */
-        .app-container {
-            display: flex;
-            height: 100vh;
+        #app {
+            max-width: 700px;
             width: 100%;
         }
 
-        /* ========== 侧边栏 ========== */
-        .sidebar {
-            width: 280px;
-            background: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            padding: 16px 0 12px 0;
-            flex-shrink: 0;
-            overflow-y: auto;
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        .profile-section {
-            padding: 0 16px 16px 16px;
+        .app-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
             gap: 12px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 16px;
-            margin-bottom: 12px;
         }
 
-        .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary-blue-light);
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
-            font-size: 16px;
+            color: white;
             font-weight: 600;
+            font-size: 18px;
             flex-shrink: 0;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        .profile-avatar:hover {
-            opacity: 0.8;
         }
 
-        .profile-info {
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 40px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-hover);
+            transform: scale(1.03);
+        }
+
+        .theme-toggle svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .sync-status {
+            font-size: 13px;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 6px 14px;
+            border-radius: 40px;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sync-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .sync-dot.syncing {
+            background: #f59e0b;
+            animation: pulse-dot 1s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .groups-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .group-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: box-shadow var(--transition), border var(--transition);
+        }
+
+        .group-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .group-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             flex: 1;
             min-width: 0;
         }
-        .profile-info .name {
-            font-size: 14px;
-            font-weight: 500;
+
+        .group-title-input {
+            font-size: 18px;
+            font-weight: 600;
+            background: transparent;
+            border: none;
             color: var(--text-primary);
-        }
-        .profile-info .email {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .sidebar .nav-list {
-            flex: 1;
-            margin: 0 12px;
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+            padding: 4px 0;
+            width: 100%;
+            min-width: 80px;
+            outline: none;
+            font-family: var(--font);
+            letter-spacing: -0.2px;
+            border-bottom: 2px solid transparent;
+            transition: border var(--transition);
         }
 
-        .sidebar .nav-list li {
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
+        .group-title-input:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .group-actions {
             display: flex;
-            align-items: center;
-            gap: 14px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: background 0.15s, color 0.15s;
-            position: relative;
-        }
-        .sidebar .nav-list li:hover {
-            background: rgba(0,0,0,0.05);
-        }
-        .sidebar .nav-list li.active {
-            background: rgba(0,0,0,0.08);
-            font-weight: 500;
-            color: var(--accent-blue);
-        }
-        .sidebar .nav-list li svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-            flex-shrink: 0;
-        }
-        .sidebar .nav-list li .group-name {
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .sidebar .nav-list li .group-count {
-            font-size: 12px;
-            color: var(--text-muted);
-            background: var(--border-color);
-            padding: 0 8px;
-            border-radius: 12px;
-            font-weight: 400;
-        }
-        .sidebar .nav-list li .group-actions {
-            display: none;
             gap: 4px;
             flex-shrink: 0;
         }
-        .sidebar .nav-list li:hover .group-actions {
-            display: flex;
-        }
-        .sidebar .nav-list li .group-actions button {
-            background: none;
+
+        .btn-icon {
+            background: transparent;
             border: none;
-            cursor: pointer;
-            color: var(--text-muted);
-            padding: 4px;
-            border-radius: 4px;
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.15s, color 0.15s;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all var(--transition);
         }
-        .sidebar .nav-list li .group-actions button:hover {
-            background: rgba(0,0,0,0.08);
+
+        .btn-icon:hover {
+            background: var(--bg-hover);
             color: var(--text-primary);
         }
-        .sidebar .nav-list li .group-actions button.danger:hover {
-            color: var(--danger-color);
-            background: rgba(211,47,47,0.1);
+        .btn-icon.danger:hover {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+        [data-theme="dark"] .btn-icon.danger:hover {
+            background: #2d1b1b;
+            color: var(--danger);
         }
 
-        .sidebar .nav-list .bottom-action {
-            margin-top: auto;
-            padding-top: 12px;
-            border-top: 1px solid var(--border-color);
-            color: var(--accent-blue);
-            font-weight: 500;
-        }
-        .sidebar .nav-list .bottom-action:hover {
-            background: rgba(0,0,0,0.04);
-        }
-
-        /* 主题切换按钮 */
-        .theme-toggle {
-            padding: 10px 14px;
-            margin: 4px 12px 0 12px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: background 0.15s;
-            border: none;
-            background: transparent;
-            width: calc(100% - 24px);
-        }
-        .theme-toggle:hover {
-            background: rgba(0,0,0,0.05);
-        }
-        .theme-toggle svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-        }
-
-        /* ========== 主内容区 ========== */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: var(--bg-primary);
-            overflow: hidden;
-            transition: background 0.3s;
-        }
-
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 32px 16px 32px;
-            background: var(--header-bg);
-            color: var(--header-text);
-            flex-shrink: 0;
-            transition: background 0.3s, color 0.3s;
-        }
-        .content-header h1 {
-            font-size: 22px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .content-header h1 .edit-group-name {
-            background: transparent;
-            border: none;
-            color: inherit;
-            font-size: 22px;
-            font-weight: 500;
-            padding: 4px 8px;
-            border-radius: var(--radius-sm);
-            min-width: 120px;
-            font-family: inherit;
-            transition: background 0.2s;
-        }
-        .content-header h1 .edit-group-name:hover,
-        .content-header h1 .edit-group-name:focus {
-            background: rgba(255,255,255,0.1);
-        }
-        .content-header h1 .edit-group-name:focus {
-            outline: 2px solid rgba(255,255,255,0.3);
-        }
-        .content-header .header-actions {
-            display: flex;
-            gap: 12px;
-        }
-        .content-header .header-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--header-text);
-            opacity: 0.7;
-            padding: 4px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.2s, background 0.2s;
-        }
-        .content-header .header-actions button:hover {
-            opacity: 1;
-            background: rgba(255,255,255,0.1);
-        }
-        .content-header .header-actions button svg {
+        .btn-icon svg {
             width: 20px;
             height: 20px;
-            fill: currentColor;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        /* ========== 任务面板 ========== */
-        .todo-container {
-            flex: 1;
-            background: var(--bg-card);
-            margin: 0 32px 32px 32px;
-            border-radius: var(--radius-md);
-            overflow-y: auto;
-            padding: 16px 0 8px 0;
-            box-shadow: var(--shadow-md);
-            transition: background 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-        .todo-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        .todo-container::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-        .todo-container::-webkit-scrollbar-track {
-            background: transparent;
+        .task-list {
+            padding: 8px 12px 12px;
+            min-height: 60px;
         }
 
-        /* ========== 过滤栏 ========== */
-        .filter-bar {
-            padding: 0 20px 8px 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0;
-        }
-        .filter-bar .filter-label {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            user-select: none;
-        }
-        .filter-bar .filter-label svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
-            transition: transform 0.2s;
-        }
-        .filter-bar .filter-label.expanded svg {
-            transform: rotate(180deg);
-        }
-        .filter-bar .filter-stats {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* ========== 任务列表 ========== */
-        .todo-list {
-            padding: 12px 20px 8px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-            overflow-y: auto;
-        }
-        .todo-list.drag-over {
-            background: rgba(0,0,0,0.03);
-            border-radius: var(--radius-sm);
-        }
-
-        /* ========== 单个任务项 ========== */
-        .todo-item {
-            background: var(--bg-task);
-            padding: 12px 12px;
-            border-radius: var(--radius-sm);
+        .task-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: background 0.15s, opacity 0.2s, transform 0.15s;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+            margin-bottom: 6px;
+            border: 1px solid transparent;
+            transition: all var(--transition);
             cursor: grab;
-            border: 2px solid transparent;
             position: relative;
         }
-        .todo-item:hover {
-            background: var(--bg-task-hover);
+
+        .task-item:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-color);
         }
-        .todo-item.dragging {
+        .task-item.dragging {
             opacity: 0.5;
-            transform: scale(0.98);
-        }
-        .todo-item.drag-over {
-            border-color: var(--accent-blue);
-        }
-        .todo-item.completed {
-            opacity: 0.6;
-        }
-        .todo-item.completed .content-text {
-            text-decoration: line-through;
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
         }
 
-        .todo-item .checkbox {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+        .task-checkbox {
             flex-shrink: 0;
+            width: var(--checkbox-size);
+            height: var(--checkbox-size);
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
-            border: 2px solid var(--checkbox-bg);
-            background: transparent;
-        }
-        .todo-item .checkbox:hover {
-            border-color: var(--accent-blue);
-        }
-        .todo-item .checkbox.checked {
-            background: var(--checkbox-checked);
-            border-color: var(--checkbox-checked);
-        }
-        .todo-item .checkbox.checked svg {
-            opacity: 1;
-        }
-        .todo-item .checkbox svg {
-            width: 14px;
-            height: 14px;
-            fill: #fff;
-            opacity: 0;
-            transition: opacity 0.2s;
+            transition: all var(--transition);
+            color: white;
+            -webkit-appearance: none;
+            appearance: none;
+            position: relative;
         }
 
-        .todo-item .drag-handle {
-            cursor: grab;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            opacity: 0.3;
-            transition: opacity 0.2s;
-            padding: 0 2px;
+        .task-checkbox:checked {
+            background: var(--accent);
+            border-color: var(--accent);
         }
-        .todo-item:hover .drag-handle {
-            opacity: 0.7;
-        }
-        .todo-item .drag-handle svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
-        .todo-item .content-text {
-            flex: 1;
+        .task-checkbox:checked::after {
+            content: '✓';
             font-size: 14px;
+            color: white;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .task-checkbox:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .task-content {
+            flex: 1;
+            font-size: 15px;
             color: var(--text-primary);
             word-break: break-word;
-            padding: 2px 0;
-            border: none;
-            background: transparent;
-            font-family: inherit;
-            resize: none;
-        }
-        .todo-item .content-text:focus {
-            outline: none;
-        }
-        .todo-item .content-text[readonly] {
-            cursor: default;
+            min-width: 0;
         }
 
-        .todo-item .task-actions {
-            display: none;
-            gap: 4px;
+        .task-content.completed {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .task-edit-input {
+            flex: 1;
+            font-size: 15px;
+            font-family: var(--font);
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px 10px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border var(--transition);
+            min-width: 60px;
+        }
+        .task-edit-input:focus {
+            border-color: var(--accent);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 2px;
             flex-shrink: 0;
         }
-        .todo-item:hover .task-actions {
-            display: flex;
+
+        .task-actions .btn-icon {
+            width: 30px;
+            height: 30px;
         }
-        .todo-item .task-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-muted);
-            padding: 4px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.15s, color 0.15s;
-        }
-        .todo-item .task-actions button:hover {
-            background: rgba(0,0,0,0.08);
-            color: var(--text-primary);
-        }
-        .todo-item .task-actions button.danger:hover {
-            color: var(--danger-color);
-            background: rgba(211,47,47,0.1);
+        .task-actions .btn-icon svg {
+            width: 18px;
+            height: 18px;
         }
 
-        /* ========== 添加任务行 ========== */
-        .todo-item.add-new {
-            background: transparent;
-            border: 2px dashed var(--border-color);
-            cursor: text;
-            transition: border-color 0.2s, background 0.2s;
-        }
-        .todo-item.add-new:hover {
-            background: rgba(0,0,0,0.02);
-            border-color: var(--accent-blue);
-        }
-        .todo-item.add-new .checkbox {
-            border-color: var(--border-color);
-            background: transparent;
-        }
-        .todo-item.add-new .content-text {
+        .drag-handle {
+            cursor: grab;
             color: var(--text-muted);
-            border: none;
-            outline: none;
-            background: transparent;
-            font-family: inherit;
-            font-size: 14px;
+            padding: 0 4px;
+            user-select: none;
+            flex-shrink: 0;
         }
-        .todo-item.add-new .content-text:focus {
-            color: var(--text-primary);
-        }
-        .todo-item.add-new .content-text::placeholder {
-            color: var(--text-muted);
-        }
-        .todo-item.add-new .task-actions {
-            display: flex;
-        }
-        .todo-item.add-new .task-actions button {
-            color: var(--accent-blue);
-        }
-        .todo-item.add-new .task-actions button:hover {
-            background: rgba(0,0,0,0.05);
+        .drag-handle svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
         }
 
-        /* ========== 空状态 ========== */
         .empty-state {
+            padding: 30px 16px;
             text-align: center;
-            padding: 40px 20px;
             color: var(--text-muted);
-        }
-        .empty-state svg {
-            opacity: 0.3;
-            margin-bottom: 12px;
-        }
-        .empty-state p {
             font-size: 14px;
         }
 
-        /* ========== Toast 提示 ========== */
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            color: #fff;
-            padding: 10px 24px;
-            border-radius: 20px;
-            font-size: 13px;
-            z-index: 10000;
-            animation: toastIn 0.3s ease;
-            pointer-events: none;
-        }
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .add-group-area {
+            margin-top: 8px;
         }
 
-        /* ========== 模态框 ========== */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9000;
-            animation: fadeIn 0.2s ease;
-        }
-        .modal.hidden {
-            display: none;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            width: 360px;
-            max-width: 90vw;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            animation: slideUp 0.2s ease;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .modal-content h3 {
-            margin-bottom: 16px;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-        .modal-content input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            background: var(--bg-input);
-            color: var(--text-primary);
-            margin-bottom: 16px;
-            transition: border-color 0.2s;
-        }
-        .modal-content input:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-        }
-        .modal-content .modal-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-        .modal-content .modal-actions button {
-            padding: 8px 20px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s, opacity 0.2s;
-        }
-        .modal-content .modal-actions .btn-cancel {
-            background: var(--border-color);
-            color: var(--text-secondary);
-        }
-        .modal-content .modal-actions .btn-cancel:hover {
-            background: var(--bg-task-hover);
-        }
-        .modal-content .modal-actions .btn-confirm {
-            background: var(--accent-blue);
-            color: #fff;
-        }
-        .modal-content .modal-actions .btn-confirm:hover {
-            opacity: 0.85;
-        }
-        .modal-content .modal-actions .btn-danger {
-            background: var(--danger-color);
-            color: #fff;
-        }
-        .modal-content .modal-actions .btn-danger:hover {
-            opacity: 0.85;
-        }
-
-        /* ========== 同步状态指示器 ========== */
-        .sync-status {
-            display: flex;
+        .add-group-btn,
+        .add-task-btn {
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 12px;
-            color: var(--text-muted);
-            padding: 0 12px;
-        }
-        .sync-status .spinning {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ========== 拖拽排序视觉反馈 ========== */
-        .drag-overlay {
-            pointer-events: none;
-            opacity: 0.7;
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 1px dashed var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: all var(--transition);
         }
 
-        /* ========== 响应式 ========== */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 200px;
-                padding: 12px 0;
-            }
-            .profile-section {
-                padding: 0 12px 12px 12px;
-            }
-            .sidebar .nav-list {
-                margin: 0 8px;
-            }
-            .sidebar .nav-list li {
-                padding: 8px 10px;
-                font-size: 13px;
-                gap: 10px;
-            }
-            .sidebar .nav-list li .group-actions {
-                display: flex;
-            }
-            .content-header {
-                padding: 16px 20px 12px 20px;
-            }
-            .content-header h1 {
-                font-size: 18px;
-            }
-            .todo-container {
-                margin: 0 16px 16px 16px;
-            }
-            .todo-list {
-                padding: 8px 12px;
-            }
-            .todo-item {
-                padding: 10px 10px;
-                gap: 10px;
-            }
-            .todo-item .task-actions {
-                display: flex;
-            }
-            .todo-item .drag-handle {
-                opacity: 0.5;
-            }
-            .filter-bar {
-                padding: 0 12px 6px 12px;
-            }
+        .add-group-btn:hover,
+        .add-task-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .add-group-btn svg,
+        .add-task-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .add-task-inline {
+            display: flex;
+            gap: 8px;
+            padding: 6px 12px 12px;
+            align-items: center;
+        }
+
+        .add-task-inline input {
+            flex: 1;
+            padding: 8px 14px;
+            border-radius: 40px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: var(--font);
+            outline: none;
+            transition: border var(--transition);
+            min-width: 0;
+        }
+        .add-task-inline input:focus {
+            border-color: var(--accent);
+        }
+
+        .add-task-inline .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 14px;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: background var(--transition);
+            white-space: nowrap;
+        }
+        .add-task-inline .btn-primary:hover {
+            background: var(--accent-hover);
         }
 
         @media (max-width: 480px) {
-            .sidebar {
-                width: 56px;
-                padding: 8px 0;
+            .app-header {
+                flex-direction: column;
+                align-items: stretch;
             }
-            .profile-section {
-                padding: 0 8px 8px 8px;
+            .header-actions {
+                justify-content: space-between;
+            }
+            .group-header {
+                flex-wrap: wrap;
+            }
+            .group-title-wrapper {
+                width: 100%;
+            }
+            .task-item {
+                flex-wrap: wrap;
+                padding: 8px 10px;
+            }
+            .task-content {
+                order: 2;
+                flex-basis: calc(100% - 60px);
+            }
+            .task-actions {
+                order: 3;
+                margin-left: auto;
+            }
+            .drag-handle {
+                order: 0;
+            }
+            .task-checkbox {
+                order: 1;
+            }
+            .add-task-inline {
+                flex-wrap: wrap;
+            }
+            .add-task-inline input {
+                flex: 1 1 100%;
+            }
+            .add-task-inline .btn-primary {
+                width: 100%;
                 justify-content: center;
             }
-            .profile-info {
-                display: none;
-            }
-            .sidebar .nav-list li {
-                padding: 10px 8px;
-                justify-content: center;
-            }
-            .sidebar .nav-list li .group-name,
-            .sidebar .nav-list li .group-count {
-                display: none;
-            }
-            .sidebar .nav-list li .group-actions {
-                display: none;
-            }
-            .theme-toggle span {
-                display: none;
-            }
-            .theme-toggle {
-                justify-content: center;
-                padding: 10px 8px;
-                margin: 0 4px;
-                width: auto;
-            }
-            .bottom-action span {
-                display: none;
-            }
-            .content-header {
-                padding: 12px 12px 8px 12px;
-            }
-            .content-header h1 {
-                font-size: 16px;
-            }
-            .todo-container {
-                margin: 0 8px 8px 8px;
-                border-radius: var(--radius-sm);
-            }
-            .todo-list {
-                padding: 4px 8px;
-            }
-            .todo-item {
-                padding: 8px 8px;
-                gap: 8px;
-                font-size: 13px;
-            }
-            .todo-item .content-text {
-                font-size: 13px;
-            }
-            .todo-item .task-actions {
-                display: flex;
-            }
-            .filter-bar {
-                padding: 0 8px 4px 8px;
-                font-size: 12px;
-            }
-            .sync-status {
-                font-size: 10px;
-                padding: 0 4px;
-            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 40px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <!-- ===== 侧边栏 ===== -->
-    <aside class="sidebar" id="sidebar">
-        <div class="profile-section">
-            <div class="profile-avatar" id="profileAvatar" title="点击查看个人资料"></div>
-            <div class="profile-info">
-                <div class="name" id="profileName"></div>
-                <div class="email">任务同步中</div>
+    <div id="app">
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">✔</div>
+                <h1>GitTodo</h1>
             </div>
-        </div>
-
-        <ul class="nav-list" id="groupList">
-            <!-- 动态渲染 -->
-            <li class="bottom-action" id="addGroupBtn">
-                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                <span>新建列表</span>
-            </li>
-        </ul>
-
-        <button class="theme-toggle" id="themeToggle">
-            <svg viewBox="0 0 24 24" id="themeIcon"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/><path d="M12 7v10M7 12h10"/></svg>
-            <span id="themeLabel">浅色</span>
-        </button>
-    </aside>
-
-    <!-- ===== 主内容 ===== -->
-    <main class="main-content">
-        <header class="content-header">
-            <h1>
-                <span id="currentGroupName">选择一个列表</span>
-                <button id="renameGroupBtn" style="background:none;border:none;cursor:pointer;color:inherit;opacity:0.5;padding:4px;border-radius:4px;" title="重命名列表">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                </button>
-            </h1>
             <div class="header-actions">
-                <div class="sync-status" id="syncStatus">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
-                    <span id="syncText">已同步</span>
-                </div>
-                <button id="refreshBtn" title="手动刷新">
-                    <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-                </button>
-                <button id="deleteGroupBtn" title="删除列表" style="opacity:0.4;">
-                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                <span class="sync-status" id="syncStatus">
+                    <span class="sync-dot" id="syncDot"></span>
+                    <span id="syncLabel">已同步</span>
+                </span>
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <svg viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                 </button>
             </div>
         </header>
 
-        <div class="todo-container" id="todoContainer">
-            <div class="filter-bar">
-                <div class="filter-label" id="filterToggle">
-                    <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                    <span id="filterText">显示已完成</span>
-                </div>
-                <div class="filter-stats" id="filterStats">0 / 0</div>
-            </div>
-
-            <div class="todo-list" id="todoList">
-                <!-- 动态渲染 -->
-                <div class="empty-state">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <rect x="3" y="4" width="18" height="18" rx="2"/>
-                        <path d="M8 2v4M16 2v4M3 10h18"/>
-                    </svg>
-                    <p>选择一个列表开始管理任务</p>
-                </div>
-            </div>
+        <div id="groupsContainer" class="groups-container">
+            <!-- 动态渲染 -->
         </div>
-    </main>
-</div>
 
-<!-- ===== 模态框 ===== -->
-<div class="modal hidden" id="modal">
-    <div class="modal-content">
-        <h3 id="modalTitle">新建列表</h3>
-        <input type="text" id="modalInput" placeholder="输入名称..." autofocus>
-        <div class="modal-actions">
-            <button class="btn-cancel" id="modalCancel">取消</button>
-            <button class="btn-confirm" id="modalConfirm">确认</button>
+        <div class="add-group-area">
+            <button class="add-group-btn" id="addGroupBtn">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                新建任务组
+            </button>
         </div>
     </div>
-</div>
 
-<script>
-    // ============================================
-    // 重要提示 - 给未来的AI/开发者
-    // ============================================
-    // 1. 禁止使用 Emoji 表情符号，所有图标使用 SVG
-    // 2. 乐观更新：先更新 UI，再同步服务端
-    // 3. 深色/浅色模式完整适配
-    // 4. 移动端响应式适配
-    // 5. 拖拽排序使用 HTML5 Drag and Drop API
-    // ============================================
-
-    // ========== 配置 ==========
-    const GITHUB_CONFIG = { owner: "s220515001", repo: "my-chat-system", branch: "main" };
-    const TOKEN_BIN_ID = "6a296f88da38895dfea6e9b3";
-
-    let currentUser = null;
-    let todosData = {}; // { username: { groups: [...] } }
-    let currentGroupId = null;
-    let showCompleted = true;
-    let cachedToken = null;
-    let pollInterval = null;
-    let isSyncing = false;
-    let dragSourceId = null;
-    let dragSourceGroupId = null;
-
-    // ========== DOM 引用 ==========
-    const $ = id => document.getElementById(id);
-    const groupList = $('groupList');
-    const todoList = $('todoList');
-    const currentGroupName = $('currentGroupName');
-    const filterToggle = $('filterToggle');
-    const filterText = $('filterText');
-    const filterStats = $('filterStats');
-    const syncText = $('syncText');
-    const modal = $('modal');
-    const modalTitle = $('modalTitle');
-    const modalInput = $('modalInput');
-    const modalConfirm = $('modalConfirm');
-    const modalCancel = $('modalCancel');
-    const themeToggle = $('themeToggle');
-    const themeIcon = $('themeIcon');
-    const themeLabel = $('themeLabel');
-    const profileAvatar = $('profileAvatar');
-    const profileName = $('profileName');
-
-    // ========== GitHub 工具函数 ==========
-    async function getGitHubToken() {
-        if (cachedToken) return cachedToken;
-        try {
-            const res = await fetch(`https://api.jsonbin.io/v3/b/${TOKEN_BIN_ID}/latest`);
-            const data = await res.json();
-            cachedToken = data.record.github_token;
-            return cachedToken;
-        } catch (e) {
-            console.error('获取 Token 失败:', e);
-            return null;
-        }
-    }
-
-    function decodeBase64(str) {
-        try { return decodeURIComponent(escape(atob(str))); } catch (e) { return atob(str); }
-    }
-
-    async function readGitHubFile(filename) {
-        const token = await getGitHubToken();
-        if (!token) return null;
-        const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${filename}?ref=${GITHUB_CONFIG.branch}`;
-        try {
-            const res = await fetch(url, { headers: { Authorization: `token ${token}` } });
-            if (res.status === 404) return null;
-            if (!res.ok) throw new Error(`读取失败: ${res.status}`);
-            const data = await res.json();
-            return JSON.parse(decodeBase64(data.content));
-        } catch (e) {
-            console.error('读取文件失败:', e);
-            return null;
-        }
-    }
-
-    async function writeGitHubFile(filename, content, msg) {
-        const token = await getGitHubToken();
-        if (!token) throw new Error('无法获取 Token');
-        const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${filename}?ref=${GITHUB_CONFIG.branch}`;
-        let sha = null;
-        try {
-            const r = await fetch(url, { headers: { Authorization: `token ${token}` } });
-            if (r.ok) sha = (await r.json()).sha;
-        } catch (e) {}
-        const body = {
-            message: msg || '更新待办数据',
-            content: btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2)))),
-            branch: GITHUB_CONFIG.branch
+    <script>
+        // =====================================================================
+        //  全局状态
+        // =====================================================================
+        const STATE = {
+            data: null,
+            username: null,
+            groups: [],
+            token: null,
+            repoOwner: 's220515001',
+            repoName: 'gittodo',
+            filePath: 'todos.json',
+            jsonbinTokenUrl: 'https://api.jsonbin.io/v3/b/6a296f88da38895dfea6e9b3',
+            pollInterval: 5000,
+            pollTimer: null,
+            isSyncing: false,
+            pendingSave: false,
+            theme: 'light',
         };
-        if (sha) body.sha = sha;
-        const wr = await fetch(url, {
-            method: 'PUT',
-            headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-        if (!wr.ok) throw new Error(`写入失败: ${wr.status}`);
-        return await wr.json();
-    }
 
-    // ========== 数据操作 ==========
-    function generateId() {
-        return `id_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
-    }
+        // =====================================================================
+        //  DOM 引用
+        // =====================================================================
+        const $ = (sel) => document.querySelector(sel);
+        const groupsContainer = $('#groupsContainer');
+        const syncStatusLabel = $('#syncLabel');
+        const syncDot = $('#syncDot');
+        const themeToggle = $('#themeToggle');
+        const addGroupBtn = $('#addGroupBtn');
 
-    async function loadTodos() {
-        const data = await readGitHubFile('todos.json');
-        if (data) todosData = data;
-        return todosData;
-    }
-
-    async function saveTodos() {
-        await writeGitHubFile('todos.json', todosData, '更新待办数据');
-    }
-
-    function getUserTodos() {
-        if (!currentUser) return { groups: [] };
-        if (!todosData[currentUser.username]) {
-            todosData[currentUser.username] = { groups: [] };
-        }
-        return todosData[currentUser.username];
-    }
-
-    function getGroup(groupId) {
-        const userTodos = getUserTodos();
-        return userTodos.groups.find(g => g.id === groupId);
-    }
-
-    function getTasks(groupId) {
-        const group = getGroup(groupId);
-        return group ? group.tasks : [];
-    }
-
-    // ========== 乐观更新：任务组 CRUD ==========
-    async function createGroup(name) {
-        if (!name.trim()) return false;
-        const userTodos = getUserTodos();
-        const newGroup = {
-            id: generateId(),
-            name: name.trim(),
-            order: userTodos.groups.length,
-            createdAt: Date.now(),
-            tasks: []
-        };
-        // 乐观更新
-        userTodos.groups.push(newGroup);
-        renderGroups();
-        if (!currentGroupId) {
-            currentGroupId = newGroup.id;
-            renderTasks();
-        }
-        // 后台同步
-        try {
-            await saveTodos();
-            renderGroups();
-            renderTasks();
-            setSyncStatus('已同步', false);
-        } catch (e) {
-            // 回滚
-            userTodos.groups = userTodos.groups.filter(g => g.id !== newGroup.id);
-            renderGroups();
-            showToast('创建列表失败');
-            setSyncStatus('同步失败', false);
-        }
-        return true;
-    }
-
-    async function renameGroup(groupId, newName) {
-        if (!newName.trim()) return false;
-        const group = getGroup(groupId);
-        if (!group) return false;
-        const oldName = group.name;
-        group.name = newName.trim();
-        renderGroups();
-        if (currentGroupId === groupId) {
-            currentGroupName.textContent = newName.trim();
-        }
-        try {
-            await saveTodos();
-            setSyncStatus('已同步', false);
-        } catch (e) {
-            group.name = oldName;
-            renderGroups();
-            if (currentGroupId === groupId) {
-                currentGroupName.textContent = oldName;
-            }
-            showToast('重命名失败');
-            setSyncStatus('同步失败', false);
-        }
-        return true;
-    }
-
-    async function deleteGroup(groupId) {
-        const userTodos = getUserTodos();
-        const group = getGroup(groupId);
-        if (!group) return false;
-        const index = userTodos.groups.findIndex(g => g.id === groupId);
-        if (index === -1) return false;
-        userTodos.groups.splice(index, 1);
-        if (currentGroupId === groupId) {
-            currentGroupId = userTodos.groups.length > 0 ? userTodos.groups[0].id : null;
-        }
-        renderGroups();
-        renderTasks();
-        try {
-            await saveTodos();
-            setSyncStatus('已同步', false);
-        } catch (e) {
-            userTodos.groups.splice(index, 0, group);
-            currentGroupId = groupId;
-            renderGroups();
-            renderTasks();
-            showToast('删除列表失败');
-            setSyncStatus('同步失败', false);
-        }
-        return true;
-    }
-
-    // ========== 乐观更新：任务 CRUD ==========
-    async function addTask(groupId, content) {
-        if (!content.trim()) return false;
-        const group = getGroup(groupId);
-        if (!group) return false;
-        const newTask = {
-            id: generateId(),
-            content: content.trim(),
-            completed: false,
-            order: group.tasks.length,
-            createdAt: Date.now(),
-            completedAt: null
-        };
-        // 乐观更新
-        group.tasks.push(newTask);
-        renderTasks();
-        // 后台同步
-        try {
-            await saveTodos();
-            renderTasks();
-            setSyncStatus('已同步', false);
-        } catch (e) {
-            group.tasks = group.tasks.filter(t => t.id !== newTask.id);
-            renderTasks();
-            showToast('添加任务失败');
-            setSyncStatus('同步失败', false);
-        }
-        return true;
-    }
-
-    async function toggleTask(groupId, taskId) {
-        const group = getGroup(groupId);
-        if (!group) return false;
-        const task = group.tasks.find(t => t.id === taskId);
-        if (!task) return false;
-        const oldCompleted = task.completed;
-        task.completed = !task.completed;
-        task.completedAt = task.completed ? Date.now() : null;
-        renderTasks();
-        try {
-            await saveTodos();
-            renderTasks();
-            setSyncStatus('已同步', false);
-        } catch (e) {
-            task.completed = oldCompleted;
-            task.completedAt = oldCompleted ? Date.now() : null;
-            renderTasks();
-            showToast('更新任务失败');
-            setSyncStatus('同步失败', false);
-        }
-        return true;
-    }
-
-    async function editTask(groupId, taskId, newContent) {
-        if (!newContent.trim()) return false;
-        const group = getGroup(groupId);
-        if (!group) return false;
-        const task = group.tasks.find(t => t.id === taskId);
-        if (!task) return false;
-        const oldContent = task.content;
-        task.content = newContent.trim();
-        renderTasks();
-        try {
-            await saveTodos();
-            setSyncStatus('已同步', false);
-        } catch (e) {
-            task.content = oldContent;
-            renderTasks();
-            showToast('编辑任务失败');
-            setSyncStatus('同步失败', false);
-        }
-        return true;
-    }
-
-    async function deleteTask(groupId, taskId) {
-        const group = getGroup(groupId);
-        if (!group) return false;
-        const index = group.tasks.findIndex(t => t.id === taskId);
-        if (index === -1) return false;
-        const removed = group.tasks[index];
-        group.tasks.splice(index, 1);
-        renderTasks();
-        try {
-            await saveTodos();
-            setSyncStatus('已同步', false);
-        } catch (e) {
-            group.tasks.splice(index, 0, removed);
-            renderTasks();
-            showToast('删除任务失败');
-            setSyncStatus('同步失败', false);
-        }
-        return true;
-    }
-
-    // ========== 拖拽排序 ==========
-    function initDragDrop() {
-        const list = todoList;
-        list.addEventListener('dragstart', handleDragStart);
-        list.addEventListener('dragend', handleDragEnd);
-        list.addEventListener('dragover', handleDragOver);
-        list.addEventListener('dragenter', handleDragEnter);
-        list.addEventListener('dragleave', handleDragLeave);
-        list.addEventListener('drop', handleDrop);
-    }
-
-    function handleDragStart(e) {
-        const item = e.target.closest('.todo-item');
-        if (!item || item.classList.contains('add-new') || item.dataset.taskId === 'add-new') {
-            e.preventDefault();
-            return;
-        }
-        dragSourceId = item.dataset.taskId;
-        dragSourceGroupId = currentGroupId;
-        item.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', dragSourceId);
-    }
-
-    function handleDragEnd(e) {
-        const item = e.target.closest('.todo-item');
-        if (item) item.classList.remove('dragging');
-        document.querySelectorAll('.todo-item.drag-over').forEach(el => el.classList.remove('drag-over'));
-        todoList.classList.remove('drag-over');
-    }
-
-    function handleDragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        todoList.classList.add('drag-over');
-        const target = e.target.closest('.todo-item');
-        if (target && !target.classList.contains('add-new') && target.dataset.taskId !== 'add-new') {
-            target.classList.add('drag-over');
-        }
-    }
-
-    function handleDragEnter(e) {
-        e.preventDefault();
-    }
-
-    function handleDragLeave(e) {
-        const target = e.target.closest('.todo-item');
-        if (target) target.classList.remove('drag-over');
-    }
-
-    async function handleDrop(e) {
-        e.preventDefault();
-        todoList.classList.remove('drag-over');
-        const target = e.target.closest('.todo-item');
-        if (target) target.classList.remove('drag-over');
-
-        const sourceId = e.dataTransfer.getData('text/plain');
-        if (!sourceId || sourceId === 'add-new') return;
-        if (sourceId === target?.dataset.taskId) return;
-
-        const group = getGroup(currentGroupId);
-        if (!group) return;
-
-        const sourceIndex = group.tasks.findIndex(t => t.id === sourceId);
-        if (sourceIndex === -1) return;
-
-        let targetIndex = -1;
-        if (target && !target.classList.contains('add-new') && target.dataset.taskId !== 'add-new') {
-            targetIndex = group.tasks.findIndex(t => t.id === target.dataset.taskId);
-        } else {
-            // 拖到列表末尾或添加行
-            targetIndex = group.tasks.length;
-        }
-        if (targetIndex === -1) targetIndex = group.tasks.length;
-
-        const [moved] = group.tasks.splice(sourceIndex, 1);
-        const insertIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
-        group.tasks.splice(insertIndex < 0 ? 0 : insertIndex, 0, moved);
-
-        // 更新 order
-        group.tasks.forEach((t, i) => t.order = i);
-
-        renderTasks();
-        try {
-            await saveTodos();
-            setSyncStatus('已同步', false);
-        } catch (e) {
-            // 回滚 - 简单重排
-            group.tasks.sort((a, b) => a.order - b.order);
-            renderTasks();
-            showToast('排序失败');
-            setSyncStatus('同步失败', false);
-        }
-    }
-
-    // ========== 渲染函数 ==========
-    function renderGroups() {
-        const userTodos = getUserTodos();
-        const groups = userTodos.groups || [];
-
-        // 清除现有列表项（保留底部按钮）
-        const items = groupList.querySelectorAll('li:not(.bottom-action)');
-        items.forEach(el => el.remove());
-
-        const bottomAction = groupList.querySelector('.bottom-action');
-
-        groups.sort((a, b) => (a.order || 0) - (b.order || 0));
-
-        groups.forEach(group => {
-            const li = document.createElement('li');
-            const taskCount = group.tasks ? group.tasks.filter(t => !t.completed).length : 0;
-            li.dataset.groupId = group.id;
-            li.className = currentGroupId === group.id ? 'active' : '';
-            li.innerHTML = `
-                <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-                <span class="group-name">${escapeHtml(group.name)}</span>
-                <span class="group-count">${taskCount}</span>
-                <div class="group-actions">
-                    <button class="rename-group" title="重命名">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                    </button>
-                    <button class="delete-group danger" title="删除列表">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                    </button>
-                </div>
-            `;
-            li.addEventListener('click', (e) => {
-                if (e.target.closest('.group-actions')) return;
-                currentGroupId = group.id;
-                renderGroups();
-                renderTasks();
-            });
-            // 重命名
-            li.querySelector('.rename-group').addEventListener('click', (e) => {
-                e.stopPropagation();
-                showRenameGroupModal(group.id, group.name);
-            });
-            // 删除
-            li.querySelector('.delete-group').addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (confirm(`确定删除列表 "${group.name}" 及其所有任务吗？`)) {
-                    deleteGroup(group.id);
-                }
-            });
-            groupList.insertBefore(li, bottomAction);
-        });
-
-        // 更新当前组名
-        if (currentGroupId) {
-            const group = getGroup(currentGroupId);
-            currentGroupName.textContent = group ? group.name : '选择一个列表';
-        } else {
-            currentGroupName.textContent = '选择一个列表';
-            // 默认选中第一个
-            if (groups.length > 0) {
-                currentGroupId = groups[0].id;
-                renderGroups();
-                renderTasks();
-            }
-        }
-    }
-
-    function renderTasks() {
-        if (!currentGroupId) {
-            todoList.innerHTML = `
-                <div class="empty-state">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <rect x="3" y="4" width="18" height="18" rx="2"/>
-                        <path d="M8 2v4M16 2v4M3 10h18"/>
-                    </svg>
-                    <p>选择一个列表开始管理任务</p>
-                </div>
-            `;
-            updateStats();
-            return;
+        // =====================================================================
+        //  工具函数
+        // =====================================================================
+        function uuid() {
+            return crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2, 8);
         }
 
-        const group = getGroup(currentGroupId);
-        if (!group) {
-            todoList.innerHTML = `
-                <div class="empty-state">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <rect x="3" y="4" width="18" height="18" rx="2"/>
-                        <path d="M8 2v4M16 2v4M3 10h18"/>
-                    </svg>
-                    <p>列表已被删除</p>
-                </div>
-            `;
-            updateStats();
-            return;
+        function sortByOrder(arr) {
+            arr.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
         }
 
-        let tasks = group.tasks || [];
-        const total = tasks.length;
-        const completed = tasks.filter(t => t.completed).length;
-
-        // 排序
-        tasks.sort((a, b) => (a.order || 0) - (b.order || 0));
-
-        let html = '';
-        // 未完成任务
-        const activeTasks = tasks.filter(t => !t.completed);
-        const completedTasks = tasks.filter(t => t.completed);
-
-        activeTasks.forEach(task => {
-            html += renderTaskItem(task, false);
-        });
-
-        // 已完成任务（可折叠）
-        if (completedTasks.length > 0 && showCompleted) {
-            html += `<div style="padding:8px 4px 4px 4px;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border-color);margin-bottom:4px;">已完成</div>`;
-            completedTasks.forEach(task => {
-                html += renderTaskItem(task, true);
-            });
-        } else if (completedTasks.length > 0 && !showCompleted) {
-            html += `<div style="padding:8px 4px 4px 4px;font-size:12px;color:var(--text-muted);cursor:pointer;" onclick="toggleShowCompleted()">
-                显示已完成 (${completedTasks.length})
-            </div>`;
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
-        // 添加任务行
-        html += `
-            <div class="todo-item add-new" data-task-id="add-new">
-                <div class="checkbox"></div>
-                <input class="content-text" type="text" placeholder="添加任务..." id="addTaskInput">
-                <div class="task-actions">
-                    <button id="addTaskBtn" style="color:var(--accent-blue);">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                    </button>
-                </div>
-            </div>
-        `;
-
-        todoList.innerHTML = html;
-        updateStats();
-
-        // 绑定添加任务事件
-        const addInput = document.getElementById('addTaskInput');
-        const addBtn = document.getElementById('addTaskBtn');
-        if (addInput && addBtn) {
-            const doAdd = () => {
-                const val = addInput.value.trim();
-                if (val) {
-                    addTask(currentGroupId, val);
-                    addInput.value = '';
-                }
-            };
-            addBtn.addEventListener('click', doAdd);
-            addInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') doAdd();
-            });
-            // 自动聚焦
-            setTimeout(() => addInput.focus(), 100);
+        // =====================================================================
+        //  主题管理
+        // =====================================================================
+        function getPreferredTheme() {
+            const stored = localStorage.getItem('gittodo-theme');
+            if (stored) return stored;
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
 
-        // 绑定任务事件
-        document.querySelectorAll('.todo-item:not(.add-new)').forEach(item => {
-            const taskId = item.dataset.taskId;
-            // 复选框
-            const checkbox = item.querySelector('.checkbox');
-            if (checkbox) {
-                checkbox.addEventListener('click', () => toggleTask(currentGroupId, taskId));
-            }
-            // 编辑（双击内容）
-            const contentEl = item.querySelector('.content-text');
-            if (contentEl) {
-                contentEl.addEventListener('dblclick', () => {
-                    const oldVal = contentEl.textContent;
-                    contentEl.contentEditable = true;
-                    contentEl.focus();
-                    // 选中全部文字
-                    const range = document.createRange();
-                    range.selectNodeContents(contentEl);
-                    const sel = window.getSelection();
-                    sel.removeAllRanges();
-                    sel.addRange(range);
-                });
-                contentEl.addEventListener('blur', () => {
-                    if (contentEl.contentEditable === 'true') {
-                        contentEl.contentEditable = 'false';
-                        const newVal = contentEl.textContent.trim();
-                        const oldVal = contentEl.dataset.original || '';
-                        if (newVal && newVal !== oldVal) {
-                            editTask(currentGroupId, taskId, newVal);
-                        } else if (!newVal) {
-                            contentEl.textContent = oldVal;
-                        }
-                    }
-                });
-                contentEl.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        contentEl.blur();
-                    }
-                    if (e.key === 'Escape') {
-                        contentEl.textContent = contentEl.dataset.original || '';
-                        contentEl.blur();
-                    }
-                });
-                // 保存原始内容
-                contentEl.dataset.original = contentEl.textContent;
-            }
-            // 删除按钮
-            const deleteBtn = item.querySelector('.delete-task');
-            if (deleteBtn) {
-                deleteBtn.addEventListener('click', () => {
-                    if (confirm('确定删除这个任务吗？')) {
-                        deleteTask(currentGroupId, taskId);
-                    }
-                });
-            }
-        });
-    }
-
-    function renderTaskItem(task, isCompleted) {
-        const checked = task.completed ? 'checked' : '';
-        const completedClass = task.completed ? 'completed' : '';
-        return `
-            <div class="todo-item ${completedClass}" data-task-id="${task.id}" draggable="true">
-                <div class="drag-handle">
-                    <svg viewBox="0 0 24 24"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                </div>
-                <div class="checkbox ${checked}" title="${task.completed ? '取消完成' : '标记完成'}">
-                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
-                <span class="content-text" data-original="${escapeHtml(task.content)}">${escapeHtml(task.content)}</span>
-                <div class="task-actions">
-                    <button class="delete-task danger" title="删除任务">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-
-    function updateStats() {
-        if (!currentGroupId) {
-            filterStats.textContent = '0 / 0';
-            return;
-        }
-        const tasks = getTasks(currentGroupId);
-        const total = tasks.length;
-        const completed = tasks.filter(t => t.completed).length;
-        filterStats.textContent = `${completed} / ${total}`;
-    }
-
-    function toggleShowCompleted() {
-        showCompleted = !showCompleted;
-        filterText.textContent = showCompleted ? '隐藏已完成' : '显示已完成';
-        renderTasks();
-    }
-
-    // ========== 模态框 ==========
-    let modalResolve = null;
-
-    function showModal(title, placeholder, defaultValue = '') {
-        return new Promise((resolve) => {
-            modalTitle.textContent = title;
-            modalInput.placeholder = placeholder || '输入名称...';
-            modalInput.value = defaultValue;
-            modal.classList.remove('hidden');
-            modalInput.focus();
-            modalInput.select();
-            modalResolve = resolve;
-        });
-    }
-
-    modalConfirm.addEventListener('click', () => {
-        if (modalResolve) {
-            modalResolve(modalInput.value.trim());
-            modalResolve = null;
-        }
-        modal.classList.add('hidden');
-    });
-
-    modalCancel.addEventListener('click', () => {
-        if (modalResolve) {
-            modalResolve(null);
-            modalResolve = null;
-        }
-        modal.classList.add('hidden');
-    });
-
-    modalInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            modalConfirm.click();
-        }
-        if (e.key === 'Escape') {
-            modalCancel.click();
-        }
-    });
-
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) modalCancel.click();
-    });
-
-    // ========== 重命名模态框 ==========
-    async function showRenameGroupModal(groupId, currentName) {
-        const newName = await showModal('重命名列表', '输入新名称...', currentName);
-        if (newName && newName !== currentName) {
-            await renameGroup(groupId, newName);
-        }
-    }
-
-    // ========== 同步状态 ==========
-    function setSyncStatus(text, isSpinning) {
-        syncText.textContent = text;
-        const icon = syncText.parentElement?.querySelector('svg');
-        if (icon) {
-            if (isSpinning) {
-                icon.classList.add('spinning');
+        function applyTheme(theme) {
+            STATE.theme = theme;
+            document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : '');
+            localStorage.setItem('gittodo-theme', theme);
+            const svg = themeToggle.querySelector('svg');
+            if (theme === 'dark') {
+                svg.innerHTML =
+                    '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
             } else {
-                icon.classList.remove('spinning');
+                svg.innerHTML =
+                    '<path d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>';
             }
         }
-    }
 
-    // ========== Toast ==========
-    function showToast(message) {
-        const existing = document.querySelector('.toast');
-        if (existing) existing.remove();
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2500);
-    }
+        themeToggle.addEventListener('click', () => {
+            applyTheme(STATE.theme === 'light' ? 'dark' : 'light');
+        });
 
-    // ========== 主题切换 ==========
-    function toggleTheme() {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('todoTheme', next);
-        updateThemeUI(next);
-    }
-
-    function updateThemeUI(theme) {
-        const isDark = theme === 'dark';
-        themeLabel.textContent = isDark ? '深色' : '浅色';
-        themeIcon.innerHTML = isDark
-            ? '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/><path d="M12 7v10M7 12h10"/>'
-            : '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/><path d="M12 7v10M7 12h10"/>';
-    }
-
-    function initTheme() {
-        const saved = localStorage.getItem('todoTheme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = saved || (prefersDark ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', theme);
-        updateThemeUI(theme);
-    }
-
-    // ========== 轮询同步 ==========
-    async function pollTodos() {
-        if (isSyncing) return;
-        isSyncing = true;
-        try {
-            const data = await readGitHubFile('todos.json');
-            if (data) {
-                // 检查是否有外部更新（简单比较长度，实际可以更精细）
-                const oldData = JSON.stringify(todosData[currentUser?.username] || { groups: [] });
-                const newData = JSON.stringify(data[currentUser?.username] || { groups: [] });
-                if (oldData !== newData) {
-                    todosData = data;
-                    renderGroups();
-                    renderTasks();
-                    setSyncStatus('已同步', false);
-                }
-            }
-        } catch (e) {
-            console.log('轮询失败:', e);
-        }
-        isSyncing = false;
-    }
-
-    // ========== 工具函数 ==========
-    function escapeHtml(s) {
-        if (!s || typeof s !== 'string') return '';
-        return s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
-    }
-
-    // ========== 初始化 ==========
-    async function init() {
-        initTheme();
-
-        // 获取当前用户
-        const urlParams = new URLSearchParams(window.location.search);
-        const username = urlParams.get('user');
-        if (!username) {
-            window.location.href = 'index.html';
-            return;
-        }
-
-        // 从 localStorage 获取用户信息
-        const saved = localStorage.getItem('chatUser');
-        if (saved) {
+        // =====================================================================
+        //  获取 GitHub Token（从 jsonbin.io）
+        // =====================================================================
+        async function fetchToken() {
             try {
-                currentUser = JSON.parse(saved);
+                const resp = await fetch(STATE.jsonbinTokenUrl);
+                if (!resp.ok) throw new Error('无法获取 Token');
+                const data = await resp.json();
+                // 修正：从 record.github_token 读取（根据你的反馈）
+                const token = data.record?.github_token || data.record?.token || data.token;
+                if (!token) throw new Error('Token 不存在');
+                return token;
             } catch (e) {
-                window.location.href = 'index.html';
+                console.error('获取 Token 失败:', e);
+                alert('请先配置 GitHub Token (在 jsonbin.io 中)');
+                return null;
+            }
+        }
+
+        // =====================================================================
+        //  GitHub API 操作
+        // =====================================================================
+        async function getFileSha() {
+            const url =
+                `https://api.github.com/repos/${STATE.repoOwner}/${STATE.repoName}/contents/${STATE.filePath}`;
+            const resp = await fetch(url, {
+                headers: {
+                    'Authorization': `token ${STATE.token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                }
+            });
+            if (resp.status === 404) return null;
+            if (!resp.ok) throw new Error('获取文件信息失败');
+            const data = await resp.json();
+            return data.sha;
+        }
+
+        async function fetchDataFromGitHub() {
+            if (!STATE.token) return null;
+            try {
+                const url =
+                    `https://api.github.com/repos/${STATE.repoOwner}/${STATE.repoName}/contents/${STATE.filePath}`;
+                const resp = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${STATE.token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                    }
+                });
+                if (resp.status === 404) return {};
+                if (!resp.ok) throw new Error('获取数据失败');
+                const data = await resp.json();
+                const content = atob(data.content);
+                return JSON.parse(content);
+            } catch (e) {
+                console.error('fetchDataFromGitHub error:', e);
+                return null;
+            }
+        }
+
+        async function saveDataToGitHub(data) {
+            if (!STATE.token) return false;
+            try {
+                const content = btoa(JSON.stringify(data, null, 2));
+                const sha = await getFileSha();
+                const payload = {
+                    message: '更新 todos',
+                    content: content,
+                    branch: 'main',
+                };
+                if (sha) payload.sha = sha;
+
+                const url =
+                    `https://api.github.com/repos/${STATE.repoOwner}/${STATE.repoName}/contents/${STATE.filePath}`;
+                const resp = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${STATE.token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+                if (!resp.ok) {
+                    const errText = await resp.text();
+                    console.error('GitHub API 错误:', resp.status, errText);
+                    throw new Error(`保存失败: ${resp.status}`);
+                }
+                return true;
+            } catch (e) {
+                console.error('saveDataToGitHub error:', e);
+                return false;
+            }
+        }
+
+        // =====================================================================
+        //  数据同步
+        // =====================================================================
+        async function syncToGitHub() {
+            if (STATE.isSyncing) {
+                STATE.pendingSave = true;
                 return;
             }
-        } else {
-            window.location.href = 'index.html';
-            return;
-        }
-
-        // 设置用户信息
-        profileAvatar.textContent = currentUser.nickname ? currentUser.nickname.charAt(0).toUpperCase() : 'U';
-        profileName.textContent = currentUser.nickname || currentUser.username;
-
-        // 加载数据
-        await loadTodos();
-        const userTodos = getUserTodos();
-        if (userTodos.groups.length > 0) {
-            currentGroupId = userTodos.groups[0].id;
-        }
-
-        renderGroups();
-        renderTasks();
-
-        // 事件绑定
-        document.getElementById('addGroupBtn').addEventListener('click', async () => {
-            const name = await showModal('新建列表', '输入列表名称...');
-            if (name) {
-                await createGroup(name);
+            STATE.isSyncing = true;
+            setSyncStatus('syncing', '同步中...');
+            try {
+                // 确保数据完整
+                if (!STATE.data[STATE.username]) {
+                    STATE.data[STATE.username] = { groups: [] };
+                }
+                STATE.data[STATE.username].groups = STATE.groups;
+                const allData = STATE.data;
+                const ok = await saveDataToGitHub(allData);
+                if (ok) setSyncStatus('ok', '已同步');
+                else setSyncStatus('error', '同步失败');
+            } catch (e) {
+                setSyncStatus('error', '同步出错');
+            } finally {
+                STATE.isSyncing = false;
+                if (STATE.pendingSave) {
+                    STATE.pendingSave = false;
+                    syncToGitHub();
+                }
             }
-        });
+        }
 
-        document.getElementById('renameGroupBtn').addEventListener('click', () => {
-            if (!currentGroupId) return;
-            const group = getGroup(currentGroupId);
+        async function pullFromGitHub() {
+            const fetched = await fetchDataFromGitHub();
+            if (fetched === null) return false;
+            // 合并：如果本地有未保存的更改，先不覆盖，但我们会将拉取的数据与本地合并（简单策略：如果拉取的数据不同，则使用拉取的数据）
+            // 这里我们采用：如果拉取的数据和当前内存数据不同，则更新内存并重新渲染
+            // 但在乐观更新下，本地数据可能比远程新，所以我们可以选择不覆盖本地修改。
+            // 更安全的做法：仅当本地没有待保存修改时才拉取，但为了简单，我们保留当前逻辑。
+            const currentStr = JSON.stringify(STATE.data);
+            const newStr = JSON.stringify(fetched);
+            if (currentStr !== newStr) {
+                STATE.data = fetched;
+                // 确保用户存在
+                if (!STATE.data[STATE.username]) {
+                    STATE.data[STATE.username] = { groups: [] };
+                }
+                STATE.groups = STATE.data[STATE.username].groups || [];
+                sortByOrder(STATE.groups);
+                renderAll();
+                setSyncStatus('ok', '已更新');
+                return true;
+            }
+            setSyncStatus('ok', '已同步');
+            return true;
+        }
+
+        // =====================================================================
+        //  渲染
+        // =====================================================================
+        function renderAll() {
+            renderGroups();
+        }
+
+        function renderGroups() {
+            if (!STATE.groups) STATE.groups = [];
+            if (STATE.groups.length === 0) {
+                groupsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <p style="margin-bottom: 8px;">还没有任务组</p>
+                        <p style="font-size:13px;">点击下方「新建任务组」开始</p>
+                    </div>
+                `;
+                return;
+            }
+            let html = '';
+            STATE.groups.forEach((group, idx) => {
+                const tasks = group.tasks || [];
+                sortByOrder(tasks);
+                html += `
+                    <div class="group-card" data-group-id="${group.id}">
+                        <div class="group-header">
+                            <div class="group-title-wrapper">
+                                <input class="group-title-input" type="text" value="${escapeHtml(group.name)}" 
+                                       data-group-id="${group.id}" placeholder="任务组名称" />
+                            </div>
+                            <div class="group-actions">
+                                <button class="btn-icon add-task-btn" data-group-id="${group.id}" title="添加任务">
+                                    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                                </button>
+                                <button class="btn-icon danger delete-group-btn" data-group-id="${group.id}" title="删除任务组">
+                                    <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="task-list" data-group-id="${group.id}">
+                            ${tasks.length === 0 ? '<div class="empty-state" style="padding:16px 0;font-size:13px;">暂无任务</div>' : ''}
+                            ${tasks.map((task, tIdx) => `
+                                <div class="task-item" draggable="true" data-group-id="${group.id}" data-task-id="${task.id}" data-order="${task.order ?? tIdx}">
+                                    <span class="drag-handle">
+                                        <svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>
+                                    </span>
+                                    <input type="checkbox" class="task-checkbox" data-group-id="${group.id}" data-task-id="${task.id}" 
+                                           ${task.completed ? 'checked' : ''} />
+                                    <span class="task-content ${task.completed ? 'completed' : ''}" data-group-id="${group.id}" data-task-id="${task.id}">
+                                        ${escapeHtml(task.content)}
+                                    </span>
+                                    <div class="task-actions">
+                                        <button class="btn-icon edit-task-btn" data-group-id="${group.id}" data-task-id="${task.id}" title="编辑">
+                                            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                        </button>
+                                        <button class="btn-icon danger delete-task-btn" data-group-id="${group.id}" data-task-id="${task.id}" title="删除">
+                                            <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                            <div class="add-task-inline" data-group-id="${group.id}">
+                                <input type="text" class="add-task-input" placeholder="输入新任务…" />
+                                <button class="btn-primary add-task-confirm" data-group-id="${group.id}">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            groupsContainer.innerHTML = html;
+            bindEvents();
+        }
+
+        // =====================================================================
+        //  事件绑定
+        // =====================================================================
+        function bindEvents() {
+            // 任务组标题修改
+            document.querySelectorAll('.group-title-input').forEach(input => {
+                input.removeEventListener('change', handleGroupTitleChange);
+                input.addEventListener('change', handleGroupTitleChange);
+            });
+
+            // 添加任务按钮 (组标题旁的 +)
+            document.querySelectorAll('.add-task-btn').forEach(btn => {
+                btn.removeEventListener('click', handleAddTaskBtn);
+                btn.addEventListener('click', handleAddTaskBtn);
+            });
+
+            // 删除任务组
+            document.querySelectorAll('.delete-group-btn').forEach(btn => {
+                btn.removeEventListener('click', handleDeleteGroup);
+                btn.addEventListener('click', handleDeleteGroup);
+            });
+
+            // 任务复选框
+            document.querySelectorAll('.task-checkbox').forEach(cb => {
+                cb.removeEventListener('change', handleTaskToggle);
+                cb.addEventListener('change', handleTaskToggle);
+            });
+
+            // 编辑任务
+            document.querySelectorAll('.edit-task-btn').forEach(btn => {
+                btn.removeEventListener('click', handleEditTask);
+                btn.addEventListener('click', handleEditTask);
+            });
+
+            // 删除任务
+            document.querySelectorAll('.delete-task-btn').forEach(btn => {
+                btn.removeEventListener('click', handleDeleteTask);
+                btn.addEventListener('click', handleDeleteTask);
+            });
+
+            // 添加任务 (内联)
+            document.querySelectorAll('.add-task-confirm').forEach(btn => {
+                btn.removeEventListener('click', handleAddTaskConfirm);
+                btn.addEventListener('click', handleAddTaskConfirm);
+            });
+            document.querySelectorAll('.add-task-input').forEach(inp => {
+                inp.removeEventListener('keydown', handleAddTaskKeydown);
+                inp.addEventListener('keydown', handleAddTaskKeydown);
+            });
+
+            // 拖拽
+            document.querySelectorAll('.task-item').forEach(item => {
+                item.removeEventListener('dragstart', handleDragStart);
+                item.removeEventListener('dragend', handleDragEnd);
+                item.removeEventListener('dragover', handleDragOver);
+                item.removeEventListener('drop', handleDrop);
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+            });
+        }
+
+        // ---- 事件处理函数 ----
+        function handleGroupTitleChange(e) {
+            const input = e.target;
+            const groupId = input.dataset.groupId;
+            const newName = input.value.trim() || '未命名';
+            const group = STATE.groups.find(g => g.id === groupId);
             if (group) {
-                showRenameGroupModal(currentGroupId, group.name);
+                group.name = newName;
+                saveAndSync();
+            }
+        }
+
+        function handleAddTaskBtn(e) {
+            const groupId = e.currentTarget.dataset.groupId;
+            const card = document.querySelector(`.group-card[data-group-id="${groupId}"]`);
+            const input = card.querySelector('.add-task-input');
+            if (input) {
+                input.focus();
+                input.select();
+            }
+        }
+
+        function handleDeleteGroup(e) {
+            const groupId = e.currentTarget.dataset.groupId;
+            if (!confirm('确定删除此任务组及其所有任务吗？')) return;
+            STATE.groups = STATE.groups.filter(g => g.id !== groupId);
+            saveAndSync();
+        }
+
+        function handleTaskToggle(e) {
+            const cb = e.target;
+            const groupId = cb.dataset.groupId;
+            const taskId = cb.dataset.taskId;
+            const group = STATE.groups.find(g => g.id === groupId);
+            if (group) {
+                const task = group.tasks.find(t => t.id === taskId);
+                if (task) {
+                    task.completed = cb.checked;
+                    task.completedAt = cb.checked ? Date.now() : null;
+                    const content = cb.closest('.task-item').querySelector('.task-content');
+                    if (content) content.classList.toggle('completed', cb.checked);
+                    saveAndSync();
+                }
+            }
+        }
+
+        function handleEditTask(e) {
+            const btn = e.currentTarget;
+            const groupId = btn.dataset.groupId;
+            const taskId = btn.dataset.taskId;
+            const group = STATE.groups.find(g => g.id === groupId);
+            if (!group) return;
+            const task = group.tasks.find(t => t.id === taskId);
+            if (!task) return;
+            const item = btn.closest('.task-item');
+            const contentSpan = item.querySelector('.task-content');
+            const currentText = task.content;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'task-edit-input';
+            input.value = currentText;
+            input.dataset.groupId = groupId;
+            input.dataset.taskId = taskId;
+            contentSpan.replaceWith(input);
+            input.focus();
+            input.select();
+
+            const finishEdit = () => {
+                const newText = input.value.trim() || currentText;
+                task.content = newText;
+                const newSpan = document.createElement('span');
+                newSpan.className = `task-content ${task.completed ? 'completed' : ''}`;
+                newSpan.dataset.groupId = groupId;
+                newSpan.dataset.taskId = taskId;
+                newSpan.textContent = newText;
+                input.replaceWith(newSpan);
+                saveAndSync();
+            };
+
+            input.addEventListener('blur', finishEdit);
+            input.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Enter') {
+                    ev.preventDefault();
+                    input.blur();
+                }
+                if (ev.key === 'Escape') {
+                    input.value = currentText;
+                    input.blur();
+                }
+            });
+        }
+
+        function handleDeleteTask(e) {
+            const btn = e.currentTarget;
+            const groupId = btn.dataset.groupId;
+            const taskId = btn.dataset.taskId;
+            if (!confirm('确定删除此任务吗？')) return;
+            const group = STATE.groups.find(g => g.id === groupId);
+            if (group) {
+                group.tasks = group.tasks.filter(t => t.id !== taskId);
+                saveAndSync();
+            }
+        }
+
+        function handleAddTaskConfirm(e) {
+            const btn = e.currentTarget;
+            const groupId = btn.dataset.groupId;
+            const card = document.querySelector(`.group-card[data-group-id="${groupId}"]`);
+            const input = card.querySelector('.add-task-input');
+            const text = input.value.trim();
+            if (!text) return;
+            const group = STATE.groups.find(g => g.id === groupId);
+            if (group) {
+                const task = {
+                    id: uuid(),
+                    content: text,
+                    completed: false,
+                    order: group.tasks.length,
+                    createdAt: Date.now(),
+                    completedAt: null,
+                };
+                group.tasks.push(task);
+                input.value = '';
+                saveAndSync();
+            }
+        }
+
+        function handleAddTaskKeydown(e) {
+            if (e.key === 'Enter') {
+                const input = e.target;
+                const groupId = input.closest('.add-task-inline').dataset.groupId;
+                const btn = document.querySelector(`.add-task-confirm[data-group-id="${groupId}"]`);
+                if (btn) btn.click();
+            }
+        }
+
+        // ---- 拖拽 ----
+        let dragData = null;
+
+        function handleDragStart(e) {
+            const item = e.target.closest('.task-item');
+            if (!item) return;
+            const groupId = item.dataset.groupId;
+            const taskId = item.dataset.taskId;
+            dragData = { groupId, taskId };
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', taskId);
+            item.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            document.querySelectorAll('.task-item').forEach(el => el.classList.remove('dragging'));
+            dragData = null;
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            const targetItem = e.target.closest('.task-item');
+            if (targetItem) {
+                targetItem.style.borderColor = 'var(--accent)';
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const targetItem = e.target.closest('.task-item');
+            if (targetItem) targetItem.style.borderColor = '';
+            if (!dragData) return;
+
+            const fromGroupId = dragData.groupId;
+            const fromTaskId = dragData.taskId;
+            const toGroupId = targetItem ? targetItem.dataset.groupId : null;
+            const toTaskId = targetItem ? targetItem.dataset.taskId : null;
+
+            if (!toGroupId || !toTaskId) return;
+            if (fromGroupId === toGroupId && fromTaskId === toTaskId) return;
+
+            const fromGroup = STATE.groups.find(g => g.id === fromGroupId);
+            const toGroup = STATE.groups.find(g => g.id === toGroupId);
+            if (!fromGroup || !toGroup) return;
+
+            const fromTasks = fromGroup.tasks;
+            const toTasks = toGroup.tasks;
+            const fromIdx = fromTasks.findIndex(t => t.id === fromTaskId);
+            const toIdx = toTasks.findIndex(t => t.id === toTaskId);
+            if (fromIdx === -1 || toIdx === -1) return;
+
+            if (fromGroupId !== toGroupId) {
+                const [moved] = fromTasks.splice(fromIdx, 1);
+                toTasks.splice(toIdx, 0, moved);
+                fromTasks.forEach((t, i) => t.order = i);
+                toTasks.forEach((t, i) => t.order = i);
+            } else {
+                const [moved] = fromTasks.splice(fromIdx, 1);
+                fromTasks.splice(toIdx, 0, moved);
+                fromTasks.forEach((t, i) => t.order = i);
+            }
+            saveAndSync();
+        }
+
+        // =====================================================================
+        //  新建任务组（修复 undefined 错误）
+        // =====================================================================
+        function handleAddGroup() {
+            const name = prompt('请输入新任务组的名称：', '新任务组');
+            if (name === null) return;
+
+            // 确保用户数据存在
+            if (!STATE.data[STATE.username]) {
+                STATE.data[STATE.username] = { groups: [] };
+            }
+
+            const newGroup = {
+                id: uuid(),
+                name: name.trim() || '未命名',
+                order: STATE.groups.length,
+                createdAt: Date.now(),
+                tasks: [],
+            };
+
+            STATE.groups.push(newGroup);
+            // 立即更新 data 并同步
+            saveAndSync();
+        }
+
+        // =====================================================================
+        //  保存并同步（乐观更新）
+        // =====================================================================
+        function saveAndSync() {
+            // 确保用户数据存在
+            if (!STATE.data[STATE.username]) {
+                STATE.data[STATE.username] = { groups: [] };
+            }
+            STATE.data[STATE.username].groups = STATE.groups;
+            // 乐观更新 UI
+            renderAll();
+            // 异步保存到 GitHub
+            syncToGitHub();
+        }
+
+        // =====================================================================
+        //  状态指示器
+        // =====================================================================
+        function setSyncStatus(status, label) {
+            const dot = syncDot;
+            const labelEl = syncStatusLabel;
+            dot.className = 'sync-dot';
+            if (status === 'syncing') {
+                dot.classList.add('syncing');
+                labelEl.textContent = label || '同步中…';
+            } else if (status === 'error') {
+                dot.style.background = 'var(--danger)';
+                labelEl.textContent = label || '同步失败';
+            } else {
+                dot.style.background = 'var(--success)';
+                labelEl.textContent = label || '已同步';
+            }
+        }
+
+        // =====================================================================
+        //  轮询
+        // =====================================================================
+        function startPolling() {
+            if (STATE.pollTimer) clearInterval(STATE.pollTimer);
+            STATE.pollTimer = setInterval(async () => {
+                if (document.hidden) return;
+                await pullFromGitHub();
+            }, STATE.pollInterval);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                pullFromGitHub();
             }
         });
 
-        document.getElementById('deleteGroupBtn').addEventListener('click', () => {
-            if (!currentGroupId) return;
-            const group = getGroup(currentGroupId);
-            if (group && confirm(`确定删除列表 "${group.name}" 及其所有任务吗？`)) {
-                deleteGroup(currentGroupId);
+        // =====================================================================
+        //  初始化
+        // =====================================================================
+        async function init() {
+            applyTheme(getPreferredTheme());
+
+            const token = await fetchToken();
+            if (!token) return;
+            STATE.token = token;
+
+            const data = await fetchDataFromGitHub();
+            if (data === null) {
+                alert('无法获取数据，请检查网络或 Token 权限');
+                return;
             }
+            STATE.data = data;
+
+            // 确定用户名
+            let username = Object.keys(data)[0];
+            if (!username) {
+                try {
+                    const userResp = await fetch('https://api.github.com/user', {
+                        headers: { 'Authorization': `token ${token}` }
+                    });
+                    if (userResp.ok) {
+                        const user = await userResp.json();
+                        username = user.login;
+                    }
+                } catch (e) {}
+                if (!username) username = 'default';
+            }
+            STATE.username = username;
+
+            // 确保用户数据存在
+            if (!STATE.data[STATE.username]) {
+                STATE.data[STATE.username] = { groups: [] };
+            }
+            STATE.groups = STATE.data[STATE.username].groups || [];
+            sortByOrder(STATE.groups);
+
+            renderAll();
+            startPolling();
+            setSyncStatus('ok', '已就绪');
+
+            // 绑定新建任务组按钮
+            addGroupBtn.addEventListener('click', handleAddGroup);
+        }
+
+        // =====================================================================
+        //  启动
+        // =====================================================================
+        init().catch(err => {
+            console.error('初始化失败:', err);
+            alert('初始化失败，请检查控制台错误');
         });
-
-        document.getElementById('refreshBtn').addEventListener('click', async () => {
-            setSyncStatus('刷新中...', true);
-            await pollTodos();
-            setSyncStatus('已同步', false);
-            showToast('已刷新');
-        });
-
-        filterToggle.addEventListener('click', toggleShowCompleted);
-
-        themeToggle.addEventListener('click', toggleTheme);
-
-        profileAvatar.addEventListener('click', () => {
-            window.location.href = `personalpage.html?user=${encodeURIComponent(currentUser.username)}`;
-        });
-
-        // 初始化拖拽
-        initDragDrop();
-
-        // 启动轮询（每5秒）
-        if (pollInterval) clearInterval(pollInterval);
-        pollInterval = setInterval(pollTodos, 5000);
-
-        // 窗口关闭前清理
-        window.addEventListener('beforeunload', () => {
-            if (pollInterval) clearInterval(pollInterval);
-        });
-
-        setSyncStatus('已同步', false);
-    }
-
-    // 暴露函数供全局调用
-    window.toggleShowCompleted = toggleShowCompleted;
-    window.addTask = addTask;
-    window.toggleTask = toggleTask;
-    window.editTask = editTask;
-    window.deleteTask = deleteTask;
-
-    // 启动
-    document.addEventListener('DOMContentLoaded', init);
-</script>
+    </script>
 </body>
 </html>
