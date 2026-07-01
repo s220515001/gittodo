@@ -6,7 +6,16 @@
         "name": "新任务组",
         "order": 0,
         "createdAt": 1782884954983,
-        "tasks": []
+        "tasks": [
+          {
+            "id": "94bfc676-582b-4d33-bd21-1cc9eeb8a5d7",
+            "content": "暑假作业本",
+            "completed": false,
+            "order": 0,
+            "createdAt": 1782885164311,
+            "completedAt": null
+          }
+        ]
       }
     ]
   }
