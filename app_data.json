@@ -1002,14 +1002,7 @@
               "order": 0,
               "createdAt": 1782918613294,
               "completedAt": null,
-              "subtasks": [
-                {
-                  "id": "6e5b4cc9-c866-4203-bee4-30cc5ac54784",
-                  "content": "第｛num｝点",
-                  "completed": false,
-                  "order": 3
-                }
-              ]
+              "subtasks": []
             }
           ]
         }
