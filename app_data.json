@@ -994,17 +994,7 @@
           "name": "明日必做",
           "order": 1,
           "createdAt": 1782918041910,
-          "tasks": [
-            {
-              "id": "183325bf-76bc-4418-ac4a-99abdd0c21b7",
-              "content": "ee",
-              "completed": false,
-              "order": 0,
-              "createdAt": 1782918560535,
-              "completedAt": null,
-              "subtasks": []
-            }
-          ]
+          "tasks": []
         }
       ]
     }
