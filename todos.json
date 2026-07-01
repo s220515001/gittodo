@@ -8,52 +8,6 @@
         "createdAt": 1782885580563,
         "tasks": [
           {
-            "id": "c2858180-c678-42da-ba0c-12754b20119e",
-            "content": "语文 ",
-            "completed": false,
-            "order": 3,
-            "createdAt": 1782896803755,
-            "completedAt": null,
-            "subtasks": [
-              {
-                "id": "24f1eb72-a911-46ef-a1b7-117e20fc4439",
-                "content": "第1天",
-                "completed": false,
-                "order": 0
-              },
-              {
-                "id": "bf38e798-66ab-432f-8894-9a3925c0a5ca",
-                "content": "第2天",
-                "completed": false,
-                "order": 1
-              },
-              {
-                "id": "ab1aaeed-7aea-4240-905b-82317b1e7f2f",
-                "content": "第3天",
-                "completed": false,
-                "order": 2
-              },
-              {
-                "id": "6d002751-4ab6-4c30-8494-102b6ef368d6",
-                "content": "1次",
-                "completed": false,
-                "order": 3
-              },
-              {
-                "id": "eb6929a7-d612-4a23-b33b-5863076afa45",
-                "content": "2次",
-                "completed": false,
-                "order": 4
-              },
-              {
-                "id": "e7742bf1-784a-48cc-90d7-280d6632a5b7",
-                "content": "3次",
-                "completed": false,
-                "order": 5
-              }
-            ]
-          },
-          {
             "id": "2c3b87f4-c706-4cb0-9f54-672bdf2f6863",
             "content": "语文%W1-10:2|第{num}周 & P1,3,5,7,9,11,13,15,17,19|{num}页 & Q1-5:2|第{num}课时%测试% %S1-8|步骤{num}%%#1-12|第{num}章%复习% %T1-7:3|第{num}天 & H2,4,6,8,10|{num}时%",
             "completed": false,
