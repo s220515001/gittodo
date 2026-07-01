@@ -6,17 +6,7 @@
         "name": "暑假作业",
         "order": 0,
         "createdAt": 1782885580563,
-        "tasks": [
-          {
-            "id": "dea0d5bc-2607-4e8f-a5c0-c4407b8a4db4",
-            "content": "语文",
-            "completed": false,
-            "order": 0,
-            "createdAt": 1782892353786,
-            "completedAt": null,
-            "subtasks": []
-          }
-        ]
+        "tasks": []
       }
     ]
   }
