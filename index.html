@@ -2,14 +2,13 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
     <title>GitTodo · 任务管理</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet" />
     <style>
-        /* ===== 完整样式（与之前一致，此处省略以节省篇幅，实际使用时请保留） ===== */
-        /* 注意：实际代码中需要包含所有样式，这里因回答长度限制略去，但最终会提供完整文件 */
+        /* ===== 基础样式重置 & 变量 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -35,6 +34,7 @@
             --danger: #e74c3c;
             --success: #27ae60;
             --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft YaHei', sans-serif;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
         [data-theme="dark"] {
             --bg-primary: #1e1e1e;
@@ -58,7 +58,8 @@
             overflow: hidden;
             transition: background 0.2s, color 0.2s;
         }
-        /* 登录界面覆盖层 */
+
+        /* ===== 登录界面 ===== */
         #loginOverlay {
             position: fixed;
             top: 0;
@@ -71,6 +72,7 @@
             justify-content: center;
             z-index: 10000;
             transition: opacity 0.4s ease;
+            padding: 20px;
         }
         #loginOverlay.hidden {
             opacity: 0;
@@ -79,9 +81,9 @@
         .login-box {
             background: var(--bg-card);
             border-radius: 16px;
-            padding: 40px 36px;
+            padding: 32px 28px;
             max-width: 400px;
-            width: 90%;
+            width: 100%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             text-align: center;
         }
@@ -109,14 +111,15 @@
         }
         .login-box .form-group input {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 14px;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
             background: var(--bg-primary);
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 16px;
             font-family: var(--font);
             transition: border 0.2s;
+            -webkit-appearance: none;
         }
         .login-box .form-group input:focus {
             border-color: var(--accent);
@@ -128,10 +131,10 @@
             margin-top: 20px;
         }
         .login-box .actions button {
-            padding: 10px;
+            padding: 12px;
             border: none;
-            border-radius: 6px;
-            font-size: 15px;
+            border-radius: 8px;
+            font-size: 16px;
             font-weight: 500;
             font-family: var(--font);
             cursor: pointer;
@@ -172,12 +175,14 @@
             text-decoration: underline;
         }
 
-        /* 主界面样式（完整） */
+        /* ===== 主界面布局 ===== */
         .app-container {
             display: flex;
             height: 100vh;
             width: 100vw;
         }
+
+        /* ===== 侧边栏 (PC & 移动) ===== */
         .sidebar {
             width: 280px;
             background-color: var(--bg-sidebar);
@@ -187,7 +192,18 @@
             padding: 20px 0 10px 0;
             flex-shrink: 0;
             overflow-y: auto;
-            transition: background 0.2s, border 0.2s;
+            transition: transform 0.3s ease, background 0.2s, border 0.2s;
+            z-index: 1000;
+        }
+        .sidebar .close-sidebar {
+            display: none;
+            align-self: flex-end;
+            margin: 0 16px 12px 0;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
         }
         .profile-section {
             padding: 0 24px 16px 24px;
@@ -299,6 +315,7 @@
             transition: opacity 0.2s;
             cursor: pointer;
             color: var(--text-muted);
+            padding: 4px;
         }
         .nav-list li:hover .group-delete {
             opacity: 1;
@@ -316,6 +333,8 @@
             background: transparent;
             color: var(--accent);
         }
+
+        /* ===== 主内容区 ===== */
         .main-content {
             flex: 1;
             display: flex;
@@ -323,21 +342,43 @@
             background: var(--bg-main);
             overflow: hidden;
             transition: background 0.2s;
+            position: relative;
         }
         .content-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 28px 32px 20px 32px;
+            padding: 16px 20px 12px 20px;
             color: #fff;
+            min-height: 64px;
+        }
+        .content-header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .content-header .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px 8px;
         }
         .content-header h1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
         }
         .header-actions {
             display: flex;
-            gap: 12px;
+            gap: 8px;
+            align-items: center;
         }
         .header-actions button {
             background: transparent;
@@ -346,7 +387,10 @@
             cursor: pointer;
             opacity: 0.8;
             transition: opacity 0.2s;
-            padding: 4px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .header-actions button:hover {
             opacity: 1;
@@ -358,22 +402,27 @@
             stroke: currentColor;
             stroke-width: 1.5;
         }
+
+        /* ===== 任务容器 ===== */
         .todo-container {
             flex: 1;
             background: var(--bg-card);
-            margin: 0 32px 32px 32px;
+            margin: 0 16px 16px 16px;
             border-radius: 8px;
             overflow-y: auto;
-            padding: 20px 0 10px 0;
+            padding: 16px 0 10px 0;
             box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
             transition: background 0.2s;
+            position: relative;
         }
         .filter-bar {
-            padding: 0 20px 8px 20px;
+            padding: 0 16px 8px 16px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         .filter-bar .filter-label {
             font-size: 14px;
@@ -393,14 +442,16 @@
             color: var(--text-muted);
         }
         .todo-list {
-            padding: 16px 20px 0 20px;
+            padding: 12px 16px 0 16px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
         }
+
+        /* ===== 任务卡片 ===== */
         .task-item-wrapper {
             background: var(--bg-task);
-            border-radius: 4px;
+            border-radius: 6px;
             border-top: 2px solid var(--bg-card);
             border-bottom: 2px solid var(--bg-card);
             transition: background 0.15s;
@@ -409,15 +460,16 @@
             background: var(--bg-task-hover);
         }
         .task-item {
-            padding: 10px 12px;
+            padding: 12px 12px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: default;
+            flex-wrap: wrap;
         }
         .task-item .expand-btn {
-            width: 24px;
-            height: 24px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -427,18 +479,22 @@
             cursor: pointer;
             transition: transform 0.2s;
             flex-shrink: 0;
+            border-radius: 50%;
+        }
+        .task-item .expand-btn:active {
+            background: rgba(0,0,0,0.05);
         }
         .task-item .expand-btn.expanded {
             transform: rotate(90deg);
         }
         .task-item .expand-btn svg {
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             fill: currentColor;
         }
         .task-item .checkbox {
-            width: 20px;
-            height: 20px;
+            width: 28px;
+            height: 28px;
             background: var(--bg-primary);
             border-radius: 50%;
             display: flex;
@@ -457,14 +513,14 @@
             display: block;
         }
         .task-item .checkbox svg {
-            width: 14px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
             fill: #fff;
             display: none;
         }
         .task-item .content-text {
             flex: 1;
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-primary);
             word-break: break-word;
             padding-bottom: 2px;
@@ -472,12 +528,13 @@
             cursor: text;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             flex-wrap: wrap;
+            min-width: 120px;
         }
         .task-item .content-text .task-label {
             flex: 1;
-            min-width: 40px;
+            min-width: 60px;
         }
         .task-item .content-text.completed {
             text-decoration: line-through;
@@ -487,18 +544,24 @@
             display: flex;
             gap: 4px;
             flex-shrink: 0;
+            margin-left: auto;
         }
         .task-item .task-actions button {
             background: transparent;
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
+            padding: 6px;
+            border-radius: 50%;
             transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+        .task-item .task-actions button:active {
+            background: rgba(0,0,0,0.05);
         }
         .task-item .task-actions button:hover {
             background: var(--bg-primary);
@@ -508,8 +571,8 @@
             color: var(--danger);
         }
         .task-item .task-actions svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: none;
             stroke: currentColor;
             stroke-width: 2;
@@ -520,19 +583,21 @@
             font-size: 11px;
             background: var(--accent);
             color: #fff;
-            border-radius: 10px;
-            padding: 0 8px;
-            line-height: 18px;
-            margin-left: 6px;
+            border-radius: 12px;
+            padding: 0 10px;
+            line-height: 20px;
+            margin-left: 4px;
             flex-shrink: 0;
-            opacity: 0.7;
+            opacity: 0.8;
             font-weight: 500;
         }
+
+        /* ===== 子任务列表 ===== */
         .subtask-list {
-            padding: 0 12px 8px 48px;
+            padding: 4px 12px 8px 48px;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 4px;
         }
         .subtask-list.hidden {
             display: none;
@@ -541,7 +606,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 4px 8px;
+            padding: 6px 8px;
             border-radius: 4px;
             background: var(--bg-card);
             transition: background 0.15s;
@@ -550,8 +615,8 @@
             background: var(--bg-task-hover);
         }
         .subtask-item .checkbox {
-            width: 18px;
-            height: 18px;
+            width: 24px;
+            height: 24px;
             background: var(--bg-primary);
             border-radius: 50%;
             border: 2px solid var(--text-muted);
@@ -570,14 +635,14 @@
             display: block;
         }
         .subtask-item .checkbox svg {
-            width: 12px;
-            height: 12px;
+            width: 16px;
+            height: 16px;
             fill: #fff;
             display: none;
         }
         .subtask-item .subtask-text {
             flex: 1;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-primary);
             word-break: break-word;
         }
@@ -590,64 +655,76 @@
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            padding: 2px;
-            border-radius: 4px;
+            padding: 6px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .subtask-item .subtask-delete:active {
+            background: rgba(0,0,0,0.05);
         }
         .subtask-item .subtask-delete:hover {
             color: var(--danger);
         }
         .subtask-item .subtask-delete svg {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             stroke: currentColor;
             stroke-width: 2;
             fill: none;
         }
+
+        /* ===== 添加步骤行 ===== */
         .add-subtask-row {
             display: flex;
             gap: 8px;
-            padding: 4px 8px 4px 0;
+            padding: 6px 8px 6px 0;
             align-items: center;
         }
         .add-subtask-row input {
             flex: 1;
-            padding: 4px 8px;
+            padding: 8px 10px;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 6px;
             background: var(--bg-primary);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 14px;
             font-family: var(--font);
         }
         .add-subtask-row input:focus {
             border-color: var(--accent);
         }
         .add-subtask-row button {
-            padding: 4px 12px;
+            padding: 8px 16px;
             background: var(--accent);
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 14px;
             font-family: var(--font);
             transition: background 0.2s;
             white-space: nowrap;
         }
-        .add-subtask-row button:hover {
+        .add-subtask-row button:active {
             background: var(--accent-hover);
         }
+
+        /* ===== 添加任务行 ===== */
         .add-task-row {
             background: transparent;
-            padding: 10px 12px;
+            padding: 12px 12px;
             display: flex;
             align-items: center;
             gap: 12px;
             border-top: 2px solid var(--bg-card);
         }
         .add-task-row .checkbox-placeholder {
-            width: 20px;
-            height: 20px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             border: 2px solid var(--text-muted);
             flex-shrink: 0;
@@ -656,10 +733,10 @@
             flex: 1;
             border: none;
             background: transparent;
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-primary);
             font-family: var(--font);
-            padding: 4px 0;
+            padding: 6px 0;
         }
         .add-task-row input::placeholder {
             color: var(--text-muted);
@@ -669,20 +746,30 @@
             border-bottom: 1.5px dashed var(--accent);
         }
         .add-task-row button {
-            padding: 4px 16px;
+            padding: 8px 18px;
             background: var(--accent);
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 14px;
             font-family: var(--font);
             transition: background 0.2s;
             white-space: nowrap;
         }
-        .add-task-row button:hover {
+        .add-task-row button:active {
             background: var(--accent-hover);
         }
+
+        /* ===== 空状态 ===== */
+        .empty-state {
+            padding: 40px 16px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        /* ===== 滚动条 ===== */
         .todo-container::-webkit-scrollbar,
         .sidebar::-webkit-scrollbar {
             width: 6px;
@@ -696,80 +783,8 @@
         .sidebar::-webkit-scrollbar-track {
             background: transparent;
         }
-        .empty-state {
-            padding: 30px 16px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 200px;
-            }
-            .content-header {
-                padding: 20px 16px 16px 16px;
-            }
-            .content-header h1 {
-                font-size: 20px;
-            }
-            .todo-container {
-                margin: 0 16px 16px 16px;
-                padding: 12px 0;
-            }
-            .task-item {
-                flex-wrap: wrap;
-            }
-            .task-item .content-text {
-                order: 2;
-                flex-basis: calc(100% - 80px);
-            }
-            .task-item .task-actions {
-                order: 3;
-                margin-left: auto;
-            }
-            .task-item .expand-btn {
-                order: 0;
-            }
-            .task-item .checkbox {
-                order: 1;
-            }
-            .subtask-list {
-                padding-left: 32px;
-            }
-        }
-        @media (max-width: 480px) {
-            .sidebar {
-                width: 160px;
-                padding: 10px 0;
-            }
-            .profile-section {
-                padding: 0 12px 12px 12px;
-                flex-wrap: wrap;
-            }
-            .nav-list li {
-                font-size: 12px;
-                padding: 8px 12px;
-                gap: 10px;
-            }
-            .nav-list li svg {
-                width: 16px;
-                height: 16px;
-            }
-            .todo-container {
-                margin: 0 8px 8px 8px;
-            }
-            .task-item {
-                padding: 8px 8px;
-                gap: 8px;
-            }
-            .task-item .content-text {
-                font-size: 13px;
-            }
-            .add-task-row input {
-                font-size: 13px;
-            }
-        }
 
+        /* ===== 模态弹窗（移动端底部浮层） ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -778,12 +793,13 @@
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: center;
             z-index: 9999;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.25s ease;
+            padding-bottom: 0;
         }
         .modal-overlay.active {
             opacity: 1;
@@ -791,16 +807,26 @@
         }
         .modal-box {
             background: var(--bg-card);
-            border-radius: 12px;
-            padding: 24px 28px;
-            max-width: 480px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            transform: scale(0.95);
-            transition: transform 0.25s ease;
+            border-radius: 16px 16px 0 0;
+            padding: 24px 24px calc(24px + var(--safe-bottom));
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         .modal-overlay.active .modal-box {
-            transform: scale(1);
+            transform: translateY(0);
+        }
+        .modal-box .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--text-muted);
+            border-radius: 4px;
+            margin: 0 auto 16px auto;
+            opacity: 0.4;
         }
         .modal-box h3 {
             font-size: 18px;
@@ -815,18 +841,21 @@
             color: var(--text-secondary);
             margin-bottom: 4px;
         }
-        .modal-box input[type="text"] {
+        .modal-box input[type="text"],
+        .modal-box input[type="password"] {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 14px;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
             background: var(--bg-primary);
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 16px;
             font-family: var(--font);
             transition: border 0.2s;
+            -webkit-appearance: none;
         }
-        .modal-box input[type="text"]:focus {
+        .modal-box input[type="text"]:focus,
+        .modal-box input[type="password"]:focus {
             border-color: var(--accent);
         }
         .modal-actions {
@@ -836,10 +865,10 @@
             margin-top: 18px;
         }
         .modal-actions button {
-            padding: 8px 20px;
+            padding: 10px 24px;
             border: none;
-            border-radius: 6px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 15px;
             font-family: var(--font);
             cursor: pointer;
             transition: background 0.2s;
@@ -858,10 +887,8 @@
         .modal-actions .btn-confirm:hover {
             background: var(--accent-hover);
         }
-        [data-theme="dark"] .modal-box input[type="text"] {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-        }
+
+        /* ===== 导出选项（内联） ===== */
         .export-options {
             margin: 12px 0 6px 0;
         }
@@ -873,20 +900,20 @@
             align-items: center;
             gap: 8px;
             font-weight: 400;
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-primary);
             cursor: pointer;
             margin-bottom: 2px;
         }
         .export-options .option-group label input[type="checkbox"],
         .export-options .option-group label input[type="radio"] {
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             accent-color: var(--accent);
             cursor: pointer;
         }
         .export-options .radio-group {
-            padding-left: 28px;
+            padding-left: 32px;
             margin-top: 4px;
             display: flex;
             flex-direction: column;
@@ -894,19 +921,19 @@
         }
         .export-options .radio-group label {
             font-weight: 400;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-secondary);
             margin-bottom: 0;
         }
         .export-options .radio-group label input[type="radio"] {
-            width: 14px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
         }
         .export-options .option-hint {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-muted);
             margin-top: 2px;
-            padding-left: 28px;
+            padding-left: 32px;
         }
         .export-options .disabled-opts {
             opacity: 0.4;
@@ -916,10 +943,228 @@
             font-weight: 600;
             color: var(--accent);
         }
+
+        /* ===== FAB (悬浮按钮) ===== */
+        .fab-add-task {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            font-size: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background 0.2s;
+            z-index: 100;
+        }
+        .fab-add-task:active {
+            transform: scale(0.92);
+            background: var(--accent-hover);
+        }
+
+        /* ===== 响应式：移动端 ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 280px;
+                transform: translateX(-100%);
+                border-right: 1px solid var(--border-color);
+                box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+                z-index: 2000;
+                background: var(--bg-sidebar);
+                padding-top: 12px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar .close-sidebar {
+                display: block;
+            }
+            .content-header .menu-toggle {
+                display: block;
+            }
+            .content-header h1 {
+                max-width: 120px;
+                font-size: 18px;
+            }
+            .todo-container {
+                margin: 0 12px 12px 12px;
+                padding: 12px 0 10px 0;
+            }
+            .todo-list {
+                padding: 8px 10px 0 10px;
+            }
+            .task-item {
+                padding: 10px 8px;
+                gap: 8px;
+            }
+            .task-item .content-text {
+                font-size: 14px;
+                min-width: 80px;
+            }
+            .task-item .expand-btn,
+            .task-item .task-actions button {
+                width: 32px;
+                height: 32px;
+            }
+            .task-item .checkbox {
+                width: 24px;
+                height: 24px;
+            }
+            .task-item .checkbox svg {
+                width: 16px;
+                height: 16px;
+            }
+            .subtask-list {
+                padding-left: 32px;
+            }
+            .subtask-item .checkbox {
+                width: 22px;
+                height: 22px;
+            }
+            .subtask-item .checkbox svg {
+                width: 14px;
+                height: 14px;
+            }
+            .modal-box {
+                padding: 20px 20px calc(20px + var(--safe-bottom));
+                max-height: 70vh;
+            }
+            .fab-add-task {
+                width: 48px;
+                height: 48px;
+                font-size: 28px;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 240px;
+            }
+            .content-header {
+                padding: 12px 12px 10px 12px;
+            }
+            .content-header h1 {
+                max-width: 80px;
+                font-size: 16px;
+            }
+            .header-actions button {
+                padding: 4px;
+            }
+            .header-actions svg {
+                width: 18px;
+                height: 18px;
+            }
+            .todo-container {
+                margin: 0 8px 8px 8px;
+                padding: 10px 0 8px 0;
+            }
+            .todo-list {
+                padding: 4px 6px 0 6px;
+                gap: 4px;
+            }
+            .task-item {
+                padding: 8px 6px;
+                gap: 6px;
+            }
+            .task-item .content-text {
+                font-size: 13px;
+                min-width: 60px;
+            }
+            .task-item .expand-btn,
+            .task-item .task-actions button {
+                width: 28px;
+                height: 28px;
+            }
+            .task-item .checkbox {
+                width: 20px;
+                height: 20px;
+            }
+            .task-item .checkbox svg {
+                width: 14px;
+                height: 14px;
+            }
+            .subtask-list {
+                padding-left: 24px;
+            }
+            .subtask-item .checkbox {
+                width: 20px;
+                height: 20px;
+            }
+            .subtask-item .checkbox svg {
+                width: 12px;
+                height: 12px;
+            }
+            .add-task-row {
+                padding: 8px 6px;
+                gap: 8px;
+            }
+            .add-task-row input {
+                font-size: 14px;
+            }
+            .add-task-row button {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+            .add-subtask-row input {
+                font-size: 13px;
+            }
+            .add-subtask-row button {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+            .modal-box {
+                padding: 16px 16px calc(16px + var(--safe-bottom));
+            }
+            .fab-add-task {
+                width: 44px;
+                height: 44px;
+                font-size: 24px;
+                bottom: 12px;
+                right: 12px;
+            }
+            .login-box {
+                padding: 24px 20px;
+            }
+            .login-box .form-group input {
+                font-size: 15px;
+            }
+        }
+
+        /* 遮罩层（点击关闭侧边栏） */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1500;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+        @media (min-width: 769px) {
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
-
     <!-- ===== 登录/注册界面 ===== -->
     <div id="loginOverlay">
         <div class="login-box">
@@ -949,7 +1194,12 @@
 
     <!-- ===== 主界面 ===== -->
     <div class="app-container" id="appContainer" style="display:none;">
+        <!-- 侧边栏遮罩 -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- 侧边栏 -->
         <aside class="sidebar" id="sidebar">
+            <button class="close-sidebar" id="closeSidebarBtn">✕</button>
             <div class="profile-section">
                 <div class="profile-avatar" id="avatarDisplay">U</div>
                 <div class="profile-info">
@@ -969,9 +1219,13 @@
             </ul>
         </aside>
 
+        <!-- 主内容 -->
         <main class="main-content">
             <header class="content-header">
-                <h1 id="currentGroupTitle">任务</h1>
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">☰</button>
+                    <h1 id="currentGroupTitle">任务</h1>
+                </div>
                 <div class="header-actions">
                     <button id="importBtn" title="导入清单 (JSON)">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1019,13 +1273,16 @@
                     <div class="sync-status" id="syncStatus">已同步</div>
                 </div>
                 <div class="todo-list" id="todoList"></div>
+                <!-- 悬浮添加按钮 -->
+                <button class="fab-add-task" id="fabAddTask" title="添加任务">+</button>
             </div>
         </main>
     </div>
 
-    <!-- ===== 模态框 ===== -->
+    <!-- ===== 模态弹窗 ===== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-box">
+            <div class="modal-handle"></div>
             <h3 id="modalTitle">编辑内容</h3>
             <div id="modalBody">
                 <label for="modalInput">内容</label>
@@ -1079,6 +1336,11 @@
         const loginSub = $('#loginSub');
         const switchHint = $('#switchHint');
 
+        const sidebar = $('#sidebar');
+        const sidebarOverlay = $('#sidebarOverlay');
+        const menuToggle = $('#menuToggle');
+        const closeSidebarBtn = $('#closeSidebarBtn');
+
         const groupList = $('#groupList');
         const todoList = $('#todoList');
         const currentGroupTitle = $('#currentGroupTitle');
@@ -1094,8 +1356,9 @@
         const exportWordBtn = $('#exportWordBtn');
         const exportJsonBtn = $('#exportJsonBtn');
         const importBtn = $('#importBtn');
+        const fabAddTask = $('#fabAddTask');
 
-        let isRegisterMode = false; // 初始为登录模式
+        let isRegisterMode = false;
 
         function uuid() { return crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2,
             8); }
@@ -1111,6 +1374,23 @@
         function setSyncStatus(text) { syncStatus.textContent = text; }
 
         function encodePwd(pwd) { return btoa(pwd); }
+
+        // ============================================================
+        //  Sidebar 控制 (移动端)
+        // ============================================================
+        function openSidebar() {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('active');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('active');
+        }
+
+        menuToggle.addEventListener('click', openSidebar);
+        closeSidebarBtn.addEventListener('click', closeSidebar);
+        sidebarOverlay.addEventListener('click', closeSidebar);
 
         // ============================================================
         //  Modal
@@ -1134,6 +1414,9 @@
                 if (inp) { inp.focus();
                     inp.select(); }
                 modalResolve = resolve;
+                // 点击遮罩关闭
+                modalOverlay._closeHandler = () => { closeModal(null); };
+                modalOverlay.addEventListener('click', modalOverlay._closeHandler);
             });
         }
 
@@ -1143,7 +1426,7 @@
                 modalTitle.textContent = '📄 导出 Word 文档';
                 modalBody.innerHTML = `
                         <div class="export-options">
-                            <div style="margin-bottom:10px;font-size:13px;color:var(--text-secondary);">
+                            <div style="margin-bottom:10px;font-size:14px;color:var(--text-secondary);">
                                 当前列表：<span class="group-name-display">${escapeHtml(groupName)}</span>
                             </div>
                             <div class="option-group">
@@ -1166,14 +1449,21 @@
                     if (!chk.checked) group.classList.add('disabled-opts');
                 }
                 modalResolve = resolve;
+                modalOverlay._closeHandler = () => { closeModal(null); };
+                modalOverlay.addEventListener('click', modalOverlay._closeHandler);
             });
         }
 
         function closeModal(result) {
             modalOverlay.classList.remove('active');
+            if (modalOverlay._closeHandler) {
+                modalOverlay.removeEventListener('click', modalOverlay._closeHandler);
+                delete modalOverlay._closeHandler;
+            }
             if (modalResolve) { modalResolve(result);
                 modalResolve = null; }
         }
+
         modalConfirm.addEventListener('click', () => {
             if (modalMode === 'input') {
                 const inp = document.getElementById('modalInput');
@@ -1191,9 +1481,8 @@
         document.addEventListener('keydown', (e) => {
             if (!modalOverlay.classList.contains('active')) return;
             if (e.key === 'Enter') modalConfirm.click();
-            else if (e.key === 'Escape') modalCancel.click();
+            else if (e.key === 'Escape') closeModal(null);
         });
-        modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(null); });
 
         // ============================================================
         //  Theme
@@ -1353,7 +1642,7 @@
         refreshBtn.addEventListener('click', () => { if (!STATE.isSyncing && STATE.currentUser) pullFromGitHub(); });
 
         // ============================================================
-        //  格式化语法（原样保留）
+        //  格式化语法
         // ============================================================
         const TYPE_MAP = { 'P': '第{num}页', 'S': '第{num}步', 'Q': '第{num}课时', 'W': '第{num}周', 'T': '第{num}天', 'H': '第{num}小时',
             'U': '第{num}单元', '#': '{num}' };
@@ -1482,6 +1771,7 @@
                     const gid = li.dataset.groupId;
                     if (gid !== STATE.currentGroupId) { STATE.currentGroupId = gid;
                         renderAll(); }
+                    closeSidebar();
                 });
             });
             groupList.querySelectorAll('.group-delete').forEach(btn => {
@@ -1494,6 +1784,7 @@
                             STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
                         }
                         saveAndSync();
+                        closeSidebar();
                     }
                 });
             });
@@ -1804,6 +2095,33 @@
                 saveAndSync(); }
         });
 
+        // FAB 添加任务
+        fabAddTask.addEventListener('click', async () => {
+            const group = getCurrentGroup();
+            if (!group) { alert('请先选择一个任务组'); return; }
+            const result = await showInputModal('添加新任务', '');
+            if (result !== null && result !== '') {
+                const parsed = parseStepName(result);
+                let taskName = result,
+                    steps = [];
+                if (parsed) { taskName = parsed.displayName || result;
+                    steps = parsed.steps || []; }
+                const newTask = {
+                    id: uuid(),
+                    content: taskName,
+                    completed: false,
+                    order: group.tasks.length,
+                    createdAt: Date.now(),
+                    completedAt: null,
+                    subtasks: steps.map((stepText, idx) => ({ id: uuid(), content: stepText, completed: false,
+                        order: idx })),
+                };
+                group.tasks.push(newTask);
+                if (steps.length > 0) STATE.expandedTasks[newTask.id] = true;
+                saveAndSync();
+            }
+        });
+
         function getCurrentGroup() { return STATE.groups.find(g => g.id === STATE.currentGroupId); }
 
         async function handleAddGroup() {
@@ -1814,6 +2132,7 @@
                 STATE.groups.push(newGroup);
                 STATE.currentGroupId = newGroup.id;
                 saveAndSync();
+                closeSidebar();
             }
         }
 
@@ -1972,7 +2291,7 @@
         }
 
         // ============================================================
-        //  登录 / 注册
+        //  登录 / 注册 + 持久化
         // ============================================================
         function switchMode() {
             if (isRegisterMode) {
@@ -2012,6 +2331,7 @@
             } else {
                 if (!STATE.users[username]) { loginError.textContent = '用户不存在'; return; }
                 if (STATE.users[username] !== encoded) { loginError.textContent = '密码错误'; return; }
+                localStorage.setItem('gittodo_user', username);
                 STATE.currentUser = username;
                 STATE.groups = (STATE.todos[username] && STATE.todos[username].groups) || [];
                 sortByOrder(STATE.groups);
@@ -2026,6 +2346,7 @@
 
         function logout() {
             if (!confirm('确定退出登录吗？')) return;
+            localStorage.removeItem('gittodo_user');
             STATE.currentUser = null;
             STATE.groups = [];
             STATE.currentGroupId = null;
@@ -2041,7 +2362,7 @@
         }
 
         // ============================================================
-        //  初始化
+        //  初始化（自动恢复登录状态）
         // ============================================================
         async function init() {
             applyTheme(getPreferredTheme());
@@ -2057,31 +2378,59 @@
             STATE.users = data.users || {};
             STATE.todos = data.todos || {};
 
-            // 确保初始为登录模式
+            const savedUser = localStorage.getItem('gittodo_user');
+            if (savedUser && STATE.todos[savedUser]) {
+                STATE.currentUser = savedUser;
+                STATE.groups = STATE.todos[savedUser].groups || [];
+                sortByOrder(STATE.groups);
+                STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
+                loginOverlay.classList.add('hidden');
+                appContainer.style.display = 'flex';
+                renderAll();
+                startPolling();
+                setSyncStatus('已就绪');
+                bindEvents();
+                return;
+            }
+
             isRegisterMode = false;
             switchMode();
-
             loginOverlay.classList.remove('hidden');
             appContainer.style.display = 'none';
+            bindEvents();
+        }
 
-            // 绑定事件
+        function bindEvents() {
+            loginBtn.removeEventListener('click', handleLogin);
             loginBtn.addEventListener('click', handleLogin);
+            registerBtn.removeEventListener('click', () => {});
             registerBtn.addEventListener('click', () => {
                 isRegisterMode = !isRegisterMode;
                 switchMode();
             });
+            switchModeLink.removeEventListener('click', () => {});
             switchModeLink.addEventListener('click', () => {
                 isRegisterMode = !isRegisterMode;
                 switchMode();
             });
-            loginPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleLogin(); });
-            loginUsername.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleLogin(); });
+            loginPassword.removeEventListener('keydown', handleLoginEnter);
+            loginPassword.addEventListener('keydown', handleLoginEnter);
+            loginUsername.removeEventListener('keydown', handleLoginEnter);
+            loginUsername.addEventListener('keydown', handleLoginEnter);
 
+            logoutBtn.removeEventListener('click', logout);
             logoutBtn.addEventListener('click', logout);
 
+            exportWordBtn.removeEventListener('click', handleExportWord);
             exportWordBtn.addEventListener('click', handleExportWord);
+            exportJsonBtn.removeEventListener('click', handleExportJson);
             exportJsonBtn.addEventListener('click', handleExportJson);
+            importBtn.removeEventListener('click', handleImportJson);
             importBtn.addEventListener('click', handleImportJson);
+        }
+
+        function handleLoginEnter(e) {
+            if (e.key === 'Enter') handleLogin();
         }
 
         init().catch(err => {
