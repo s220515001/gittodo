@@ -1024,6 +1024,12 @@
                   "content": "完整生存测试",
                   "completed": false,
                   "order": 1
+                },
+                {
+                  "id": "4c54f3d3-c9a8-4ee3-89bd-94abe706896c",
+                  "content": "将问题/建议喂给AI",
+                  "completed": false,
+                  "order": 2
                 }
               ]
             }
