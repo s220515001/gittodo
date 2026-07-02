@@ -1030,6 +1030,12 @@
                   "content": "将问题/建议喂给AI",
                   "completed": false,
                   "order": 2
+                },
+                {
+                  "id": "816c7331-8664-4332-abbe-1c35520114d6",
+                  "content": "重复以上 直至模组完善",
+                  "completed": false,
+                  "order": 3
                 }
               ]
             }
