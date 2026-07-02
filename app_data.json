@@ -994,42 +994,7 @@
           "name": "明日必做",
           "order": 1,
           "createdAt": 1782918041910,
-          "tasks": [
-            {
-              "id": "84452404-f772-400d-950c-66d3fa38de3f",
-              "content": "明天就要出分了 你紧张吗 在以下时间打勾",
-              "completed": false,
-              "order": 1,
-              "createdAt": 1782947861957,
-              "completedAt": null,
-              "subtasks": [
-                {
-                  "id": "faf8f5c6-6d69-4aac-a4ad-85e410fc63b6",
-                  "content": "7点",
-                  "completed": true,
-                  "order": 0
-                },
-                {
-                  "id": "6aa89da4-ed6a-4d21-a4b5-77568330daff",
-                  "content": "13点",
-                  "completed": true,
-                  "order": 1
-                },
-                {
-                  "id": "e7a82806-a4a7-4f15-9e9a-69f468364ec7",
-                  "content": "16点",
-                  "completed": true,
-                  "order": 2
-                },
-                {
-                  "id": "22b8182f-6b47-4217-ac96-eebcb60fa12b",
-                  "content": "18点",
-                  "completed": false,
-                  "order": 3
-                }
-              ]
-            }
-          ]
+          "tasks": []
         }
       ]
     }
