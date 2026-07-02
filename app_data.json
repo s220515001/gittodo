@@ -1012,7 +1012,7 @@
                 {
                   "id": "6aa89da4-ed6a-4d21-a4b5-77568330daff",
                   "content": "13点",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 },
                 {
