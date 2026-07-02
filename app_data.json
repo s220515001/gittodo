@@ -1001,7 +1001,20 @@
           "name": "今日必做",
           "order": 2,
           "createdAt": 1783031979629,
-          "tasks": []
+          "tasks": [
+            {
+              "id": "0856a45e-b4ce-4b4e-a19e-389ea637b358",
+              "content": "完善模组",
+              "completed": false,
+              "order": 0,
+              "createdAt": 1783032006138,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
+            }
+          ]
         }
       ]
     }
