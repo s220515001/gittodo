@@ -1016,7 +1016,7 @@
                 {
                   "id": "6cd510e5-3199-4d40-8bf8-57a3580074fa",
                   "content": "将图片放入资产",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
