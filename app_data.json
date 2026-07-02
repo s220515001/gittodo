@@ -1018,6 +1018,12 @@
                   "content": "将图片放入资产",
                   "completed": false,
                   "order": 0
+                },
+                {
+                  "id": "93b61bce-998c-41e5-a90b-94904af96979",
+                  "content": "完整生存测试",
+                  "completed": false,
+                  "order": 1
                 }
               ]
             }
