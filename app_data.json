@@ -920,44 +920,10 @@
               ]
             },
             {
-              "id": "8a3121ee-4c85-4d46-880d-a97150150079",
-              "content": "英语 预习",
-              "completed": false,
-              "order": 2,
-              "createdAt": 1782899935251,
-              "completedAt": null,
-              "subtasks": [
-                {
-                  "id": "8357a3bf-f17f-490b-8496-9e032b7a3ec1",
-                  "content": "第1单元",
-                  "completed": false,
-                  "order": 0
-                },
-                {
-                  "id": "d97c4b0a-642c-4716-b42e-2cb5fc952ab0",
-                  "content": "第2单元",
-                  "completed": false,
-                  "order": 1
-                },
-                {
-                  "id": "539c72fd-2517-404e-b0d9-af58ef495d2d",
-                  "content": "第3单元",
-                  "completed": false,
-                  "order": 2
-                },
-                {
-                  "id": "a642b493-efd1-4d27-b64a-bfd28a361966",
-                  "content": "第4单元",
-                  "completed": false,
-                  "order": 3
-                }
-              ]
-            },
-            {
               "id": "dd715246-07fa-441f-89cb-a42a061baf54",
               "content": "英语 预默",
               "completed": false,
-              "order": 3,
+              "order": 2,
               "createdAt": 1782900104609,
               "completedAt": null,
               "subtasks": [
@@ -981,6 +947,40 @@
                 },
                 {
                   "id": "3e20df3c-f845-4548-8a41-ba82e0c208be",
+                  "content": "第4单元",
+                  "completed": false,
+                  "order": 3
+                }
+              ]
+            },
+            {
+              "id": "8a3121ee-4c85-4d46-880d-a97150150079",
+              "content": "英语 预习",
+              "completed": false,
+              "order": 3,
+              "createdAt": 1782899935251,
+              "completedAt": null,
+              "subtasks": [
+                {
+                  "id": "8357a3bf-f17f-490b-8496-9e032b7a3ec1",
+                  "content": "第1单元",
+                  "completed": false,
+                  "order": 0
+                },
+                {
+                  "id": "d97c4b0a-642c-4716-b42e-2cb5fc952ab0",
+                  "content": "第2单元",
+                  "completed": false,
+                  "order": 1
+                },
+                {
+                  "id": "539c72fd-2517-404e-b0d9-af58ef495d2d",
+                  "content": "第3单元",
+                  "completed": false,
+                  "order": 2
+                },
+                {
+                  "id": "a642b493-efd1-4d27-b64a-bfd28a361966",
                   "content": "第4单元",
                   "completed": false,
                   "order": 3
