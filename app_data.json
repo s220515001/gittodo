@@ -1074,7 +1074,14 @@
               "dueDate": "",
               "notes": "",
               "tags": [],
-              "subtasks": []
+              "subtasks": [
+                {
+                  "id": "73b488cd-b7bc-4cb2-b100-2c46e2103356",
+                  "content": "玩家在熵痕平原中如果没有特殊装备会受到熵化的效果",
+                  "completed": false,
+                  "order": 0
+                }
+              ]
             }
           ]
         }
