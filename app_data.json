@@ -986,18 +986,6 @@
                   "order": 3
                 }
               ]
-            },
-            {
-              "id": "75c73d49-eba7-40d9-83ff-0f8f65a7c3be",
-              "content": "数学 预习%#一,二|第{num}章%",
-              "completed": false,
-              "order": 4,
-              "createdAt": 1783036865538,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
             }
           ]
         },
