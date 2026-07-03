@@ -1026,20 +1026,7 @@
           "name": "今日必做",
           "order": 2,
           "createdAt": 1783031979629,
-          "tasks": [
-            {
-              "id": "86421c2b-b3a6-40c6-a69e-e9d9ae340c4d",
-              "content": "将修改过的GitTodo部署",
-              "completed": true,
-              "order": 1,
-              "createdAt": 1783059049695,
-              "completedAt": 1783118058355,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
-            }
-          ]
+          "tasks": []
         }
       ]
     }
