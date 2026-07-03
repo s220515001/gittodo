@@ -1037,7 +1037,14 @@
               "dueDate": "",
               "notes": "",
               "tags": [],
-              "subtasks": []
+              "subtasks": [
+                {
+                  "id": "ad12d123-7ee2-454d-bcac-fafc26ecf4ad",
+                  "content": "放入贴图",
+                  "completed": false,
+                  "order": 0
+                }
+              ]
             }
           ]
         }
