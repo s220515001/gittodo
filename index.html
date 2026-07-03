@@ -1761,6 +1761,8 @@
     lastStatsSnapshot: null,
  statsInitialized: false,   // 统计视图是否已初始化
     lastGroupId: null,   
+isEditing: false,      // 是否正在编辑输入框
+    pendingRender: false,  // 是否有待渲染的数据更新
         };
 
         // ============================================================
@@ -1918,10 +1920,17 @@
                 modalResolve(result);
                 modalResolve = null;
             }
+STATE.isEditing = false;
+    if (STATE.pendingRender) {
+        STATE.pendingRender = false;
+        renderAll();
+        setSyncStatus('已更新');
+    }
         }
 
         // 打开模态框的通用函数，绑定 overlay 点击事件（仅点击遮罩本身才关闭）
         function openModal() {
+STATE.isEditing = true;
             modalOverlay.classList.add('active');
             // 绑定点击遮罩关闭，但要确保点击的是遮罩本身而不是内部盒子
             if (modalOverlay._closeHandler) {
@@ -2155,9 +2164,17 @@
         if (!STATE.groups.some(g => g.id === STATE.currentGroupId)) {
             STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
         }
-        renderAll();  // 这里会调用 renderStats(false)
-        setSyncStatus('已更新');
-    } else { setSyncStatus('已同步'); }
+        // 如果正在编辑，只标记待渲染，不立即刷新
+        if (STATE.isEditing) {
+            STATE.pendingRender = true;
+            setSyncStatus('已更新（待应用）');
+        } else {
+            renderAll();
+            setSyncStatus('已更新');
+        }
+    } else {
+        setSyncStatus('已同步');
+    }
     return true;
 }
 
@@ -2205,60 +2222,76 @@
         // ============================================================
         const TYPE_MAP = { 'P': '第{num}页', 'S': '第{num}步', 'Q': '第{num}课时', 'W': '第{num}周', 'T': '第{num}天', 'H': '第{num}小时',
             'U': '第{num}单元', '#': '{num}' };
-
-        function parseRange(rangeStr) {
-            rangeStr = rangeStr.trim();
-            if (/^[\d\s,]+$/.test(rangeStr)) {
-                const nums = rangeStr.split(',').map(s => parseInt(s.trim(), 10));
-                if (nums.every(n => !isNaN(n) && n > 0)) return nums;
-                return null;
-            }
-            const match = rangeStr.match(/^(\d+)\s*-\s*(\d+)(?:\s*:\s*(\d+))?$/);
-            if (match) {
-                const start = parseInt(match[1], 10),
-                    end = parseInt(match[2], 10),
-                    step = match[3] ? parseInt(match[3], 10) : 1;
-                if (isNaN(start) || isNaN(end) || isNaN(step) || step < 1) return null;
-                const result = [];
-                if (start <= end) { for (let i = start; i <= end; i += step) result.push(i); } else { for (let i =
-                        start; i >= end; i -= step) result.push(i); }
-                return result;
-            }
+// 在 parseBlock 函数之前添加这个函数
+function parseRange(rangeStr) {
+    rangeStr = rangeStr.trim();
+    // 检测是否为纯数字、逗号、空格（可能是数字列表或范围）
+    if (/^[\d\s,]+$/.test(rangeStr)) {
+        // 尝试解析为数字列表（逗号分隔）
+        if (!rangeStr.includes('-')) {
+            const nums = rangeStr.split(',').map(s => parseInt(s.trim(), 10));
+            if (nums.every(n => !isNaN(n) && n > 0)) return nums;
             return null;
         }
-
-        function parseBlock(blockContent) {
-            blockContent = blockContent.trim();
-            if (blockContent.includes('&')) {
-                const parts = blockContent.split('&').map(s => s.trim());
-                const dimensions = [];
-                for (const part of parts) {
-                    const match = part.match(/^([A-Z#])(.+?)(?:\|(.+))?$/);
-                    if (!match) return null;
-                    const type = match[1],
-                        rangeStr = match[2].trim(),
-                        template = match[3] ? match[3].trim() : null;
-                    if (!TYPE_MAP[type]) return null;
-                    const nums = parseRange(rangeStr);
-                    if (!nums) return null;
-                    dimensions.push({ type, nums, template: template || TYPE_MAP[type] });
-                }
-                const minLen = Math.min(...dimensions.map(d => d.nums.length));
-                if (minLen === 0) return null;
-                return { type: 'pair', dimensions, length: minLen };
+        // 尝试解析为数字范围（如 1-5 或 1-5:2）
+        const match = rangeStr.match(/^(\d+)\s*-\s*(\d+)(?:\s*:\s*(\d+))?$/);
+        if (match) {
+            const start = parseInt(match[1], 10);
+            const end = parseInt(match[2], 10);
+            const step = match[3] ? parseInt(match[3], 10) : 1;
+            if (isNaN(start) || isNaN(end) || isNaN(step) || step < 1) return null;
+            const result = [];
+            if (start <= end) {
+                for (let i = start; i <= end; i += step) result.push(i);
             } else {
-                const match = blockContent.match(/^([A-Z#])(.+?)(?:\|(.+))?$/);
-                if (!match) return null;
-                const type = match[1],
-                    rangeStr = match[2].trim(),
-                    template = match[3] ? match[3].trim() : null;
-                if (!TYPE_MAP[type]) return null;
-                const nums = parseRange(rangeStr);
-                if (!nums) return null;
-                return { type: 'single', nums, template: template || TYPE_MAP[type] };
+                for (let i = start; i >= end; i -= step) result.push(i);
             }
+            return result;
         }
+        return null;
+    } else {
+        // 视为占位词列表（用逗号分隔的字符串）
+        const items = rangeStr.split(',').map(s => s.trim());
+        if (items.every(s => s.length > 0)) return items;
+        return null;
+    }
+}
+        function parseBlock(blockContent) {
+    blockContent = blockContent.trim();
+    if (blockContent.includes('&')) {
+        const parts = blockContent.split('&').map(s => s.trim());
+        const dimensions = [];
+        for (const part of parts) {
+            // 修改正则：支持 # 后面直接跟占位词列表（中文或任意字符）
+            const match = part.match(/^([A-Z#])(.+?)(?:\|(.+))?$/);
+            if (!match) return null;
+            const type = match[1],
+                rangeStr = match[2].trim(),
+                template = match[3] ? match[3].trim() : null;
+            if (!TYPE_MAP[type] && type !== '#') return null;
+            const nums = parseRange(rangeStr);
+            if (!nums) return null;
+            // 如果是占位词列表（字符串数组），直接使用 nums 作为值
+            dimensions.push({ type, nums, template: template || TYPE_MAP[type] || '{num}' });
+        }
+        const minLen = Math.min(...dimensions.map(d => d.nums.length));
+        if (minLen === 0) return null;
+        return { type: 'pair', dimensions, length: minLen };
+    } else {
+        // 修改正则：支持 # 后面直接跟占位词列表（中文或任意字符）
+        const match = blockContent.match(/^([A-Z#])(.+?)(?:\|(.+))?$/);
+        if (!match) return null;
+        const type = match[1],
+            rangeStr = match[2].trim(),
+            template = match[3] ? match[3].trim() : null;
+        if (!TYPE_MAP[type] && type !== '#') return null;
+        const nums = parseRange(rangeStr);
+        if (!nums) return null;
+        return { type: 'single', nums, template: template || TYPE_MAP[type] || '{num}' };
+    }
+}
 
+        
         function expandBlock(block) {
             if (block.type === 'single') return block.nums.map(num => block.template.replace(/\{num\}/g, num));
             else if (block.type === 'pair') {
@@ -3525,33 +3558,60 @@
         }
 
         function bindEvents() {
-            loginBtn.removeEventListener('click', handleLogin);
-            loginBtn.addEventListener('click', handleLogin);
-            registerBtn.removeEventListener('click', () => {});
-            registerBtn.addEventListener('click', () => {
-                isRegisterMode = !isRegisterMode;
-                switchMode();
-            });
-            switchModeLink.removeEventListener('click', () => {});
-            switchModeLink.addEventListener('click', () => {
-                isRegisterMode = !isRegisterMode;
-                switchMode();
-            });
-            loginPassword.removeEventListener('keydown', handleLoginEnter);
-            loginPassword.addEventListener('keydown', handleLoginEnter);
-            loginUsername.removeEventListener('keydown', handleLoginEnter);
-            loginUsername.addEventListener('keydown', handleLoginEnter);
+    // 登录相关
+    loginBtn.removeEventListener('click', handleLogin);
+    loginBtn.addEventListener('click', handleLogin);
+    registerBtn.removeEventListener('click', () => {});
+    registerBtn.addEventListener('click', () => {
+        isRegisterMode = !isRegisterMode;
+        switchMode();
+    });
+    switchModeLink.removeEventListener('click', () => {});
+    switchModeLink.addEventListener('click', () => {
+        isRegisterMode = !isRegisterMode;
+        switchMode();
+    });
+    loginPassword.removeEventListener('keydown', handleLoginEnter);
+    loginPassword.addEventListener('keydown', handleLoginEnter);
+    loginUsername.removeEventListener('keydown', handleLoginEnter);
+    loginUsername.addEventListener('keydown', handleLoginEnter);
 
-            logoutBtn.removeEventListener('click', logout);
-            logoutBtn.addEventListener('click', logout);
+    // 退出登录
+    logoutBtn.removeEventListener('click', logout);
+    logoutBtn.addEventListener('click', logout);
 
-            exportWordBtn.removeEventListener('click', handleExportWord);
-            exportWordBtn.addEventListener('click', handleExportWord);
-            exportJsonBtn.removeEventListener('click', handleExportJson);
-            exportJsonBtn.addEventListener('click', handleExportJson);
-            importBtn.removeEventListener('click', handleImportJson);
-            importBtn.addEventListener('click', handleImportJson);
+    // 导入/导出
+    exportWordBtn.removeEventListener('click', handleExportWord);
+    exportWordBtn.addEventListener('click', handleExportWord);
+    exportJsonBtn.removeEventListener('click', handleExportJson);
+    exportJsonBtn.addEventListener('click', handleExportJson);
+    importBtn.removeEventListener('click', handleImportJson);
+    importBtn.addEventListener('click', handleImportJson);
+
+    // ---- 新增：监听任务列表中的输入框焦点，防止自动刷新导致失焦 ----
+    todoList.removeEventListener('focusin', todoList._focusinHandler);
+    todoList.removeEventListener('focusout', todoList._focusoutHandler);
+    todoList._focusinHandler = function(e) {
+        const target = e.target;
+        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+            STATE.isEditing = true;   // 标记正在编辑，暂停自动刷新
         }
+    };
+    todoList._focusoutHandler = function(e) {
+        const target = e.target;
+        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+            STATE.isEditing = false;
+            // 如果有待渲染的更新，立即执行
+            if (STATE.pendingRender) {
+                STATE.pendingRender = false;
+                renderAll();
+                setSyncStatus('已更新');
+            }
+        }
+    };
+    todoList.addEventListener('focusin', todoList._focusinHandler);
+    todoList.addEventListener('focusout', todoList._focusoutHandler);
+}
 
         function handleLoginEnter(e) {
             if (e.key === 'Enter') handleLogin();
