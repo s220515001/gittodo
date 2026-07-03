@@ -1028,18 +1028,6 @@
           "createdAt": 1783031979629,
           "tasks": [
             {
-              "id": "1146ec77-cf6b-454e-8a8b-a5dd85e27115",
-              "content": "修复模组音符盒不明显问题",
-              "completed": true,
-              "order": 0,
-              "createdAt": 1783058749580,
-              "completedAt": 1783118055725,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
-            },
-            {
               "id": "86421c2b-b3a6-40c6-a69e-e9d9ae340c4d",
               "content": "将修改过的GitTodo部署",
               "completed": true,
