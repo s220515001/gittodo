@@ -1049,6 +1049,12 @@
                   "content": "注册block",
                   "completed": false,
                   "order": 1
+                },
+                {
+                  "id": "365b9611-07bf-490e-ac2a-cde62dafdb30",
+                  "content": "数据生成中注册1",
+                  "completed": false,
+                  "order": 2
                 }
               ]
             }
