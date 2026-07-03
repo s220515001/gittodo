@@ -1043,6 +1043,12 @@
                   "content": "放入贴图",
                   "completed": false,
                   "order": 0
+                },
+                {
+                  "id": "9daed2a6-7a0d-44f0-93d3-36c12d1c8884",
+                  "content": "注册block",
+                  "completed": false,
+                  "order": 1
                 }
               ]
             }
