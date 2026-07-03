@@ -986,43 +986,6 @@
                   "order": 3
                 }
               ]
-            },
-            {
-              "id": "294a0ffb-3116-43c9-bcb0-55d2087f4801",
-              "content": "数学 预习",
-              "completed": false,
-              "order": 4,
-              "createdAt": 1783036887951,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": [
-                {
-                  "id": "bbe8d48a-df45-4c72-8d95-8ed3605da862",
-                  "content": "第1章",
-                  "completed": false,
-                  "order": 0
-                },
-                {
-                  "id": "03d6eb73-d0f8-49cb-8246-103322ecbb29",
-                  "content": "第2章",
-                  "completed": false,
-                  "order": 1
-                }
-              ]
-            },
-            {
-              "id": "db19144d-039e-437c-84a2-41a3ab5ec3eb",
-              "content": "数学 预习%#一,二|第{num}章%",
-              "completed": false,
-              "order": 5,
-              "createdAt": 1783037733191,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
             }
           ]
         },
