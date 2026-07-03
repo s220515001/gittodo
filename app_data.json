@@ -1028,10 +1028,22 @@
           "createdAt": 1783031979629,
           "tasks": [
             {
+              "id": "d226dbda-0f41-4550-b7ac-64f8d7ddef39",
+              "content": "修复熵值200却不生成熵痕平原的BUG",
+              "completed": false,
+              "order": 0,
+              "createdAt": 1783118260338,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
+            },
+            {
               "id": "82aa180b-1cfe-4240-8acc-7d198d9cc8d9",
               "content": "熵化草",
               "completed": false,
-              "order": 0,
+              "order": 1,
               "createdAt": 1783118109701,
               "completedAt": null,
               "dueDate": "",
@@ -1068,7 +1080,7 @@
               "id": "26cd8fca-9c3b-444a-9bfa-4a190aa3eddb",
               "content": "想法",
               "completed": false,
-              "order": 1,
+              "order": 2,
               "createdAt": 1783118171204,
               "completedAt": null,
               "dueDate": "",
@@ -1082,18 +1094,6 @@
                   "order": 0
                 }
               ]
-            },
-            {
-              "id": "d226dbda-0f41-4550-b7ac-64f8d7ddef39",
-              "content": "修复熵值200却不生成熵痕平原的BUG",
-              "completed": false,
-              "order": 2,
-              "createdAt": 1783118260338,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
             }
           ]
         }
