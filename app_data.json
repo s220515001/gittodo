@@ -1082,6 +1082,18 @@
                   "order": 0
                 }
               ]
+            },
+            {
+              "id": "d226dbda-0f41-4550-b7ac-64f8d7ddef39",
+              "content": "修复熵值200却不生成熵痕平原的BUG",
+              "completed": false,
+              "order": 2,
+              "createdAt": 1783118260338,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
             }
           ]
         }
