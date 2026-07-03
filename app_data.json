@@ -1011,6 +1011,18 @@
                   "order": 1
                 }
               ]
+            },
+            {
+              "id": "db19144d-039e-437c-84a2-41a3ab5ec3eb",
+              "content": "数学 预习%#一,二|第{num}章%",
+              "completed": false,
+              "order": 5,
+              "createdAt": 1783037733191,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
             }
           ]
         },
