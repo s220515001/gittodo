@@ -1026,7 +1026,20 @@
           "name": "今日必做",
           "order": 2,
           "createdAt": 1783031979629,
-          "tasks": []
+          "tasks": [
+            {
+              "id": "1146ec77-cf6b-454e-8a8b-a5dd85e27115",
+              "content": "修复模组音符盒不明显问题",
+              "completed": false,
+              "order": 0,
+              "createdAt": 1783058749580,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
+            }
+          ]
         }
       ]
     }
