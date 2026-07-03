@@ -1026,7 +1026,20 @@
           "name": "今日必做",
           "order": 2,
           "createdAt": 1783031979629,
-          "tasks": []
+          "tasks": [
+            {
+              "id": "82aa180b-1cfe-4240-8acc-7d198d9cc8d9",
+              "content": "熵化草",
+              "completed": false,
+              "order": 0,
+              "createdAt": 1783118109701,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
+            }
+          ]
         }
       ]
     }
