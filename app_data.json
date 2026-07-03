@@ -1026,45 +1026,7 @@
           "name": "今日必做",
           "order": 2,
           "createdAt": 1783031979629,
-          "tasks": [
-            {
-              "id": "0856a45e-b4ce-4b4e-a19e-389ea637b358",
-              "content": "完善模组",
-              "completed": false,
-              "order": 0,
-              "createdAt": 1783032006138,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": [
-                {
-                  "id": "6cd510e5-3199-4d40-8bf8-57a3580074fa",
-                  "content": "将图片放入资产",
-                  "completed": true,
-                  "order": 0
-                },
-                {
-                  "id": "93b61bce-998c-41e5-a90b-94904af96979",
-                  "content": "完整生存测试",
-                  "completed": false,
-                  "order": 1
-                },
-                {
-                  "id": "4c54f3d3-c9a8-4ee3-89bd-94abe706896c",
-                  "content": "将问题/建议喂给AI",
-                  "completed": false,
-                  "order": 2
-                },
-                {
-                  "id": "816c7331-8664-4332-abbe-1c35520114d6",
-                  "content": "重复以上 直至模组完善",
-                  "completed": false,
-                  "order": 3
-                }
-              ]
-            }
-          ]
+          "tasks": []
         }
       ]
     }
