@@ -1028,43 +1028,6 @@
           "createdAt": 1783031979629,
           "tasks": [
             {
-              "id": "82aa180b-1cfe-4240-8acc-7d198d9cc8d9",
-              "content": "熵化草",
-              "completed": false,
-              "order": 1,
-              "createdAt": 1783118109701,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": [
-                {
-                  "id": "ad12d123-7ee2-454d-bcac-fafc26ecf4ad",
-                  "content": "放入贴图",
-                  "completed": false,
-                  "order": 0
-                },
-                {
-                  "id": "9daed2a6-7a0d-44f0-93d3-36c12d1c8884",
-                  "content": "注册block",
-                  "completed": false,
-                  "order": 1
-                },
-                {
-                  "id": "365b9611-07bf-490e-ac2a-cde62dafdb30",
-                  "content": "数据生成中注册1",
-                  "completed": false,
-                  "order": 2
-                },
-                {
-                  "id": "abaf5e21-e076-4e33-976f-195f4fcc3b01",
-                  "content": "写自定义行为",
-                  "completed": false,
-                  "order": 3
-                }
-              ]
-            },
-            {
               "id": "26cd8fca-9c3b-444a-9bfa-4a190aa3eddb",
               "content": "想法",
               "completed": false,
