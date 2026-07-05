@@ -1036,6 +1036,109 @@
                   "order": 1
                 }
               ]
+            },
+            {
+              "id": "c72ccf62-648b-4411-bf16-282e5d492e06",
+              "content": "数学 预习",
+              "completed": false,
+              "order": 6,
+              "createdAt": 1783233070563,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": [
+                {
+                  "id": "83c0a873-9c2d-4049-9efa-e627c5517af2",
+                  "content": "第一章 1.1",
+                  "completed": false,
+                  "order": 0
+                },
+                {
+                  "id": "ed4598bc-c0b0-48e1-8495-d666fda1e509",
+                  "content": "第一章 1.2",
+                  "completed": false,
+                  "order": 1
+                },
+                {
+                  "id": "fdb46286-302e-4ebd-954e-c37706c363c7",
+                  "content": "第一章 1.3",
+                  "completed": false,
+                  "order": 2
+                },
+                {
+                  "id": "d6961d1b-70d1-4b1b-991b-f2b75c885aea",
+                  "content": "第一章 1.4",
+                  "completed": false,
+                  "order": 3
+                },
+                {
+                  "id": "062cb992-518c-4abf-8303-b709f8e5b2d7",
+                  "content": "第一章 1.5",
+                  "completed": false,
+                  "order": 4
+                },
+                {
+                  "id": "94db6eef-f624-4350-8c85-9bd268487778",
+                  "content": "第一章 1.6",
+                  "completed": false,
+                  "order": 5
+                },
+                {
+                  "id": "99591b02-27c5-44f5-b86d-ceaf9212a2aa",
+                  "content": "第一章 1.7",
+                  "completed": false,
+                  "order": 6
+                },
+                {
+                  "id": "9e65254f-8655-4cdf-9ae8-1c154d11b0d3",
+                  "content": "第二章 2.1",
+                  "completed": false,
+                  "order": 7
+                },
+                {
+                  "id": "9ce437cb-c586-4ad0-8cab-d276a2c08268",
+                  "content": "第二章 2.2",
+                  "completed": false,
+                  "order": 8
+                },
+                {
+                  "id": "27612e2d-032c-4efe-bac0-76c428e0fd0f",
+                  "content": "第二章 2.3",
+                  "completed": false,
+                  "order": 9
+                },
+                {
+                  "id": "8f429761-18df-4ba0-8da3-b81cb072f533",
+                  "content": "第二章 2.4",
+                  "completed": false,
+                  "order": 10
+                },
+                {
+                  "id": "a67d1d5f-1b7a-4b42-b486-1200f77f6c97",
+                  "content": "第二章 2.5",
+                  "completed": false,
+                  "order": 11
+                },
+                {
+                  "id": "504d7bf3-05ff-441d-bcae-e27a3c621372",
+                  "content": "第二章 2.6",
+                  "completed": false,
+                  "order": 12
+                },
+                {
+                  "id": "372e1bb3-4836-4f82-8ba9-acd39accf05d",
+                  "content": "第二章 2.7",
+                  "completed": false,
+                  "order": 13
+                },
+                {
+                  "id": "016848a5-f1aa-41b2-be40-e0c065769003",
+                  "content": "第二章 2.8",
+                  "completed": false,
+                  "order": 14
+                }
+              ]
             }
           ]
         },
