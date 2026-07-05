@@ -1013,31 +1013,6 @@
               ]
             },
             {
-              "id": "7c9fe666-f140-4897-b32f-3859511aa362",
-              "content": "数学 预习 ",
-              "completed": false,
-              "order": 5,
-              "createdAt": 1783233044554,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": [
-                {
-                  "id": "3b884118-d1b8-4083-a0ad-fda5ec62a3dc",
-                  "content": "第一章 1.1-7",
-                  "completed": false,
-                  "order": 0
-                },
-                {
-                  "id": "b82b244b-e546-4596-9f3d-b89d38fedd93",
-                  "content": "第二章 2.1-8",
-                  "completed": false,
-                  "order": 1
-                }
-              ]
-            },
-            {
               "id": "c72ccf62-648b-4411-bf16-282e5d492e06",
               "content": "数学 预习",
               "completed": false,
