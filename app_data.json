@@ -1137,10 +1137,10 @@
             {
               "id": "62b1e05a-1406-4ec4-955c-e10fa3156b7a",
               "content": "废弃营地",
-              "completed": false,
+              "completed": true,
               "order": 3,
               "createdAt": 1783164294201,
-              "completedAt": null,
+              "completedAt": 1783335311077,
               "dueDate": "",
               "notes": "",
               "tags": [],
