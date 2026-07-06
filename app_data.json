@@ -1093,62 +1093,6 @@
           ]
         },
         {
-          "id": "c03b6d9c-ba8d-47c5-ae86-65bbd188e114",
-          "name": "明日必做",
-          "order": 1,
-          "createdAt": 1782918041910,
-          "tasks": [
-            {
-              "id": "b46b3afe-04dc-459e-973a-24be36d4e3d4",
-              "content": "替换altar中的原木为熵基",
-              "completed": false,
-              "order": 0,
-              "createdAt": 1783164261915,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
-            },
-            {
-              "id": "a7bcc938-9aff-4f69-8a25-69caaedc113a",
-              "content": "添加降临动效",
-              "completed": false,
-              "order": 1,
-              "createdAt": 1783164275177,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
-            },
-            {
-              "id": "5a2d2f71-66a0-4464-90c2-106c25ab123d",
-              "content": "删除出戏提示",
-              "completed": false,
-              "order": 2,
-              "createdAt": 1783164281252,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
-            },
-            {
-              "id": "62b1e05a-1406-4ec4-955c-e10fa3156b7a",
-              "content": "废弃营地",
-              "completed": true,
-              "order": 3,
-              "createdAt": 1783164294201,
-              "completedAt": 1783335311077,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
-            }
-          ]
-        },
-        {
           "id": "c7bd6262-7868-49f5-8a9d-48e90c82fe15",
           "name": "今日必做",
           "order": 2,
