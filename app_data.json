@@ -988,6 +988,25 @@
               ]
             },
             {
+              "id": "1040382d-1038-4443-9226-218196c1cce3",
+              "content": "语文摘录",
+              "completed": false,
+              "order": 5,
+              "createdAt": 1783407528540,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": [
+                {
+                  "id": "be8cf71d-056b-44ab-9ce2-bb2615987e5e",
+                  "content": "红岩 第1-30章",
+                  "completed": false,
+                  "order": 0
+                }
+              ]
+            },
+            {
               "id": "c72ccf62-648b-4411-bf16-282e5d492e06",
               "content": "数学 预习",
               "completed": false,
@@ -1087,6 +1106,25 @@
                   "content": "第二章 2.8",
                   "completed": false,
                   "order": 14
+                }
+              ]
+            },
+            {
+              "id": "3f59b4d7-2faf-43f5-b86b-c5be0609b179",
+              "content": "语文摘录",
+              "completed": false,
+              "order": 6,
+              "createdAt": 1783407542714,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": [
+                {
+                  "id": "ae61559d-3960-4d5f-9dd4-ca6100fa8d22",
+                  "content": "红岩 第1-30章",
+                  "completed": false,
+                  "order": 0
                 }
               ]
             }
