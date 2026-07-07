@@ -1089,25 +1089,6 @@
                   "order": 14
                 }
               ]
-            },
-            {
-              "id": "3f59b4d7-2faf-43f5-b86b-c5be0609b179",
-              "content": "语文摘录",
-              "completed": false,
-              "order": 6,
-              "createdAt": 1783407542714,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": [
-                {
-                  "id": "ae61559d-3960-4d5f-9dd4-ca6100fa8d22",
-                  "content": "红岩 第1-30章",
-                  "completed": false,
-                  "order": 0
-                }
-              ]
             }
           ]
         },
