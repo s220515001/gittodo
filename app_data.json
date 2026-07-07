@@ -1108,31 +1108,6 @@
                   "order": 0
                 }
               ]
-            },
-            {
-              "id": "56597db6-4814-43ad-9902-de632a296d62",
-              "content": "语文 ",
-              "completed": false,
-              "order": 6,
-              "createdAt": 1783407631306,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": [
-                {
-                  "id": "ecd83c01-238b-49e3-8e85-32a59a9f48a6",
-                  "content": "红岩 第1-30章",
-                  "completed": false,
-                  "order": 0
-                },
-                {
-                  "id": "3ffb94b6-231f-4d81-8484-88b5b1bf3655",
-                  "content": "红星照耀中国 第1-12章",
-                  "completed": false,
-                  "order": 1
-                }
-              ]
             }
           ]
         },
