@@ -988,31 +988,6 @@
               ]
             },
             {
-              "id": "b87d46e4-8cbb-469e-acad-135fbbb1cb4e",
-              "content": "语文 ",
-              "completed": false,
-              "order": 5,
-              "createdAt": 1783407794399,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": [
-                {
-                  "id": "f44c8474-603f-47cb-bd43-d1bb9802b633",
-                  "content": "第1页",
-                  "completed": false,
-                  "order": 0
-                },
-                {
-                  "id": "17d701f9-3a25-4c62-ad90-9b7e5749b305",
-                  "content": "第2页",
-                  "completed": false,
-                  "order": 1
-                }
-              ]
-            },
-            {
               "id": "c72ccf62-648b-4411-bf16-282e5d492e06",
               "content": "数学 预习",
               "completed": false,
