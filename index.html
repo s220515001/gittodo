@@ -2225,36 +2225,34 @@ STATE.isEditing = true;
 // 在 parseBlock 函数之前添加这个函数
 function parseRange(rangeStr) {
     rangeStr = rangeStr.trim();
-    // 检测是否为纯数字、逗号、空格（可能是数字列表或范围）
+    
+    // 先尝试解析为数字范围（如 1-5 或 1-5:2）
+    const rangeMatch = rangeStr.match(/^(\d+)\s*-\s*(\d+)(?:\s*:\s*(\d+))?$/);
+    if (rangeMatch) {
+        const start = parseInt(rangeMatch[1], 10);
+        const end = parseInt(rangeMatch[2], 10);
+        const step = rangeMatch[3] ? parseInt(rangeMatch[3], 10) : 1;
+        if (isNaN(start) || isNaN(end) || isNaN(step) || step < 1) return null;
+        const result = [];
+        if (start <= end) {
+            for (let i = start; i <= end; i += step) result.push(i);
+        } else {
+            for (let i = start; i >= end; i -= step) result.push(i);
+        }
+        return result;
+    }
+    
+    // 检测是否为纯数字、逗号（数字列表）
     if (/^[\d\s,]+$/.test(rangeStr)) {
-        // 尝试解析为数字列表（逗号分隔）
-        if (!rangeStr.includes('-')) {
-            const nums = rangeStr.split(',').map(s => parseInt(s.trim(), 10));
-            if (nums.every(n => !isNaN(n) && n > 0)) return nums;
-            return null;
-        }
-        // 尝试解析为数字范围（如 1-5 或 1-5:2）
-        const match = rangeStr.match(/^(\d+)\s*-\s*(\d+)(?:\s*:\s*(\d+))?$/);
-        if (match) {
-            const start = parseInt(match[1], 10);
-            const end = parseInt(match[2], 10);
-            const step = match[3] ? parseInt(match[3], 10) : 1;
-            if (isNaN(start) || isNaN(end) || isNaN(step) || step < 1) return null;
-            const result = [];
-            if (start <= end) {
-                for (let i = start; i <= end; i += step) result.push(i);
-            } else {
-                for (let i = start; i >= end; i -= step) result.push(i);
-            }
-            return result;
-        }
-        return null;
-    } else {
-        // 视为占位词列表（用逗号分隔的字符串）
-        const items = rangeStr.split(',').map(s => s.trim());
-        if (items.every(s => s.length > 0)) return items;
+        const nums = rangeStr.split(',').map(s => parseInt(s.trim(), 10));
+        if (nums.every(n => !isNaN(n) && n > 0)) return nums;
         return null;
     }
+    
+    // 视为占位词列表（用逗号分隔的字符串）
+    const items = rangeStr.split(',').map(s => s.trim());
+    if (items.every(s => s.length > 0)) return items;
+    return null;
 }
         function parseBlock(blockContent) {
     blockContent = blockContent.trim();
