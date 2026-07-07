@@ -988,6 +988,271 @@
               ]
             },
             {
+              "id": "e42c1a8c-b5c1-45ce-8842-295d02394603",
+              "content": "语文 ",
+              "completed": false,
+              "order": 5,
+              "createdAt": 1783408066238,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": [
+                {
+                  "id": "190307d4-5402-4f71-ae45-f580432d4027",
+                  "content": "红岩 第1章",
+                  "completed": false,
+                  "order": 0
+                },
+                {
+                  "id": "6a093547-a6c0-4776-a3ba-835e3242de1e",
+                  "content": "红岩 第2章",
+                  "completed": false,
+                  "order": 1
+                },
+                {
+                  "id": "886953c6-12e3-4c5a-b3f7-09f68f429faf",
+                  "content": "红岩 第3章",
+                  "completed": false,
+                  "order": 2
+                },
+                {
+                  "id": "6a5446d9-b7ef-4952-9eac-74578a4c1110",
+                  "content": "红岩 第4章",
+                  "completed": false,
+                  "order": 3
+                },
+                {
+                  "id": "d074d4d5-87a5-401a-b415-1d6106d4b0de",
+                  "content": "红岩 第5章",
+                  "completed": false,
+                  "order": 4
+                },
+                {
+                  "id": "2ca10d78-2a9a-41f2-8e2f-ecf0ee3c1b60",
+                  "content": "红岩 第6章",
+                  "completed": false,
+                  "order": 5
+                },
+                {
+                  "id": "28008c71-4965-4896-99f7-69899a2378b2",
+                  "content": "红岩 第7章",
+                  "completed": false,
+                  "order": 6
+                },
+                {
+                  "id": "07c619c9-81d4-439f-8621-a4bfbf0a5977",
+                  "content": "红岩 第8章",
+                  "completed": false,
+                  "order": 7
+                },
+                {
+                  "id": "3e8945fa-4a47-49d9-95ed-adde74ae59b9",
+                  "content": "红岩 第9章",
+                  "completed": false,
+                  "order": 8
+                },
+                {
+                  "id": "52c80bf3-97a6-4a1c-a57a-f1215c22c799",
+                  "content": "红岩 第10章",
+                  "completed": false,
+                  "order": 9
+                },
+                {
+                  "id": "432feb12-f431-455a-9158-6c8f5704eca0",
+                  "content": "红岩 第11章",
+                  "completed": false,
+                  "order": 10
+                },
+                {
+                  "id": "8b3b70e6-5d02-4416-b891-bbfd53e281ab",
+                  "content": "红岩 第12章",
+                  "completed": false,
+                  "order": 11
+                },
+                {
+                  "id": "2cae4502-575e-431a-99dc-e180824fceb8",
+                  "content": "红岩 第13章",
+                  "completed": false,
+                  "order": 12
+                },
+                {
+                  "id": "603e975e-a227-4c68-9a9c-a2173aed3263",
+                  "content": "红岩 第14章",
+                  "completed": false,
+                  "order": 13
+                },
+                {
+                  "id": "ad81771d-0c3e-4a49-b65d-c4474b12f760",
+                  "content": "红岩 第15章",
+                  "completed": false,
+                  "order": 14
+                },
+                {
+                  "id": "56a96073-bb84-426b-acfa-b148782bcd4c",
+                  "content": "红岩 第16章",
+                  "completed": false,
+                  "order": 15
+                },
+                {
+                  "id": "04f5dd75-c0b3-45c6-8fa8-8a5df8e9f60e",
+                  "content": "红岩 第17章",
+                  "completed": false,
+                  "order": 16
+                },
+                {
+                  "id": "ee983c10-b9e3-4c04-bd43-27c30156f252",
+                  "content": "红岩 第18章",
+                  "completed": false,
+                  "order": 17
+                },
+                {
+                  "id": "149d2f83-b39b-451e-9771-a65155c39e69",
+                  "content": "红岩 第19章",
+                  "completed": false,
+                  "order": 18
+                },
+                {
+                  "id": "4de2d573-d319-4724-b2cd-8eda53812c26",
+                  "content": "红岩 第20章",
+                  "completed": false,
+                  "order": 19
+                },
+                {
+                  "id": "7fd1adf5-156c-4586-8517-96085f2180e2",
+                  "content": "红岩 第21章",
+                  "completed": false,
+                  "order": 20
+                },
+                {
+                  "id": "23adfb3d-0f63-406a-bb11-35c1e7589c66",
+                  "content": "红岩 第22章",
+                  "completed": false,
+                  "order": 21
+                },
+                {
+                  "id": "4cce7700-05ca-4a0b-83d6-2f2ef54772bd",
+                  "content": "红岩 第23章",
+                  "completed": false,
+                  "order": 22
+                },
+                {
+                  "id": "44deceba-a7e7-498e-bb8e-1c07b702cd1d",
+                  "content": "红岩 第24章",
+                  "completed": false,
+                  "order": 23
+                },
+                {
+                  "id": "d0139550-aa6c-4d4e-a824-aa1978be73ea",
+                  "content": "红岩 第25章",
+                  "completed": false,
+                  "order": 24
+                },
+                {
+                  "id": "44525318-8e80-41b1-915f-af57e6fef124",
+                  "content": "红岩 第26章",
+                  "completed": false,
+                  "order": 25
+                },
+                {
+                  "id": "4ffe383f-b059-4b4f-8eba-cbeb5e920af9",
+                  "content": "红岩 第27章",
+                  "completed": false,
+                  "order": 26
+                },
+                {
+                  "id": "aa8bdfc6-c797-4673-9b96-b4647c46c6c1",
+                  "content": "红岩 第28章",
+                  "completed": false,
+                  "order": 27
+                },
+                {
+                  "id": "04bd5d18-9d5b-4daa-8bee-24c1a222e825",
+                  "content": "红岩 第29章",
+                  "completed": false,
+                  "order": 28
+                },
+                {
+                  "id": "cf998e71-de55-4b22-b624-d7b378b0a115",
+                  "content": "红岩 第30章",
+                  "completed": false,
+                  "order": 29
+                },
+                {
+                  "id": "b2a6b635-2d0d-4574-b3da-b5f24b1b780a",
+                  "content": "红星照耀中国 第1章",
+                  "completed": false,
+                  "order": 30
+                },
+                {
+                  "id": "88c97240-0cfa-4e78-999a-e6bd0e3fd7d3",
+                  "content": "红星照耀中国 第2章",
+                  "completed": false,
+                  "order": 31
+                },
+                {
+                  "id": "240d3e82-19a6-4d8f-8748-e089bfb31e77",
+                  "content": "红星照耀中国 第3章",
+                  "completed": false,
+                  "order": 32
+                },
+                {
+                  "id": "a01c93c7-a54a-44b7-86f4-e0636e648bf5",
+                  "content": "红星照耀中国 第4章",
+                  "completed": false,
+                  "order": 33
+                },
+                {
+                  "id": "63738816-2b7c-4871-bdd2-28b31772ee8c",
+                  "content": "红星照耀中国 第5章",
+                  "completed": false,
+                  "order": 34
+                },
+                {
+                  "id": "204389b7-dacb-4e04-8263-c741e9e98bbb",
+                  "content": "红星照耀中国 第6章",
+                  "completed": false,
+                  "order": 35
+                },
+                {
+                  "id": "e5f7f8c0-2cb4-4b88-ad4b-b05736266c97",
+                  "content": "红星照耀中国 第7章",
+                  "completed": false,
+                  "order": 36
+                },
+                {
+                  "id": "8c0526b8-e4bb-4157-a4af-24c7e2369618",
+                  "content": "红星照耀中国 第8章",
+                  "completed": false,
+                  "order": 37
+                },
+                {
+                  "id": "1826e56d-fe37-44e8-8211-1ffc2e83f814",
+                  "content": "红星照耀中国 第9章",
+                  "completed": false,
+                  "order": 38
+                },
+                {
+                  "id": "11d176fb-c93b-4b1f-a75d-f31b92b88d2b",
+                  "content": "红星照耀中国 第10章",
+                  "completed": false,
+                  "order": 39
+                },
+                {
+                  "id": "6f04f7c9-6d91-47ad-b035-9363bb4e93a9",
+                  "content": "红星照耀中国 第11章",
+                  "completed": false,
+                  "order": 40
+                },
+                {
+                  "id": "d7e2d7b6-576a-4d84-9e9e-992b4480cefa",
+                  "content": "红星照耀中国 第12章",
+                  "completed": false,
+                  "order": 41
+                }
+              ]
+            },
+            {
               "id": "c72ccf62-648b-4411-bf16-282e5d492e06",
               "content": "数学 预习",
               "completed": false,
