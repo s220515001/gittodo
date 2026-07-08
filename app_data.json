@@ -890,13 +890,13 @@
                 {
                   "id": "c30eddd8-4158-434f-bd4a-cfdddf408439",
                   "content": "第4页",
-                  "completed": false,
+                  "completed": true,
                   "order": 3
                 },
                 {
                   "id": "a225c217-cbd9-4f19-a152-89a73d8e7316",
                   "content": "第5页",
-                  "completed": false,
+                  "completed": true,
                   "order": 4
                 },
                 {
