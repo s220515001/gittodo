@@ -690,15 +690,77 @@
         }
 
         /* ===== 子任务列表 ===== */
-        .subtask-list {
+        .subtask-container {
             padding: 4px 12px 8px 48px;
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
-        .subtask-list.hidden {
+        .subtask-container.hidden {
             display: none;
         }
+
+        /* ===== 步骤批量工具栏 ===== */
+        .subtask-batch-toolbar {
+            display: none;
+            /* 默认隐藏，有选中时显示 */
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            background: var(--bg-card);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+        .subtask-batch-toolbar.visible {
+            display: flex;
+        }
+        .subtask-batch-toolbar .stb-count {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .subtask-batch-toolbar button {
+            padding: 3px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 12px;
+            font-family: var(--font);
+            transition: all 0.15s;
+            white-space: nowrap;
+            height: 28px;
+        }
+        .subtask-batch-toolbar button:hover {
+            background: var(--bg-task-hover);
+        }
+        .subtask-batch-toolbar button.primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .subtask-batch-toolbar button.primary:hover {
+            background: var(--accent-hover);
+        }
+        .subtask-batch-toolbar button.danger {
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+        .subtask-batch-toolbar button.danger:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+        .subtask-batch-toolbar button:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* ===== 步骤项 ———— 无独立复选框 ===== */
         .subtask-item {
             display: flex;
             align-items: center;
@@ -706,10 +768,18 @@
             padding: 6px 8px;
             border-radius: 4px;
             background: var(--bg-card);
-            transition: background 0.15s;
+            transition: background 0.15s, outline 0.15s;
+            position: relative;
+            cursor: default;
         }
         .subtask-item:hover {
             background: var(--bg-task-hover);
+        }
+        /* 选中状态：仅通过 .selected 类控制，无额外复选框 */
+        .subtask-item.selected {
+            background: var(--bg-task-hover);
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
         }
         .subtask-item .checkbox {
             width: 24px;
@@ -742,6 +812,8 @@
             font-size: 14px;
             color: var(--text-primary);
             word-break: break-word;
+            cursor: default;
+            padding: 2px 0;
         }
         .subtask-item .subtask-text.completed {
             text-decoration: line-through;
@@ -759,6 +831,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
         .subtask-item .subtask-delete:active {
             background: rgba(0, 0, 0, 0.05);
@@ -774,31 +847,15 @@
             fill: none;
         }
 
-        /* ===== 任务备注 ===== */
-        .task-notes-area {
-            padding: 4px 12px 8px 48px;
-        }
-        .task-notes-area textarea {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 13px;
-            font-family: var(--font);
-            resize: vertical;
-            min-height: 50px;
-            transition: border 0.2s;
-        }
-        .task-notes-area textarea:focus {
-            border-color: var(--accent);
-        }
-        .task-notes-area .notes-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            display: block;
-            margin-bottom: 2px;
+        /* ===== 框选遮罩 ===== */
+        .subtask-selection-box {
+            position: absolute;
+            border: 2px dashed var(--accent);
+            background: rgba(58, 124, 174, 0.12);
+            pointer-events: none;
+            z-index: 50;
+            border-radius: 4px;
+            display: none;
         }
 
         /* ===== 添加步骤行 ===== */
@@ -835,6 +892,33 @@
         }
         .add-subtask-row button:active {
             background: var(--accent-hover);
+        }
+
+        /* ===== 任务备注 ===== */
+        .task-notes-area {
+            padding: 4px 12px 8px 48px;
+        }
+        .task-notes-area textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: var(--font);
+            resize: vertical;
+            min-height: 50px;
+            transition: border 0.2s;
+        }
+        .task-notes-area textarea:focus {
+            border-color: var(--accent);
+        }
+        .task-notes-area .notes-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 2px;
         }
 
         /* ===== 添加任务行 ===== */
@@ -1233,7 +1317,7 @@
             display: block;
         }
 
-        /* ===== 批量操作栏 ===== */
+        /* ===== 批量操作栏（任务级） ===== */
         .batch-bar {
             display: none;
             padding: 8px 16px;
@@ -1341,6 +1425,44 @@
             }
         }
 
+        /* ===== 队列状态指示器 ===== */
+        .queue-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--bg-task);
+            border: 1px solid var(--border-color);
+        }
+        .queue-indicator .q-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            background: var(--success);
+        }
+        .queue-indicator .q-dot.processing {
+            background: var(--warning);
+            animation: pulse 1s ease-in-out infinite;
+        }
+        .queue-indicator .q-dot.error {
+            background: var(--danger);
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+        }
+
         /* ===== 响应式 ===== */
         @media (max-width: 768px) {
             .sidebar {
@@ -1397,7 +1519,7 @@
                 width: 16px;
                 height: 16px;
             }
-            .subtask-list {
+            .subtask-container {
                 padding-left: 32px;
             }
             .subtask-item .checkbox {
@@ -1407,6 +1529,10 @@
             .subtask-item .checkbox svg {
                 width: 14px;
                 height: 14px;
+            }
+            .subtask-item .subtask-select {
+                width: 20px;
+                height: 20px;
             }
             .modal-box {
                 padding: 20px 20px calc(20px + var(--safe-bottom));
@@ -1430,6 +1556,18 @@
             }
             .task-item .drag-handle {
                 display: none;
+            }
+            .subtask-batch-toolbar {
+                padding: 4px 8px;
+                gap: 4px;
+            }
+            .subtask-batch-toolbar button {
+                font-size: 11px;
+                padding: 2px 8px;
+                height: 24px;
+            }
+            .subtask-batch-toolbar .stb-count {
+                font-size: 11px;
             }
         }
         @media (max-width: 480px) {
@@ -1479,7 +1617,7 @@
                 width: 14px;
                 height: 14px;
             }
-            .subtask-list {
+            .subtask-container {
                 padding-left: 24px;
             }
             .subtask-item .checkbox {
@@ -1489,6 +1627,10 @@
             .subtask-item .checkbox svg {
                 width: 12px;
                 height: 12px;
+            }
+            .subtask-item .subtask-select {
+                width: 18px;
+                height: 18px;
             }
             .add-task-row {
                 padding: 8px 6px;
@@ -1544,9 +1686,17 @@
                 bottom: 1px;
                 right: 3px;
             }
+            .subtask-batch-toolbar {
+                gap: 3px;
+                padding: 4px 6px;
+            }
+            .subtask-batch-toolbar button {
+                font-size: 10px;
+                padding: 2px 6px;
+                height: 22px;
+            }
         }
 
-        /* 遮罩层 */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -1597,10 +1747,7 @@
 
     <!-- ===== 主界面 ===== -->
     <div class="app-container" id="appContainer" style="display:none;">
-        <!-- 侧边栏遮罩 -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-        <!-- 侧边栏 -->
         <aside class="sidebar" id="sidebar">
             <button class="close-sidebar" id="closeSidebarBtn">✕</button>
             <div class="profile-section">
@@ -1615,7 +1762,6 @@
                 <input type="text" placeholder="搜索任务" id="searchInput" />
             </div>
             <ul class="nav-list" id="groupList">
-                <!-- 视图导航 -->
                 <li class="nav-view-item active" data-view="list">
                     <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
                     <span>列表视图</span>
@@ -1629,7 +1775,6 @@
                     <span>日历视图</span>
                 </li>
                 <li class="nav-divider"></li>
-                <!-- 任务组列表会动态插入到这里 -->
                 <li class="bottom-action" id="addGroupBtn">
                     <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                     新建列表
@@ -1637,7 +1782,6 @@
             </ul>
         </aside>
 
-        <!-- 主内容 -->
         <main class="main-content">
             <header class="content-header">
                 <div class="header-left">
@@ -1645,6 +1789,10 @@
                     <h1 id="currentGroupTitle">任务</h1>
                 </div>
                 <div class="header-actions">
+                    <span class="queue-indicator" id="queueIndicator" style="display:none;">
+                        <span class="q-dot" id="queueDot"></span>
+                        <span id="queueCount">0</span>
+                    </span>
                     <button id="randomTaskBtn" title="随机任务">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -1688,7 +1836,6 @@
             </header>
 
             <div class="todo-container" id="todoContainer">
-                <!-- 批量操作栏 -->
                 <div class="batch-bar" id="batchBar">
                     <span class="batch-info" id="batchInfo">已选 0 项</span>
                     <button id="batchCompleteBtn">标记完成</button>
@@ -1702,7 +1849,6 @@
                     </div>
                     <div class="sync-status" id="syncStatus">已同步</div>
                 </div>
-                <!-- 视图内容区域 -->
                 <div id="viewList" class="view-content active">
                     <div class="todo-list" id="todoList"></div>
                 </div>
@@ -1757,12 +1903,27 @@
             calMonth: null,
             calSelectedDate: null,
             chartInstance: null,
-    chartMode: 'task',
-    lastStatsSnapshot: null,
- statsInitialized: false,   // 统计视图是否已初始化
-    lastGroupId: null,   
-isEditing: false,      // 是否正在编辑输入框
-    pendingRender: false,  // 是否有待渲染的数据更新
+            chartMode: 'task',
+            lastStatsSnapshot: null,
+            statsInitialized: false,
+            lastGroupId: null,
+            isEditing: false,
+            pendingRender: false,
+            // ---- 步骤选择状态 ----
+            selectedSubtasks: {}, // { taskId: Set(subtaskId) }
+            // ---- 操作队列 ----
+            queue: [],
+            isProcessingQueue: false,
+            queueRetryCount: 0,
+            // ---- 框选状态 ----
+            boxSelecting: false,
+            boxStartX: 0,
+            boxStartY: 0,
+            boxTaskId: null,
+            // ---- 单击/双击区分 ----
+            clickTimer: null,
+            pendingClickTaskId: null,
+            pendingClickSubtaskId: null,
         };
 
         // ============================================================
@@ -1816,6 +1977,10 @@ isEditing: false,      // 是否正在编辑输入框
         const batchCompleteBtn = $('#batchCompleteBtn');
         const batchDeleteBtn = $('#batchDeleteBtn');
         const batchCancelBtn = $('#batchCancelBtn');
+
+        const queueIndicator = $('#queueIndicator');
+        const queueDot = $('#queueDot');
+        const queueCount = $('#queueCount');
 
         let isRegisterMode = false;
 
@@ -1885,8 +2050,22 @@ isEditing: false,      // 是否正在编辑输入框
             return colors[index % colors.length];
         }
 
+        function getCurrentGroup() { return STATE.groups.find(g => g.id === STATE.currentGroupId); }
+
+        function findTask(taskId) {
+            const group = getCurrentGroup();
+            if (!group) return null;
+            return group.tasks.find(t => t.id === taskId) || null;
+        }
+
+        function findSubtask(taskId, subtaskId) {
+            const task = findTask(taskId);
+            if (!task || !task.subtasks) return null;
+            return task.subtasks.find(s => s.id === subtaskId) || null;
+        }
+
         // ============================================================
-        //  Sidebar 控制
+        //  侧边栏控制
         // ============================================================
         function openSidebar() { sidebar.classList.add('open');
             sidebarOverlay.classList.add('active'); }
@@ -1898,7 +2077,7 @@ isEditing: false,      // 是否正在编辑输入框
         sidebarOverlay.addEventListener('click', closeSidebar);
 
         // ============================================================
-        //  Modal
+        //  模态框
         // ============================================================
         const modalOverlay = $('#modalOverlay');
         const modalTitle = $('#modalTitle');
@@ -1908,10 +2087,8 @@ isEditing: false,      // 是否正在编辑输入框
         let modalResolve = null;
         let modalMode = 'input';
 
-        // 统一关闭函数，只移除事件监听
         function closeModal(result) {
             modalOverlay.classList.remove('active');
-            // 移除 overlay 点击监听
             if (modalOverlay._closeHandler) {
                 modalOverlay.removeEventListener('click', modalOverlay._closeHandler);
                 delete modalOverlay._closeHandler;
@@ -1920,19 +2097,17 @@ isEditing: false,      // 是否正在编辑输入框
                 modalResolve(result);
                 modalResolve = null;
             }
-STATE.isEditing = false;
-    if (STATE.pendingRender) {
-        STATE.pendingRender = false;
-        renderAll();
-        setSyncStatus('已更新');
-    }
+            STATE.isEditing = false;
+            if (STATE.pendingRender) {
+                STATE.pendingRender = false;
+                renderAll();
+                setSyncStatus('已更新');
+            }
         }
 
-        // 打开模态框的通用函数，绑定 overlay 点击事件（仅点击遮罩本身才关闭）
         function openModal() {
-STATE.isEditing = true;
+            STATE.isEditing = true;
             modalOverlay.classList.add('active');
-            // 绑定点击遮罩关闭，但要确保点击的是遮罩本身而不是内部盒子
             if (modalOverlay._closeHandler) {
                 modalOverlay.removeEventListener('click', modalOverlay._closeHandler);
             }
@@ -2011,7 +2186,6 @@ STATE.isEditing = true;
             });
         }
 
-        // 确认按钮事件
         modalConfirm.addEventListener('click', () => {
             if (modalMode === 'input') {
                 const inp = document.getElementById('modalInput');
@@ -2040,7 +2214,6 @@ STATE.isEditing = true;
 
         modalCancel.addEventListener('click', () => closeModal(null));
 
-        // 键盘 Enter 触发确认（但不适用于 taskEdit 多行文本）
         document.addEventListener('keydown', (e) => {
             if (!modalOverlay.classList.contains('active')) return;
             if (e.key === 'Enter' && modalMode !== 'taskEdit') {
@@ -2051,7 +2224,7 @@ STATE.isEditing = true;
         });
 
         // ============================================================
-        //  Theme
+        //  主题
         // ============================================================
         function getPreferredTheme() {
             const stored = localStorage.getItem('gittodo-theme');
@@ -2150,205 +2323,476 @@ STATE.isEditing = true;
         }
 
         // ============================================================
-        //  同步
+        //  操作队列系统
         // ============================================================
-        async function pullFromGitHub() {
-    if (STATE.isSyncing) return false;
-    const fetched = await fetchAppData();
-    if (fetched === null) return false;
-    STATE.users = fetched.users || {};
-    STATE.todos = fetched.todos || {};
-    if (STATE.currentUser && STATE.todos[STATE.currentUser]) {
-        STATE.groups = STATE.todos[STATE.currentUser].groups || [];
-        sortByOrder(STATE.groups);
-        if (!STATE.groups.some(g => g.id === STATE.currentGroupId)) {
-            STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
-        }
-        // 如果正在编辑，只标记待渲染，不立即刷新
-        if (STATE.isEditing) {
-            STATE.pendingRender = true;
-            setSyncStatus('已更新（待应用）');
-        } else {
-            renderAll();
-            setSyncStatus('已更新');
-        }
-    } else {
-        setSyncStatus('已同步');
-    }
-    return true;
-}
-
-        async function syncToGitHub() {
-            if (STATE.isSyncing) { STATE.pendingSave = true; return; }
-            STATE.isSyncing = true;
-            setSyncStatus('同步中...');
+        function loadQueueFromStorage() {
             try {
-                const fullData = { users: STATE.users, todos: STATE.todos };
-                const ok = await saveAppData(fullData);
-                if (ok) { setSyncStatus('已同步'); await pullFromGitHub(); } else { setSyncStatus('同步失败'); }
-            } catch (e) { setSyncStatus('同步出错'); } finally {
-                STATE.isSyncing = false;
-                if (STATE.pendingSave) { STATE.pendingSave = false;
-                    syncToGitHub(); }
-            }
-        }
-
-        function saveAndSync() {
-    if (STATE.currentUser) {
-        if (!STATE.todos[STATE.currentUser]) STATE.todos[STATE.currentUser] = { groups: [] };
-        STATE.todos[STATE.currentUser].groups = STATE.groups;
-    }
-    // 数据已变更，重置图表快照
-    STATE.lastStatsSnapshot = null;
-    renderAll();
-    syncToGitHub();
-}
-
-        function startPolling() {
-            if (STATE.pollTimer) clearInterval(STATE.pollTimer);
-            STATE.pollTimer = setInterval(async () => {
-                if (document.hidden || STATE.isSyncing) return;
-                await pullFromGitHub();
-            }, STATE.pollInterval);
-        }
-
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && !STATE.isSyncing && STATE.currentUser) pullFromGitHub();
-        });
-        refreshBtn.addEventListener('click', () => { if (!STATE.isSyncing && STATE.currentUser) pullFromGitHub(); });
-
-        // ============================================================
-        //  格式化语法 (步骤生成)
-        // ============================================================
-        const TYPE_MAP = { 'P': '第{num}页', 'S': '第{num}步', 'Q': '第{num}课时', 'W': '第{num}周', 'T': '第{num}天', 'H': '第{num}小时',
-            'U': '第{num}单元', '#': '{num}' };
-// 在 parseBlock 函数之前添加这个函数
-function parseRange(rangeStr) {
-    rangeStr = rangeStr.trim();
-    
-    // 先尝试解析为数字范围（如 1-5 或 1-5:2）
-    const rangeMatch = rangeStr.match(/^(\d+)\s*-\s*(\d+)(?:\s*:\s*(\d+))?$/);
-    if (rangeMatch) {
-        const start = parseInt(rangeMatch[1], 10);
-        const end = parseInt(rangeMatch[2], 10);
-        const step = rangeMatch[3] ? parseInt(rangeMatch[3], 10) : 1;
-        if (isNaN(start) || isNaN(end) || isNaN(step) || step < 1) return null;
-        const result = [];
-        if (start <= end) {
-            for (let i = start; i <= end; i += step) result.push(i);
-        } else {
-            for (let i = start; i >= end; i -= step) result.push(i);
-        }
-        return result;
-    }
-    
-    // 检测是否为纯数字、逗号（数字列表）
-    if (/^[\d\s,]+$/.test(rangeStr)) {
-        const nums = rangeStr.split(',').map(s => parseInt(s.trim(), 10));
-        if (nums.every(n => !isNaN(n) && n > 0)) return nums;
-        return null;
-    }
-    
-    // 视为占位词列表（用逗号分隔的字符串）
-    const items = rangeStr.split(',').map(s => s.trim());
-    if (items.every(s => s.length > 0)) return items;
-    return null;
-}
-        function parseBlock(blockContent) {
-    blockContent = blockContent.trim();
-    if (blockContent.includes('&')) {
-        const parts = blockContent.split('&').map(s => s.trim());
-        const dimensions = [];
-        for (const part of parts) {
-            // 修改正则：支持 # 后面直接跟占位词列表（中文或任意字符）
-            const match = part.match(/^([A-Z#])(.+?)(?:\|(.+))?$/);
-            if (!match) return null;
-            const type = match[1],
-                rangeStr = match[2].trim(),
-                template = match[3] ? match[3].trim() : null;
-            if (!TYPE_MAP[type] && type !== '#') return null;
-            const nums = parseRange(rangeStr);
-            if (!nums) return null;
-            // 如果是占位词列表（字符串数组），直接使用 nums 作为值
-            dimensions.push({ type, nums, template: template || TYPE_MAP[type] || '{num}' });
-        }
-        const minLen = Math.min(...dimensions.map(d => d.nums.length));
-        if (minLen === 0) return null;
-        return { type: 'pair', dimensions, length: minLen };
-    } else {
-        // 修改正则：支持 # 后面直接跟占位词列表（中文或任意字符）
-        const match = blockContent.match(/^([A-Z#])(.+?)(?:\|(.+))?$/);
-        if (!match) return null;
-        const type = match[1],
-            rangeStr = match[2].trim(),
-            template = match[3] ? match[3].trim() : null;
-        if (!TYPE_MAP[type] && type !== '#') return null;
-        const nums = parseRange(rangeStr);
-        if (!nums) return null;
-        return { type: 'single', nums, template: template || TYPE_MAP[type] || '{num}' };
-    }
-}
-
-        
-        function expandBlock(block) {
-            if (block.type === 'single') return block.nums.map(num => block.template.replace(/\{num\}/g, num));
-            else if (block.type === 'pair') {
-                const dims = block.dimensions,
-                    len = block.length,
-                    results = [];
-                for (let i = 0; i < len; i++) {
-                    results.push(dims.map(d => d.template.replace(/\{num\}/g, d.nums[i])).join(' '));
+                const data = localStorage.getItem('gittodo_queue');
+                if (data) {
+                    STATE.queue = JSON.parse(data);
+                    STATE.queue = STATE.queue.filter(op => !op._done);
+                } else {
+                    STATE.queue = [];
                 }
-                return results;
-            }
-            return [];
+            } catch (e) { STATE.queue = []; }
         }
 
-        function parseStepName(input) {
-            const escaped = input.replace(/%%/g, '\uFFFF');
-            const regex = /%([^%]+?)%/g;
-            let match,
-                lastIndex = 0,
-                blocks = [],
-                textParts = [],
-                hasBlock = false;
-            while ((match = regex.exec(escaped)) !== null) {
-                hasBlock = true;
-                const before = escaped.substring(lastIndex, match.index);
-                if (before) textParts.push(before);
-                const content = match[1];
-                const parsed = parseBlock(content);
-                if (!parsed) return null;
-                blocks.push(parsed);
-                lastIndex = match.index + match[0].length;
+        function saveQueueToStorage() {
+            try {
+                localStorage.setItem('gittodo_queue', JSON.stringify(STATE.queue));
+            } catch (e) { console.warn('保存队列失败', e); }
+            updateQueueIndicator();
+        }
+
+        function updateQueueIndicator() {
+            const pending = STATE.queue.filter(op => !op._done).length;
+            if (pending > 0) {
+                queueIndicator.style.display = 'inline-flex';
+                queueCount.textContent = pending;
+                queueDot.className = 'q-dot processing';
+            } else {
+                queueIndicator.style.display = 'none';
             }
-            if (lastIndex < escaped.length) { const remaining = escaped.substring(lastIndex); if (remaining) textParts.push(
-                    remaining); }
-            if (!hasBlock) return { displayName: input, steps: [] };
-            const displayName = textParts.join('').replace(/\uFFFF/g, '%');
-            let allSteps = [];
-            for (const block of blocks) { allSteps = allSteps.concat(expandBlock(block)); }
-            return { displayName: displayName || '', steps: allSteps };
+        }
+
+        function enqueueOperation(operation) {
+            operation._done = false;
+            operation._retries = 0;
+            operation._createdAt = Date.now();
+            STATE.queue.push(operation);
+            saveQueueToStorage();
+            processQueue();
+        }
+
+        async function processQueue() {
+            if (STATE.isProcessingQueue) return;
+            if (STATE.queue.filter(op => !op._done).length === 0) {
+                updateQueueIndicator();
+                return;
+            }
+            STATE.isProcessingQueue = true;
+            updateQueueIndicator();
+
+            try {
+                const pendingOps = STATE.queue.filter(op => !op._done);
+                if (pendingOps.length === 0) { STATE.isProcessingQueue = false;
+                    updateQueueIndicator(); return; }
+                const op = pendingOps[0];
+                const fetched = await fetchAppData();
+                if (fetched === null) {
+                    op._retries = (op._retries || 0) + 1;
+                    if (op._retries > 5) {
+                        console.warn('操作重试次数过多，跳过:', op);
+                        op._done = true;
+                        saveQueueToStorage();
+                        STATE.isProcessingQueue = false;
+                        processQueue();
+                        return;
+                    }
+                    const delay = Math.min(1000 * Math.pow(2, op._retries), 30000);
+                    await new Promise(r => setTimeout(r, delay));
+                    STATE.isProcessingQueue = false;
+                    processQueue();
+                    return;
+                }
+                STATE.users = fetched.users || {};
+                STATE.todos = fetched.todos || {};
+                let executed = false;
+                try {
+                    executed = executeOperation(op);
+                } catch (e) { console.error('执行操作失败:', e);
+                    executed = false; }
+                if (executed) {
+                    const fullData = { users: STATE.users, todos: STATE.todos };
+                    const ok = await saveAppData(fullData);
+                    if (ok) {
+                        op._done = true;
+                        if (STATE.currentUser && STATE.todos[STATE.currentUser]) {
+                            STATE.groups = STATE.todos[STATE.currentUser].groups || [];
+                            sortByOrder(STATE.groups);
+                            if (!STATE.groups.some(g => g.id === STATE.currentGroupId)) {
+                                STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
+                            }
+                        }
+                        renderAll();
+                        setSyncStatus('已同步');
+                        saveQueueToStorage();
+                    } else {
+                        op._retries = (op._retries || 0) + 1;
+                        if (op._retries > 3) {
+                            await fetchAppData();
+                            if (STATE.currentUser && STATE.todos[STATE.currentUser]) {
+                                STATE.groups = STATE.todos[STATE.currentUser].groups || [];
+                                sortByOrder(STATE.groups);
+                            }
+                            const reExec = executeOperation(op);
+                            if (reExec) {
+                                const fullData2 = { users: STATE.users, todos: STATE.todos };
+                                const ok2 = await saveAppData(fullData2);
+                                if (ok2) {
+                                    op._done = true;
+                                    if (STATE.currentUser && STATE.todos[STATE.currentUser]) {
+                                        STATE.groups = STATE.todos[STATE.currentUser].groups || [];
+                                        sortByOrder(STATE.groups);
+                                    }
+                                    renderAll();
+                                    setSyncStatus('已同步');
+                                    saveQueueToStorage();
+                                } else {
+                                    op._done = true;
+                                    saveQueueToStorage();
+                                }
+                            } else {
+                                op._done = true;
+                                saveQueueToStorage();
+                            }
+                        } else {
+                            const delay = Math.min(1000 * Math.pow(2, op._retries), 10000);
+                            await new Promise(r => setTimeout(r, delay));
+                        }
+                    }
+                } else {
+                    op._done = true;
+                    saveQueueToStorage();
+                }
+            } catch (e) {
+                console.error('队列处理异常:', e);
+                const pending = STATE.queue.filter(op => !op._done);
+                if (pending.length > 0) {
+                    pending[0]._retries = (pending[0]._retries || 0) + 1;
+                    if (pending[0]._retries > 5) {
+                        pending[0]._done = true;
+                        saveQueueToStorage();
+                    } else {
+                        await new Promise(r => setTimeout(r, 2000));
+                    }
+                }
+            }
+            STATE.isProcessingQueue = false;
+            processQueue();
+        }
+
+        function executeOperation(op) {
+            if (op.type === 'BATCH_DELETE_SUBTASKS') {
+                return executeBatchDeleteSubtasks(op);
+            } else if (op.type === 'BATCH_COMPLETE_SUBTASKS') {
+                return executeBatchCompleteSubtasks(op);
+            } else if (op.type === 'BATCH_UNCOMPLETE_SUBTASKS') {
+                return executeBatchUncompleteSubtasks(op);
+            } else if (op.type === 'SINGLE_SUBTASK_TOGGLE') {
+                return executeSingleSubtaskToggle(op);
+            }
+            return false;
+        }
+
+        function executeBatchDeleteSubtasks(op) {
+            const { taskId, subtaskIds } = op;
+            const user = STATE.currentUser;
+            if (!user || !STATE.todos[user]) return false;
+            const groups = STATE.todos[user].groups || [];
+            let targetGroup = null,
+                targetTask = null;
+            for (const g of groups) {
+                const task = g.tasks.find(t => t.id === taskId);
+                if (task) { targetGroup = g;
+                    targetTask = task; break; }
+            }
+            if (!targetTask || !targetTask.subtasks) return false;
+            const existingIds = targetTask.subtasks.map(s => s.id);
+            const validIds = subtaskIds.filter(id => existingIds.includes(id));
+            if (validIds.length === 0) return false;
+            targetTask.subtasks = targetTask.subtasks.filter(s => !validIds.includes(s.id));
+            targetTask.subtasks.forEach((s, idx) => s.order = idx);
+            if (targetTask.subtasks.length === 0) {
+                // 无步骤
+            } else {
+                const allDone = targetTask.subtasks.every(s => s.completed);
+                if (allDone && !targetTask.completed) {
+                    targetTask.completed = true;
+                    targetTask.completedAt = Date.now();
+                } else if (!allDone && targetTask.completed) {
+                    targetTask.completed = false;
+                    targetTask.completedAt = null;
+                }
+            }
+            return true;
+        }
+
+        function executeBatchCompleteSubtasks(op) {
+            const { taskId, subtaskIds } = op;
+            const user = STATE.currentUser;
+            if (!user || !STATE.todos[user]) return false;
+            const groups = STATE.todos[user].groups || [];
+            let targetTask = null;
+            for (const g of groups) {
+                const task = g.tasks.find(t => t.id === taskId);
+                if (task) { targetTask = task; break; }
+            }
+            if (!targetTask || !targetTask.subtasks) return false;
+            const existingIds = targetTask.subtasks.map(s => s.id);
+            const validIds = subtaskIds.filter(id => existingIds.includes(id));
+            if (validIds.length === 0) return false;
+            targetTask.subtasks.forEach(s => {
+                if (validIds.includes(s.id)) {
+                    s.completed = true;
+                }
+            });
+            const allDone = targetTask.subtasks.every(s => s.completed);
+            if (allDone && targetTask.subtasks.length > 0) {
+                targetTask.completed = true;
+                targetTask.completedAt = Date.now();
+            }
+            return true;
+        }
+
+        function executeBatchUncompleteSubtasks(op) {
+            const { taskId, subtaskIds } = op;
+            const user = STATE.currentUser;
+            if (!user || !STATE.todos[user]) return false;
+            const groups = STATE.todos[user].groups || [];
+            let targetTask = null;
+            for (const g of groups) {
+                const task = g.tasks.find(t => t.id === taskId);
+                if (task) { targetTask = task; break; }
+            }
+            if (!targetTask || !targetTask.subtasks) return false;
+            const existingIds = targetTask.subtasks.map(s => s.id);
+            const validIds = subtaskIds.filter(id => existingIds.includes(id));
+            if (validIds.length === 0) return false;
+            targetTask.subtasks.forEach(s => {
+                if (validIds.includes(s.id)) {
+                    s.completed = false;
+                }
+            });
+            const allDone = targetTask.subtasks.every(s => s.completed);
+            if (!allDone && targetTask.completed) {
+                targetTask.completed = false;
+                targetTask.completedAt = null;
+            }
+            return true;
+        }
+
+        function executeSingleSubtaskToggle(op) {
+            const { taskId, subtaskId, completed } = op;
+            const user = STATE.currentUser;
+            if (!user || !STATE.todos[user]) return false;
+            const groups = STATE.todos[user].groups || [];
+            let targetTask = null,
+                targetSubtask = null;
+            for (const g of groups) {
+                const task = g.tasks.find(t => t.id === taskId);
+                if (task) {
+                    const st = task.subtasks.find(s => s.id === subtaskId);
+                    if (st) { targetTask = task;
+                        targetSubtask = st; break; }
+                }
+            }
+            if (!targetTask || !targetSubtask) return false;
+            targetSubtask.completed = completed;
+            const allDone = targetTask.subtasks.every(s => s.completed);
+            if (allDone && targetTask.subtasks.length > 0) {
+                targetTask.completed = true;
+                targetTask.completedAt = Date.now();
+            } else if (!allDone) {
+                targetTask.completed = false;
+                targetTask.completedAt = null;
+            }
+            return true;
+        }
+
+        // ============================================================
+        //  步骤选择状态管理
+        // ============================================================
+        function getSelectedSubtasks(taskId) {
+            if (!STATE.selectedSubtasks[taskId]) STATE.selectedSubtasks[taskId] = new Set();
+            return STATE.selectedSubtasks[taskId];
+        }
+
+        function toggleSubtaskSelection(taskId, subtaskId, force) {
+            const set = getSelectedSubtasks(taskId);
+            if (force === true) set.add(subtaskId);
+            else if (force === false) set.delete(subtaskId);
+            else {
+                if (set.has(subtaskId)) set.delete(subtaskId);
+                else set.add(subtaskId);
+            }
+            if (set.size === 0) delete STATE.selectedSubtasks[taskId];
+            saveSelectionState();
+            // 更新UI：工具栏可见性 + 步骤项高亮
+            updateSubtaskBatchToolbarVisibility(taskId);
+            // 更新步骤项的 selected 类
+            updateSubtaskItemsSelection(taskId);
+        }
+
+        /** 更新单个任务下所有步骤项的 .selected 类（不重新渲染整个列表） */
+        function updateSubtaskItemsSelection(taskId) {
+            const container = document.querySelector(`.subtask-container[data-task-id="${taskId}"]`);
+            if (!container) return;
+            const set = getSelectedSubtasks(taskId);
+            const items = container.querySelectorAll('.subtask-item');
+            items.forEach(item => {
+                const sid = item.dataset.subtaskId;
+                if (sid) {
+                    const isSel = set.has(sid);
+                    item.classList.toggle('selected', isSel);
+                }
+            });
+            // 更新工具栏计数
+            const toolbar = container.querySelector('.subtask-batch-toolbar');
+            if (toolbar) {
+                const countEl = toolbar.querySelector('.stb-count');
+                if (countEl) countEl.textContent = `已选 ${set.size} 个步骤`;
+                const btns = toolbar.querySelectorAll('button');
+                btns.forEach(btn => {
+                    const action = btn.dataset.action;
+                    if (action === 'select-all' || action === 'deselect-all') return;
+                    btn.disabled = set.size === 0;
+                });
+            }
+        }
+
+        function selectAllSubtasks(taskId) {
+            const task = findTask(taskId);
+            if (!task || !task.subtasks) return;
+            const set = new Set(task.subtasks.map(s => s.id));
+            STATE.selectedSubtasks[taskId] = set;
+            saveSelectionState();
+            updateSubtaskBatchToolbarVisibility(taskId);
+            updateSubtaskItemsSelection(taskId);
+        }
+
+        function clearSubtaskSelection(taskId) {
+            delete STATE.selectedSubtasks[taskId];
+            saveSelectionState();
+            updateSubtaskBatchToolbarVisibility(taskId);
+            updateSubtaskItemsSelection(taskId);
+        }
+
+        function saveSelectionState() {
+            try {
+                const serialized = {};
+                Object.keys(STATE.selectedSubtasks).forEach(taskId => {
+                    serialized[taskId] = Array.from(STATE.selectedSubtasks[taskId]);
+                });
+                localStorage.setItem('gittodo_subtask_selection', JSON.stringify(serialized));
+            } catch (e) {}
+        }
+
+        function loadSelectionState() {
+            try {
+                const data = localStorage.getItem('gittodo_subtask_selection');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    Object.keys(parsed).forEach(taskId => {
+                        STATE.selectedSubtasks[taskId] = new Set(parsed[taskId]);
+                    });
+                }
+            } catch (e) {}
+        }
+
+        /** 根据选中数量显示/隐藏工具栏 */
+        function updateSubtaskBatchToolbarVisibility(taskId) {
+            const container = document.querySelector(`.subtask-container[data-task-id="${taskId}"]`);
+            if (!container) return;
+            const toolbar = container.querySelector('.subtask-batch-toolbar');
+            if (!toolbar) return;
+            const count = getSelectedSubtasks(taskId).size;
+            toolbar.classList.toggle('visible', count > 0);
+            const countEl = toolbar.querySelector('.stb-count');
+            if (countEl) countEl.textContent = `已选 ${count} 个步骤`;
+            const btns = toolbar.querySelectorAll('button');
+            btns.forEach(btn => {
+                const action = btn.dataset.action;
+                if (action === 'select-all' || action === 'deselect-all') return;
+                btn.disabled = count === 0;
+            });
+        }
+
+        /** 渲染步骤列表（不含独立复选框） */
+        function renderSubtasksForTask(taskId) {
+            const group = getCurrentGroup();
+            if (!group) return;
+            const task = group.tasks.find(t => t.id === taskId);
+            if (!task) return;
+            const container = document.querySelector(`.subtask-container[data-task-id="${taskId}"]`);
+            if (!container) return;
+            // 保留工具栏，重新生成步骤项
+            const toolbar = container.querySelector('.subtask-batch-toolbar');
+            container.innerHTML = '';
+            // 渲染工具栏（先不添加到DOM，由 updateSubtaskBatchToolbarVisibility 控制显示）
+            const toolbarHtml = renderSubtaskBatchToolbar(taskId);
+            const toolbarTemp = document.createElement('div');
+            toolbarTemp.innerHTML = toolbarHtml;
+            const toolbarEl = toolbarTemp.firstElementChild;
+            container.appendChild(toolbarEl);
+
+            const subtasks = task.subtasks || [];
+            sortByOrder(subtasks);
+            const selectedSet = getSelectedSubtasks(taskId);
+            subtasks.forEach(st => {
+                const stChecked = st.completed ? 'checked' : '';
+                const stCompletedClass = st.completed ? 'completed' : '';
+                const isSelected = selectedSet.has(st.id);
+                const div = document.createElement('div');
+                div.className = `subtask-item ${isSelected ? 'selected' : ''}`;
+                div.dataset.subtaskId = st.id;
+                div.dataset.taskId = taskId;
+                div.innerHTML = `
+                        <div class="checkbox ${stChecked}" data-subtask-id="${st.id}" data-task-id="${taskId}">
+                            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        </div>
+                        <span class="subtask-text ${stCompletedClass}">${escapeHtml(st.content)}</span>
+                        <button class="subtask-delete" data-task-id="${taskId}" data-subtask-id="${st.id}" title="删除步骤">
+                            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                        </button>
+                    `;
+                container.appendChild(div);
+            });
+            // 添加步骤行
+            const addRow = document.createElement('div');
+            addRow.className = 'add-subtask-row';
+            addRow.dataset.taskId = taskId;
+            addRow.innerHTML = `
+                    <input type="text" class="add-subtask-input" placeholder="添加步骤… 支持 %P1-3% 语法" />
+                    <button class="add-subtask-confirm" data-task-id="${taskId}">添加</button>
+                `;
+            container.appendChild(addRow);
+            // 更新工具栏可见性
+            updateSubtaskBatchToolbarVisibility(taskId);
+        }
+
+        function renderSubtaskBatchToolbar(taskId) {
+            const count = getSelectedSubtasks(taskId).size;
+            return `
+                    <div class="subtask-batch-toolbar ${count > 0 ? 'visible' : ''}" data-task-id="${taskId}">
+                        <button data-action="select-all" data-task-id="${taskId}">全选</button>
+                        <button data-action="deselect-all" data-task-id="${taskId}">取消全选</button>
+                        <button data-action="batch-complete" data-task-id="${taskId}" class="primary" ${count===0?'disabled':''}>批量完成</button>
+                        <button data-action="batch-uncomplete" data-task-id="${taskId}" ${count===0?'disabled':''}>取消完成</button>
+                        <button data-action="batch-delete" data-task-id="${taskId}" class="danger" ${count===0?'disabled':''}>删除</button>
+                        <span class="stb-count">已选 ${count} 个步骤</span>
+                    </div>
+                `;
         }
 
         // ============================================================
         //  视图切换
         // ============================================================
         function switchView(view) {
-    STATE.currentView = view;
-    document.querySelectorAll('.nav-view-item').forEach(el => {
-        el.classList.toggle('active', el.dataset.view === view);
-    });
-    document.querySelectorAll('.view-content').forEach(el => el.classList.remove('active'));
-    const target = document.getElementById('view' + view.charAt(0).toUpperCase() + view.slice(1));
-    if (target) target.classList.add('active');
-    const titles = { list: '任务', stats: '统计看板', calendar: '日历' };
-    currentGroupTitle.textContent = titles[view] || '任务';
-    if (view === 'stats') renderStats(true);   // 强制重建
-    else if (view === 'calendar') renderCalendar();
-    else renderTasks();
-    exitBatchMode();
-}
+            STATE.currentView = view;
+            document.querySelectorAll('.nav-view-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.view === view);
+            });
+            document.querySelectorAll('.view-content').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById('view' + view.charAt(0).toUpperCase() + view.slice(1));
+            if (target) target.classList.add('active');
+            const titles = { list: '任务', stats: '统计看板', calendar: '日历' };
+            currentGroupTitle.textContent = titles[view] || '任务';
+            if (view === 'stats') renderStats(true);
+            else if (view === 'calendar') renderCalendar();
+            else renderTasks();
+            exitBatchMode();
+        }
 
         document.querySelectorAll('.nav-view-item').forEach(el => {
             el.addEventListener('click', () => {
@@ -2363,12 +2807,13 @@ function parseRange(rangeStr) {
         // ============================================================
         //  渲染
         // ============================================================
-       function renderAll() {
-    renderSidebar();
-    if (STATE.currentView === 'stats') renderStats(false);
-    else if (STATE.currentView === 'calendar') renderCalendar();
-    else renderTasks();
-}
+        function renderAll() {
+            renderSidebar();
+            if (STATE.currentView === 'stats') renderStats(false);
+            else if (STATE.currentView === 'calendar') renderCalendar();
+            else renderTasks();
+            updateQueueIndicator();
+        }
 
         function renderSidebar() {
             if (STATE.currentUser) {
@@ -2424,7 +2869,7 @@ function parseRange(rangeStr) {
         //  列表视图渲染
         // ============================================================
         function renderTasks() {
-            const group = STATE.groups.find(g => g.id === STATE.currentGroupId);
+            const group = getCurrentGroup();
             if (!group) {
                 todoList.innerHTML = `<div class="empty-state"><p>选择一个任务组或创建新列表</p></div>`;
                 if (STATE.currentView === 'list') {
@@ -2506,33 +2951,22 @@ function parseRange(rangeStr) {
                                 </div>
                             </div>
                             ${task.notes ? `<div class="task-notes-area"><span class="notes-label">备注</span><textarea readonly style="background:var(--bg-primary);cursor:default;min-height:40px;">${escapeHtml(task.notes)}</textarea></div>` : ''}
-                            <div class="subtask-list ${isExpanded ? '' : 'hidden'}" data-task-id="${task.id}">
-                                ${subtasks.map(st => {
-                                    const stChecked = st.completed ? 'checked' : '';
-                                    const stCompletedClass = st.completed ? 'completed' : '';
-                                    return `
-                                            <div class="subtask-item" data-subtask-id="${st.id}">
-                                                <div class="checkbox ${stChecked}" data-subtask-id="${st.id}">
-                                                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                                                </div>
-                                                <span class="subtask-text ${stCompletedClass}">${escapeHtml(st.content)}</span>
-                                                <button class="subtask-delete" data-subtask-id="${st.id}" title="删除步骤">
-                                                    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
-                                                </button>
-                                            </div>
-                                        `;
-                                }).join('')}
-                                <div class="add-subtask-row" data-task-id="${task.id}">
-                                    <input type="text" class="add-subtask-input" placeholder="添加步骤… 支持 %P1-3% 语法" />
-                                    <button class="add-subtask-confirm" data-task-id="${task.id}">添加</button>
-                                </div>
+                            <div class="subtask-container ${isExpanded ? '' : 'hidden'}" data-task-id="${task.id}">
                             </div>
                         </div>
                     `;
             });
             html += renderAddTaskRow(group.id);
             todoList.innerHTML = html;
+            // 为每个任务渲染步骤列表
+            filteredTasks.forEach(task => {
+                const container = todoList.querySelector(`.subtask-container[data-task-id="${task.id}"]`);
+                if (container) {
+                    renderSubtasksForTask(task.id);
+                }
+            });
             initSortable();
+            initBoxSelection();
         }
 
         function renderAddTaskRow(groupId) {
@@ -2546,14 +2980,13 @@ function parseRange(rangeStr) {
         }
 
         // ============================================================
-        //  拖拽排序 (SortableJS)
+        //  拖拽排序
         // ============================================================
         let sortableInstance = null;
 
         function initSortable() {
-            // 确保 Sortable 已定义
             if (typeof Sortable === 'undefined') {
-                console.warn('Sortable 未加载，拖拽功能不可用');
+                console.warn('Sortable 未加载');
                 return;
             }
             if (sortableInstance) {
@@ -2569,7 +3002,7 @@ function parseRange(rangeStr) {
                 draggable: '.task-item-wrapper',
                 animation: 150,
                 onEnd: function(evt) {
-                    const group = STATE.groups.find(g => g.id === STATE.currentGroupId);
+                    const group = getCurrentGroup();
                     if (!group) return;
                     const tasks = group.tasks || [];
                     const fromIndex = evt.oldIndex;
@@ -2597,185 +3030,280 @@ function parseRange(rangeStr) {
         }
 
         // ============================================================
-        //  统计看板 (仅当前任务组)
+        //  框选功能（优化：框选自动勾选，无独立复选框）
         // ============================================================
-        function renderStats(forceRecreate = false) {
-    const group = STATE.groups.find(g => g.id === STATE.currentGroupId);
-    if (!group) {
-        statsContent.innerHTML = `<div class="stats-empty">请先选择一个任务组</div>`;
-        STATE.statsInitialized = false;
-        STATE.lastGroupId = null;
-        if (STATE.chartInstance) {
-            STATE.chartInstance.destroy();
-            STATE.chartInstance = null;
-        }
-        return;
-    }
+        function initBoxSelection() {
+            document.querySelectorAll('.subtask-container:not(.hidden)').forEach(container => {
+                if (container._boxInitialized) return;
+                container._boxInitialized = true;
+                let isDown = false,
+                    startX = 0,
+                    startY = 0;
+                let boxEl = null;
 
-    const tasks = group.tasks || [];
-    let totalTasks = tasks.length;
-    let completedTasks = tasks.filter(t => t.completed).length;
-    let overdueTasks = tasks.filter(t => t.dueDate && isOverdue(t.dueDate) && !t.completed).length;
-    let dueSoonTasks = tasks.filter(t => t.dueDate && isDueSoon(t.dueDate) && !t.completed && !isOverdue(t.dueDate)).length;
-    let totalSteps = 0, completedSteps = 0;
-    tasks.forEach(t => {
-        if (t.subtasks) {
-            totalSteps += t.subtasks.length;
-            completedSteps += t.subtasks.filter(s => s.completed).length;
-        }
-    });
-    const taskCompletionRate = totalTasks === 0 ? 0 : ((completedTasks / totalTasks) * 100);
-    const stepCompletionRate = totalSteps === 0 ? 0 : ((completedSteps / totalSteps) * 100);
-
-    const currentSnapshot = JSON.stringify({ totalTasks, completedTasks, totalSteps, completedSteps });
-    const dataChanged = STATE.lastStatsSnapshot !== currentSnapshot;
-
-    // 如果组变了，强制重建
-    if (STATE.lastGroupId !== group.id) {
-        forceRecreate = true;
-        STATE.lastGroupId = group.id;
-    }
-
-    // 获取当前图表模式
-    const mode = STATE.chartMode || 'task';
-
-    // ----- 首次渲染 或 强制重建 -----
-    if (!STATE.statsInitialized || forceRecreate) {
-        // 生成完整 HTML（包含统计卡片、切换按钮、canvas）
-        let html = `
-            <div class="stats-group-name">${escapeHtml(group.name)}</div>
-            <div class="stats-dashboard">
-                <div class="stats-card"><div class="stats-number">${totalTasks}</div><div class="stats-label">总任务</div></div>
-                <div class="stats-card"><div class="stats-number success">${completedTasks}</div><div class="stats-label">已完成</div></div>
-                <div class="stats-card"><div class="stats-number">${totalTasks - completedTasks}</div><div class="stats-label">未完成</div></div>
-                <div class="stats-card"><div class="stats-number ${overdueTasks > 0 ? 'overdue' : ''}">${overdueTasks}</div><div class="stats-label">逾期</div></div>
-                <div class="stats-card"><div class="stats-number ${dueSoonTasks > 0 ? 'due-soon' : ''}">${dueSoonTasks}</div><div class="stats-label">即将到期</div></div>
-                <div class="stats-card"><div class="stats-number">${taskCompletionRate.toFixed(2)}%</div><div class="stats-label">任务完成率</div></div>
-                <div class="stats-card"><div class="stats-number">${totalSteps}</div><div class="stats-label">总步骤</div></div>
-                <div class="stats-card"><div class="stats-number success">${completedSteps}</div><div class="stats-label">已完成步骤</div></div>
-                <div class="stats-card"><div class="stats-number">${stepCompletionRate.toFixed(2)}%</div><div class="stats-label">步骤完成率</div></div>
-            </div>
-            <div style="display:flex;justify-content:center;gap:12px;padding:0 20px 12px 20px;">
-                <button class="chart-toggle-btn active" data-chart="task" style="padding:6px 16px;border-radius:6px;border:1px solid var(--border-color);background:var(--accent);color:#fff;cursor:pointer;font-family:var(--font);">按任务</button>
-                <button class="chart-toggle-btn" data-chart="step" style="padding:6px 16px;border-radius:6px;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);cursor:pointer;font-family:var(--font);">按步骤</button>
-            </div>
-            <div class="stats-chart-wrap"><canvas id="statsChart"></canvas></div>
-        `;
-        statsContent.innerHTML = html;
-        STATE.statsInitialized = true;
-
-        // 销毁旧图表
-        if (STATE.chartInstance) {
-            STATE.chartInstance.destroy();
-            STATE.chartInstance = null;
-        }
-
-        // 创建新图表（带默认动画）
-        const canvas = document.getElementById('statsChart');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            let labels, data, colors;
-            if (mode === 'task') {
-                labels = ['已完成任务', '未完成任务'];
-                data = [completedTasks, totalTasks - completedTasks];
-                colors = ['#27ae60', '#9ca3af'];
-            } else {
-                labels = ['已完成步骤', '未完成步骤'];
-                data = [completedSteps, totalSteps - completedSteps];
-                colors = ['#27ae60', '#9ca3af'];
-            }
-            if (data[0] + data[1] === 0) {
-                STATE.chartInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: { labels: ['暂无数据'], datasets: [{ data: [1], backgroundColor: ['#e5e7eb'], borderWidth: 0 }] },
-                    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, cutout: '70%' }
-                });
-            } else {
-                STATE.chartInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        plugins: {
-                            legend: { position: 'bottom', labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#1f2937' } }
-                        },
-                        cutout: '70%',
+                container.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('input') || e.target.closest('button') || e.target.closest(
+                            '.checkbox') || e.target.closest('.subtask-delete')) return;
+                    if (e.button !== 0) return;
+                    const rect = container.getBoundingClientRect();
+                    startX = e.clientX - rect.left;
+                    startY = e.clientY - rect.top;
+                    isDown = true;
+                    STATE.boxSelecting = true;
+                    STATE.boxStartX = startX;
+                    STATE.boxStartY = startY;
+                    STATE.boxTaskId = container.dataset.taskId;
+                    if (!boxEl) {
+                        boxEl = document.createElement('div');
+                        boxEl.className = 'subtask-selection-box';
+                        container.style.position = 'relative';
+                        container.appendChild(boxEl);
+                    }
+                    boxEl.style.display = 'block';
+                    boxEl.style.left = startX + 'px';
+                    boxEl.style.top = startY + 'px';
+                    boxEl.style.width = '0';
+                    boxEl.style.height = '0';
+                    // 清除之前的 pending 状态
+                    if (STATE.clickTimer) {
+                        clearTimeout(STATE.clickTimer);
+                        STATE.clickTimer = null;
                     }
                 });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDown || !boxEl) return;
+                    const rect = container.getBoundingClientRect();
+                    const currentX = e.clientX - rect.left;
+                    const currentY = e.clientY - rect.top;
+                    const left = Math.min(currentX, startX);
+                    const top = Math.min(currentY, startY);
+                    const width = Math.abs(currentX - startX);
+                    const height = Math.abs(currentY - startY);
+                    boxEl.style.left = left + 'px';
+                    boxEl.style.top = top + 'px';
+                    boxEl.style.width = width + 'px';
+                    boxEl.style.height = height + 'px';
+
+                    const taskId = container.dataset.taskId;
+                    const items = container.querySelectorAll('.subtask-item');
+                    const boxRect = {
+                        left: left,
+                        top: top,
+                        right: left + width,
+                        bottom: top + height
+                    };
+                    // 直接在 DOM 上操作选中类，不修改 STATE（避免频繁渲染）
+                    items.forEach(item => {
+                        const rect2 = item.getBoundingClientRect();
+                        const containerRect = container.getBoundingClientRect();
+                        const itemLeft = rect2.left - containerRect.left;
+                        const itemTop = rect2.top - containerRect.top;
+                        const itemRight = itemLeft + rect2.width;
+                        const itemBottom = itemTop + rect2.height;
+                        const overlap = !(itemRight < boxRect.left || itemLeft > boxRect.right ||
+                            itemBottom < boxRect.top || itemTop > boxRect.bottom);
+                        if (overlap) {
+                            item.classList.add('selected');
+                        } else {
+                            item.classList.remove('selected');
+                        }
+                    });
+                });
+
+                document.addEventListener('mouseup', (e) => {
+                    if (!isDown) return;
+                    isDown = false;
+                    STATE.boxSelecting = false;
+                    if (boxEl) {
+                        boxEl.style.display = 'none';
+                        boxEl.remove();
+                        boxEl = null;
+                    }
+                    const taskId = container.dataset.taskId;
+                    if (!taskId) return;
+                    // 根据 DOM 中的 .selected 类同步 STATE
+                    const items = container.querySelectorAll('.subtask-item');
+                    const set = new Set();
+                    items.forEach(item => {
+                        if (item.classList.contains('selected')) {
+                            const sid = item.dataset.subtaskId;
+                            if (sid) set.add(sid);
+                        }
+                    });
+                    // 更新 STATE
+                    if (set.size === 0) {
+                        delete STATE.selectedSubtasks[taskId];
+                    } else {
+                        STATE.selectedSubtasks[taskId] = set;
+                    }
+                    saveSelectionState();
+                    updateSubtaskBatchToolbarVisibility(taskId);
+                    // 确保所有步骤项的类与 STATE 一致
+                    updateSubtaskItemsSelection(taskId);
+                    STATE.boxTaskId = null;
+                });
+            });
+        }
+
+        // ============================================================
+        //  统计看板
+        // ============================================================
+        function renderStats(forceRecreate = false) {
+            const group = getCurrentGroup();
+            if (!group) {
+                statsContent.innerHTML = `<div class="stats-empty">请先选择一个任务组</div>`;
+                STATE.statsInitialized = false;
+                STATE.lastGroupId = null;
+                if (STATE.chartInstance) {
+                    STATE.chartInstance.destroy();
+                    STATE.chartInstance = null;
+                }
+                return;
             }
-            STATE.chartMode = mode;
-        }
-
-        STATE.lastStatsSnapshot = currentSnapshot;
-
-        // 绑定切换按钮事件（只绑定一次，使用事件委托或一次性绑定）
-        // 因为 HTML 重新生成，需要重新绑定
-        statsContent.querySelectorAll('.chart-toggle-btn').forEach(btn => {
-    btn.removeEventListener('click', btn._chartClickHandler);
-    btn._chartClickHandler = function() {
-        statsContent.querySelectorAll('.chart-toggle-btn').forEach(b => {
-            b.classList.remove('active');
-            b.style.background = 'transparent';
-            b.style.color = 'var(--text-secondary)';
-        });
-        this.classList.add('active');
-        this.style.background = 'var(--accent)';
-        this.style.color = '#fff';
-        STATE.chartMode = this.dataset.chart;
-        renderStats(true);
-    };
-    btn.addEventListener('click', btn._chartClickHandler);
-});
-
-        return;
-    }
-
-    // ----- 更新现有视图（无动画） -----
-    // 更新组名
-    const nameEl = statsContent.querySelector('.stats-group-name');
-    if (nameEl) nameEl.textContent = escapeHtml(group.name);
-
-    // 更新统计卡片数字
-    const cards = statsContent.querySelectorAll('.stats-card');
-    if (cards.length >= 9) {
-        cards[0].querySelector('.stats-number').textContent = totalTasks;
-        cards[1].querySelector('.stats-number').textContent = completedTasks;
-        cards[2].querySelector('.stats-number').textContent = totalTasks - completedTasks;
-        const overdueEl = cards[3].querySelector('.stats-number');
-        overdueEl.textContent = overdueTasks;
-        overdueEl.className = 'stats-number' + (overdueTasks > 0 ? ' overdue' : '');
-        const dueSoonEl = cards[4].querySelector('.stats-number');
-        dueSoonEl.textContent = dueSoonTasks;
-        dueSoonEl.className = 'stats-number' + (dueSoonTasks > 0 ? ' due-soon' : '');
-        cards[5].querySelector('.stats-number').textContent = taskCompletionRate.toFixed(2) + '%';
-        cards[6].querySelector('.stats-number').textContent = totalSteps;
-        cards[7].querySelector('.stats-number').textContent = completedSteps;
-        cards[8].querySelector('.stats-number').textContent = stepCompletionRate.toFixed(2) + '%';
-    }
-
-    // 更新图表数据（无动画）
-    if (STATE.chartInstance) {
-        const chart = STATE.chartInstance;
-        let newData;
-        if (mode === 'task') {
-            newData = [completedTasks, totalTasks - completedTasks];
-        } else {
-            newData = [completedSteps, totalSteps - completedSteps];
-        }
-        // 如果新旧数据完全相同则跳过
-        const oldData = chart.data.datasets[0].data;
-        if (oldData.length === 2 && oldData[0] === newData[0] && oldData[1] === newData[1]) {
-            // 数据未变，但可能快照未更新，更新快照
+            const tasks = group.tasks || [];
+            let totalTasks = tasks.length;
+            let completedTasks = tasks.filter(t => t.completed).length;
+            let overdueTasks = tasks.filter(t => t.dueDate && isOverdue(t.dueDate) && !t.completed).length;
+            let dueSoonTasks = tasks.filter(t => t.dueDate && isDueSoon(t.dueDate) && !t.completed && !isOverdue(t.dueDate))
+                .length;
+            let totalSteps = 0,
+                completedSteps = 0;
+            tasks.forEach(t => {
+                if (t.subtasks) {
+                    totalSteps += t.subtasks.length;
+                    completedSteps += t.subtasks.filter(s => s.completed).length;
+                }
+            });
+            const taskCompletionRate = totalTasks === 0 ? 0 : ((completedTasks / totalTasks) * 100);
+            const stepCompletionRate = totalSteps === 0 ? 0 : ((completedSteps / totalSteps) * 100);
+            const currentSnapshot = JSON.stringify({ totalTasks, completedTasks, totalSteps, completedSteps });
+            const dataChanged = STATE.lastStatsSnapshot !== currentSnapshot;
+            if (STATE.lastGroupId !== group.id) {
+                forceRecreate = true;
+                STATE.lastGroupId = group.id;
+            }
+            const mode = STATE.chartMode || 'task';
+            if (!STATE.statsInitialized || forceRecreate) {
+                let html = `
+                        <div class="stats-group-name">${escapeHtml(group.name)}</div>
+                        <div class="stats-dashboard">
+                            <div class="stats-card"><div class="stats-number">${totalTasks}</div><div class="stats-label">总任务</div></div>
+                            <div class="stats-card"><div class="stats-number success">${completedTasks}</div><div class="stats-label">已完成</div></div>
+                            <div class="stats-card"><div class="stats-number">${totalTasks - completedTasks}</div><div class="stats-label">未完成</div></div>
+                            <div class="stats-card"><div class="stats-number ${overdueTasks > 0 ? 'overdue' : ''}">${overdueTasks}</div><div class="stats-label">逾期</div></div>
+                            <div class="stats-card"><div class="stats-number ${dueSoonTasks > 0 ? 'due-soon' : ''}">${dueSoonTasks}</div><div class="stats-label">即将到期</div></div>
+                            <div class="stats-card"><div class="stats-number">${taskCompletionRate.toFixed(2)}%</div><div class="stats-label">任务完成率</div></div>
+                            <div class="stats-card"><div class="stats-number">${totalSteps}</div><div class="stats-label">总步骤</div></div>
+                            <div class="stats-card"><div class="stats-number success">${completedSteps}</div><div class="stats-label">已完成步骤</div></div>
+                            <div class="stats-card"><div class="stats-number">${stepCompletionRate.toFixed(2)}%</div><div class="stats-label">步骤完成率</div></div>
+                        </div>
+                        <div style="display:flex;justify-content:center;gap:12px;padding:0 20px 12px 20px;">
+                            <button class="chart-toggle-btn active" data-chart="task" style="padding:6px 16px;border-radius:6px;border:1px solid var(--border-color);background:var(--accent);color:#fff;cursor:pointer;font-family:var(--font);">按任务</button>
+                            <button class="chart-toggle-btn" data-chart="step" style="padding:6px 16px;border-radius:6px;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);cursor:pointer;font-family:var(--font);">按步骤</button>
+                        </div>
+                        <div class="stats-chart-wrap"><canvas id="statsChart"></canvas></div>
+                    `;
+                statsContent.innerHTML = html;
+                STATE.statsInitialized = true;
+                if (STATE.chartInstance) {
+                    STATE.chartInstance.destroy();
+                    STATE.chartInstance = null;
+                }
+                const canvas = document.getElementById('statsChart');
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    let labels, data, colors;
+                    if (mode === 'task') {
+                        labels = ['已完成任务', '未完成任务'];
+                        data = [completedTasks, totalTasks - completedTasks];
+                        colors = ['#27ae60', '#9ca3af'];
+                    } else {
+                        labels = ['已完成步骤', '未完成步骤'];
+                        data = [completedSteps, totalSteps - completedSteps];
+                        colors = ['#27ae60', '#9ca3af'];
+                    }
+                    if (data[0] + data[1] === 0) {
+                        STATE.chartInstance = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: { labels: ['暂无数据'], datasets: [{ data: [1], backgroundColor: ['#e5e7eb'],
+                                    borderWidth: 0 }] },
+                            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } },
+                                cutout: '70%' }
+                        });
+                    } else {
+                        STATE.chartInstance = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                plugins: {
+                                    legend: { position: 'bottom', labels: { color: getComputedStyle(
+                                            document.documentElement).getPropertyValue('--text-primary')
+                                            .trim() || '#1f2937' } }
+                                },
+                                cutout: '70%',
+                            }
+                        });
+                    }
+                    STATE.chartMode = mode;
+                }
+                STATE.lastStatsSnapshot = currentSnapshot;
+                statsContent.querySelectorAll('.chart-toggle-btn').forEach(btn => {
+                    btn.removeEventListener('click', btn._chartClickHandler);
+                    btn._chartClickHandler = function() {
+                        statsContent.querySelectorAll('.chart-toggle-btn').forEach(b => {
+                            b.classList.remove('active');
+                            b.style.background = 'transparent';
+                            b.style.color = 'var(--text-secondary)';
+                        });
+                        this.classList.add('active');
+                        this.style.background = 'var(--accent)';
+                        this.style.color = '#fff';
+                        STATE.chartMode = this.dataset.chart;
+                        renderStats(true);
+                    };
+                    btn.addEventListener('click', btn._chartClickHandler);
+                });
+                return;
+            }
+            const nameEl = statsContent.querySelector('.stats-group-name');
+            if (nameEl) nameEl.textContent = escapeHtml(group.name);
+            const cards = statsContent.querySelectorAll('.stats-card');
+            if (cards.length >= 9) {
+                cards[0].querySelector('.stats-number').textContent = totalTasks;
+                cards[1].querySelector('.stats-number').textContent = completedTasks;
+                cards[2].querySelector('.stats-number').textContent = totalTasks - completedTasks;
+                const overdueEl = cards[3].querySelector('.stats-number');
+                overdueEl.textContent = overdueTasks;
+                overdueEl.className = 'stats-number' + (overdueTasks > 0 ? ' overdue' : '');
+                const dueSoonEl = cards[4].querySelector('.stats-number');
+                dueSoonEl.textContent = dueSoonTasks;
+                dueSoonEl.className = 'stats-number' + (dueSoonTasks > 0 ? ' due-soon' : '');
+                cards[5].querySelector('.stats-number').textContent = taskCompletionRate.toFixed(2) + '%';
+                cards[6].querySelector('.stats-number').textContent = totalSteps;
+                cards[7].querySelector('.stats-number').textContent = completedSteps;
+                cards[8].querySelector('.stats-number').textContent = stepCompletionRate.toFixed(2) + '%';
+            }
+            if (STATE.chartInstance) {
+                const chart = STATE.chartInstance;
+                let newData;
+                if (mode === 'task') {
+                    newData = [completedTasks, totalTasks - completedTasks];
+                } else {
+                    newData = [completedSteps, totalSteps - completedSteps];
+                }
+                const oldData = chart.data.datasets[0].data;
+                if (oldData.length === 2 && oldData[0] === newData[0] && oldData[1] === newData[1]) {
+                    STATE.lastStatsSnapshot = currentSnapshot;
+                    return;
+                }
+                chart.data.datasets[0].data = newData;
+                chart.update('none');
+            }
             STATE.lastStatsSnapshot = currentSnapshot;
-            return;
         }
-        chart.data.datasets[0].data = newData;
-        chart.update('none'); // 无动画更新
-    }
-
-    STATE.lastStatsSnapshot = currentSnapshot;
-}
 
         // ============================================================
         //  日历视图
@@ -2785,16 +3313,14 @@ function parseRange(rangeStr) {
             const month = STATE.calMonth !== undefined ? STATE.calMonth : new Date().getMonth();
             STATE.calYear = year;
             STATE.calMonth = month;
-
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const daysInPrevMonth = new Date(year, month, 0).getDate();
             const today = new Date();
             const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today
                 .getDate()).padStart(2, '0');
-
             const tasksByDate = {};
-            const group = STATE.groups.find(g => g.id === STATE.currentGroupId);
+            const group = getCurrentGroup();
             if (group) {
                 (group.tasks || []).forEach(t => {
                     if (t.dueDate) {
@@ -2804,11 +3330,9 @@ function parseRange(rangeStr) {
                     }
                 });
             }
-
             let cells = '';
             const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
             let headerHtml = weekDays.map(d => `<div class="cal-day-header">${d}</div>`).join('');
-
             const startOffset = firstDay;
             for (let i = startOffset - 1; i >= 0; i--) {
                 const day = daysInPrevMonth - i;
@@ -2816,7 +3340,6 @@ function parseRange(rangeStr) {
                             <span class="cal-day-num other-month">${day}</span>
                         </div>`;
             }
-
             for (let d = 1; d <= daysInMonth; d++) {
                 const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
                 const tasks = tasksByDate[dateStr] || [];
@@ -2832,7 +3355,6 @@ function parseRange(rangeStr) {
                             ${countHtml}
                         </div>`;
             }
-
             const totalCells = startOffset + daysInMonth;
             const remaining = (7 - totalCells % 7) % 7;
             for (let d = 1; d <= remaining; d++) {
@@ -2840,7 +3362,6 @@ function parseRange(rangeStr) {
                             <span class="cal-day-num other-month">${d}</span>
                         </div>`;
             }
-
             const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
             let html = `
                     <div class="calendar-view">
@@ -2860,7 +3381,6 @@ function parseRange(rangeStr) {
                     </div>
                 `;
             calendarContent.innerHTML = html;
-
             document.getElementById('calPrev')?.addEventListener('click', () => {
                 STATE.calMonth--;
                 if (STATE.calMonth < 0) { STATE.calMonth = 11;
@@ -2911,11 +3431,183 @@ function parseRange(rangeStr) {
         }
 
         // ============================================================
+        //  同步
+        // ============================================================
+        async function pullFromGitHub() {
+            if (STATE.isSyncing) return false;
+            const fetched = await fetchAppData();
+            if (fetched === null) return false;
+            STATE.users = fetched.users || {};
+            STATE.todos = fetched.todos || {};
+            if (STATE.currentUser && STATE.todos[STATE.currentUser]) {
+                STATE.groups = STATE.todos[STATE.currentUser].groups || [];
+                sortByOrder(STATE.groups);
+                if (!STATE.groups.some(g => g.id === STATE.currentGroupId)) {
+                    STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
+                }
+                if (STATE.isEditing) {
+                    STATE.pendingRender = true;
+                    setSyncStatus('已更新（待应用）');
+                } else {
+                    renderAll();
+                    setSyncStatus('已更新');
+                }
+            } else {
+                setSyncStatus('已同步');
+            }
+            return true;
+        }
+
+        async function syncToGitHub() {
+            if (STATE.isSyncing) { STATE.pendingSave = true; return; }
+            STATE.isSyncing = true;
+            setSyncStatus('同步中...');
+            try {
+                const fullData = { users: STATE.users, todos: STATE.todos };
+                const ok = await saveAppData(fullData);
+                if (ok) { setSyncStatus('已同步'); await pullFromGitHub(); } else { setSyncStatus('同步失败'); }
+            } catch (e) { setSyncStatus('同步出错'); } finally {
+                STATE.isSyncing = false;
+                if (STATE.pendingSave) { STATE.pendingSave = false;
+                    syncToGitHub(); }
+            }
+        }
+
+        function saveAndSync() {
+            if (STATE.currentUser) {
+                if (!STATE.todos[STATE.currentUser]) STATE.todos[STATE.currentUser] = { groups: [] };
+                STATE.todos[STATE.currentUser].groups = STATE.groups;
+            }
+            STATE.lastStatsSnapshot = null;
+            renderAll();
+            syncToGitHub();
+        }
+
+        function startPolling() {
+            if (STATE.pollTimer) clearInterval(STATE.pollTimer);
+            STATE.pollTimer = setInterval(async () => {
+                if (document.hidden || STATE.isSyncing) return;
+                await pullFromGitHub();
+            }, STATE.pollInterval);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && !STATE.isSyncing && STATE.currentUser) pullFromGitHub();
+        });
+        refreshBtn.addEventListener('click', () => { if (!STATE.isSyncing && STATE.currentUser) pullFromGitHub(); });
+
+        // ============================================================
+        //  语法解析（步骤生成）
+        // ============================================================
+        const TYPE_MAP = { 'P': '第{num}页', 'S': '第{num}步', 'Q': '第{num}课时', 'W': '第{num}周', 'T': '第{num}天', 'H': '第{num}小时',
+            'U': '第{num}单元', '#': '{num}' };
+
+        function parseRange(rangeStr) {
+            rangeStr = rangeStr.trim();
+            const rangeMatch = rangeStr.match(/^(\d+)\s*-\s*(\d+)(?:\s*:\s*(\d+))?$/);
+            if (rangeMatch) {
+                const start = parseInt(rangeMatch[1], 10);
+                const end = parseInt(rangeMatch[2], 10);
+                const step = rangeMatch[3] ? parseInt(rangeMatch[3], 10) : 1;
+                if (isNaN(start) || isNaN(end) || isNaN(step) || step < 1) return null;
+                const result = [];
+                if (start <= end) {
+                    for (let i = start; i <= end; i += step) result.push(i);
+                } else {
+                    for (let i = start; i >= end; i -= step) result.push(i);
+                }
+                return result;
+            }
+            if (/^[\d\s,]+$/.test(rangeStr)) {
+                const nums = rangeStr.split(',').map(s => parseInt(s.trim(), 10));
+                if (nums.every(n => !isNaN(n) && n > 0)) return nums;
+                return null;
+            }
+            const items = rangeStr.split(',').map(s => s.trim());
+            if (items.every(s => s.length > 0)) return items;
+            return null;
+        }
+
+        function parseBlock(blockContent) {
+            blockContent = blockContent.trim();
+            if (blockContent.includes('&')) {
+                const parts = blockContent.split('&').map(s => s.trim());
+                const dimensions = [];
+                for (const part of parts) {
+                    const match = part.match(/^([A-Z#])(.+?)(?:\|(.+))?$/);
+                    if (!match) return null;
+                    const type = match[1],
+                        rangeStr = match[2].trim(),
+                        template = match[3] ? match[3].trim() : null;
+                    if (!TYPE_MAP[type] && type !== '#') return null;
+                    const nums = parseRange(rangeStr);
+                    if (!nums) return null;
+                    dimensions.push({ type, nums, template: template || TYPE_MAP[type] || '{num}' });
+                }
+                const minLen = Math.min(...dimensions.map(d => d.nums.length));
+                if (minLen === 0) return null;
+                return { type: 'pair', dimensions, length: minLen };
+            } else {
+                const match = blockContent.match(/^([A-Z#])(.+?)(?:\|(.+))?$/);
+                if (!match) return null;
+                const type = match[1],
+                    rangeStr = match[2].trim(),
+                    template = match[3] ? match[3].trim() : null;
+                if (!TYPE_MAP[type] && type !== '#') return null;
+                const nums = parseRange(rangeStr);
+                if (!nums) return null;
+                return { type: 'single', nums, template: template || TYPE_MAP[type] || '{num}' };
+            }
+        }
+
+        function expandBlock(block) {
+            if (block.type === 'single') return block.nums.map(num => block.template.replace(/\{num\}/g, num));
+            else if (block.type === 'pair') {
+                const dims = block.dimensions,
+                    len = block.length,
+                    results = [];
+                for (let i = 0; i < len; i++) {
+                    results.push(dims.map(d => d.template.replace(/\{num\}/g, d.nums[i])).join(' '));
+                }
+                return results;
+            }
+            return [];
+        }
+
+        function parseStepName(input) {
+            const escaped = input.replace(/%%/g, '\uFFFF');
+            const regex = /%([^%]+?)%/g;
+            let match,
+                lastIndex = 0,
+                blocks = [],
+                textParts = [],
+                hasBlock = false;
+            while ((match = regex.exec(escaped)) !== null) {
+                hasBlock = true;
+                const before = escaped.substring(lastIndex, match.index);
+                if (before) textParts.push(before);
+                const content = match[1];
+                const parsed = parseBlock(content);
+                if (!parsed) return null;
+                blocks.push(parsed);
+                lastIndex = match.index + match[0].length;
+            }
+            if (lastIndex < escaped.length) { const remaining = escaped.substring(lastIndex); if (remaining) textParts.push(
+                    remaining); }
+            if (!hasBlock) return { displayName: input, steps: [] };
+            const displayName = textParts.join('').replace(/\uFFFF/g, '%');
+            let allSteps = [];
+            for (const block of blocks) { allSteps = allSteps.concat(expandBlock(block)); }
+            return { displayName: displayName || '', steps: allSteps };
+        }
+
+        // ============================================================
         //  事件绑定 - 任务列表交互
         // ============================================================
         todoList.addEventListener('click', async (e) => {
             const target = e.target.closest('button') || e.target;
 
+            // ---- 展开/收起 ----
             if (target.classList && target.classList.contains('expand-btn')) {
                 const taskId = target.dataset.taskId;
                 STATE.expandedTasks[taskId] = !STATE.expandedTasks[taskId];
@@ -2923,6 +3615,7 @@ function parseRange(rangeStr) {
                 return;
             }
 
+            // ---- 任务级完成切换 ----
             if (target.classList && target.classList.contains('checkbox') && target.closest('.task-item')) {
                 const taskId = target.dataset.taskId;
                 const group = getCurrentGroup();
@@ -2937,34 +3630,41 @@ function parseRange(rangeStr) {
                 return;
             }
 
+            // ---- 步骤级完成切换（圆形勾选框） ----
             if (target.classList && target.classList.contains('checkbox') && target.closest('.subtask-item')) {
                 const subtaskId = target.dataset.subtaskId;
-                const group = getCurrentGroup();
-                if (!group) return;
-                let foundTask = null,
-                    foundSubtask = null;
-                for (const task of group.tasks) {
-                    const st = (task.subtasks || []).find(s => s.id === subtaskId);
-                    if (st) { foundTask = task;
-                        foundSubtask = st; break; }
+                const container = target.closest('.subtask-container');
+                if (!container) return;
+                const taskId = container.dataset.taskId;
+                const task = findTask(taskId);
+                if (!task) return;
+                const subtask = task.subtasks.find(s => s.id === subtaskId);
+                if (!subtask) return;
+                const newCompleted = !subtask.completed;
+                const op = {
+                    id: uuid(),
+                    type: 'SINGLE_SUBTASK_TOGGLE',
+                    taskId: taskId,
+                    subtaskId: subtaskId,
+                    completed: newCompleted,
+                    userId: STATE.currentUser,
+                    timestamp: Date.now(),
+                };
+                subtask.completed = newCompleted;
+                const allDone = task.subtasks.every(s => s.completed);
+                if (allDone && task.subtasks.length > 0) {
+                    task.completed = true;
+                    task.completedAt = Date.now();
+                } else {
+                    task.completed = false;
+                    task.completedAt = null;
                 }
-                if (!foundTask || !foundSubtask) return;
-                foundSubtask.completed = !foundSubtask.completed;
-                if (!foundSubtask.completed && foundTask.completed) {
-                    foundTask.completed = false;
-                    foundTask.completedAt = null;
-                }
-                if (foundSubtask.completed) {
-                    const allCompleted = (foundTask.subtasks || []).every(s => s.completed === true);
-                    if (allCompleted && !foundTask.completed) {
-                        foundTask.completed = true;
-                        foundTask.completedAt = Date.now();
-                    }
-                }
-                saveAndSync();
+                renderTasks();
+                enqueueOperation(op);
                 return;
             }
 
+            // ---- 编辑任务 ----
             if (target.classList && target.classList.contains('edit-task-btn')) {
                 const taskId = target.dataset.taskId;
                 const group = getCurrentGroup();
@@ -2982,6 +3682,7 @@ function parseRange(rangeStr) {
                 return;
             }
 
+            // ---- 删除任务 ----
             if (target.classList && target.classList.contains('delete-task-btn')) {
                 const taskId = target.dataset.taskId;
                 if (!confirm('确定删除此任务吗？')) return;
@@ -2989,10 +3690,12 @@ function parseRange(rangeStr) {
                 if (!group) return;
                 group.tasks = group.tasks.filter(t => t.id !== taskId);
                 STATE.selectedTasks.delete(taskId);
+                delete STATE.selectedSubtasks[taskId];
                 saveAndSync();
                 return;
             }
 
+            // ---- 任务选择（批量） ----
             if (target.classList && target.classList.contains('task-select-btn')) {
                 const taskId = target.dataset.taskId;
                 const group = getCurrentGroup();
@@ -3006,6 +3709,7 @@ function parseRange(rangeStr) {
                 return;
             }
 
+            // ---- 添加步骤按钮 ----
             if (target.classList && target.classList.contains('add-subtask-btn')) {
                 const taskId = target.dataset.taskId;
                 STATE.expandedTasks[taskId] = true;
@@ -3013,9 +3717,7 @@ function parseRange(rangeStr) {
                 const result = await showInputModal('添加步骤', '');
                 if (result !== null && result !== '') {
                     const parsed = parseStepName(result);
-                    const group = getCurrentGroup();
-                    if (!group) { alert('当前组未找到'); return; }
-                    const task = group.tasks.find(t => t.id === taskId);
+                    const task = findTask(taskId);
                     if (!task) { alert('任务未找到'); return; }
                     if (!task.subtasks) task.subtasks = [];
                     if (parsed && parsed.steps.length > 0) {
@@ -3035,6 +3737,7 @@ function parseRange(rangeStr) {
                 return;
             }
 
+            // ---- 添加步骤确认 ----
             if (target.classList && target.classList.contains('add-subtask-confirm')) {
                 const taskId = target.dataset.taskId;
                 const row = target.closest('.add-subtask-row');
@@ -3043,9 +3746,7 @@ function parseRange(rangeStr) {
                 if (!input) return;
                 const text = input.value.trim();
                 if (!text) return;
-                const group = getCurrentGroup();
-                if (!group) return;
-                const task = group.tasks.find(t => t.id === taskId);
+                const task = findTask(taskId);
                 if (!task) return;
                 const parsed = parseStepName(text);
                 if (!task.subtasks) task.subtasks = [];
@@ -3066,19 +3767,24 @@ function parseRange(rangeStr) {
                 return;
             }
 
+            // ---- 删除步骤 ----
             if (target.classList && target.classList.contains('subtask-delete')) {
                 const subtaskId = target.dataset.subtaskId;
+                const taskId = target.dataset.taskId;
                 if (!confirm('删除此步骤吗？')) return;
-                const group = getCurrentGroup();
-                if (!group) return;
-                for (const task of group.tasks) {
-                    const idx = (task.subtasks || []).findIndex(s => s.id === subtaskId);
-                    if (idx !== -1) { task.subtasks.splice(idx, 1);
-                        saveAndSync(); return; }
-                }
+                const task = findTask(taskId);
+                if (!task || !task.subtasks) return;
+                task.subtasks = task.subtasks.filter(s => s.id !== subtaskId);
+                task.subtasks.forEach((s, idx) => s.order = idx);
+                const selSet = getSelectedSubtasks(taskId);
+                selSet.delete(subtaskId);
+                if (selSet.size === 0) delete STATE.selectedSubtasks[taskId];
+                saveSelectionState();
+                saveAndSync();
                 return;
             }
 
+            // ---- 添加任务确认 ----
             if (target.classList && target.classList.contains('add-task-confirm')) {
                 const groupId = target.dataset.groupId;
                 const row = target.closest('.add-task-row');
@@ -3113,8 +3819,250 @@ function parseRange(rangeStr) {
                 saveAndSync();
                 return;
             }
+
+            // ---- 步骤批量工具栏按钮 ----
+            if (target.closest('.subtask-batch-toolbar')) {
+                const action = target.dataset.action;
+                const taskId = target.dataset.taskId;
+                if (!taskId) return;
+                const task = findTask(taskId);
+                if (!task) return;
+
+                if (action === 'select-all') {
+                    selectAllSubtasks(taskId);
+                    return;
+                }
+                if (action === 'deselect-all') {
+                    clearSubtaskSelection(taskId);
+                    return;
+                }
+                if (action === 'batch-complete') {
+                    const selected = getSelectedSubtasks(taskId);
+                    if (selected.size === 0) return;
+                    const ids = Array.from(selected);
+                    if (!confirm(`确定将选中的 ${ids.length} 个步骤标记为完成吗？`)) return;
+                    task.subtasks.forEach(s => {
+                        if (ids.includes(s.id)) s.completed = true;
+                    });
+                    const allDone = task.subtasks.every(s => s.completed);
+                    if (allDone && task.subtasks.length > 0) {
+                        task.completed = true;
+                        task.completedAt = Date.now();
+                    }
+                    clearSubtaskSelection(taskId);
+                    renderTasks();
+                    const op = {
+                        id: uuid(),
+                        type: 'BATCH_COMPLETE_SUBTASKS',
+                        taskId: taskId,
+                        subtaskIds: ids,
+                        userId: STATE.currentUser,
+                        timestamp: Date.now(),
+                    };
+                    enqueueOperation(op);
+                    return;
+                }
+                if (action === 'batch-uncomplete') {
+                    const selected = getSelectedSubtasks(taskId);
+                    if (selected.size === 0) return;
+                    const ids = Array.from(selected);
+                    if (!confirm(`确定将选中的 ${ids.length} 个步骤标记为未完成吗？`)) return;
+                    task.subtasks.forEach(s => {
+                        if (ids.includes(s.id)) s.completed = false;
+                    });
+                    task.completed = false;
+                    task.completedAt = null;
+                    clearSubtaskSelection(taskId);
+                    renderTasks();
+                    const op = {
+                        id: uuid(),
+                        type: 'BATCH_UNCOMPLETE_SUBTASKS',
+                        taskId: taskId,
+                        subtaskIds: ids,
+                        userId: STATE.currentUser,
+                        timestamp: Date.now(),
+                    };
+                    enqueueOperation(op);
+                    return;
+                }
+                if (action === 'batch-delete') {
+                    const selected = getSelectedSubtasks(taskId);
+                    if (selected.size === 0) return;
+                    const ids = Array.from(selected);
+                    if (!confirm(`确定删除选中的 ${ids.length} 个步骤吗？`)) return;
+                    task.subtasks = task.subtasks.filter(s => !ids.includes(s.id));
+                    task.subtasks.forEach((s, idx) => s.order = idx);
+                    if (task.subtasks.length === 0) {
+                        // 无步骤
+                    } else {
+                        const allDone = task.subtasks.every(s => s.completed);
+                        if (allDone && !task.completed) {
+                            task.completed = true;
+                            task.completedAt = Date.now();
+                        } else if (!allDone && task.completed) {
+                            task.completed = false;
+                            task.completedAt = null;
+                        }
+                    }
+                    clearSubtaskSelection(taskId);
+                    renderTasks();
+                    const op = {
+                        id: uuid(),
+                        type: 'BATCH_DELETE_SUBTASKS',
+                        taskId: taskId,
+                        subtaskIds: ids,
+                        userId: STATE.currentUser,
+                        timestamp: Date.now(),
+                    };
+                    enqueueOperation(op);
+                    return;
+                }
+            }
         });
 
+        // ---- 步骤项单击选中（不含独立复选框） ----
+        // 使用 mousedown + mouseup 区分单击和双击，避免与双击编辑冲突
+        let clickPending = null;
+
+        todoList.addEventListener('mousedown', (e) => {
+            const item = e.target.closest('.subtask-item');
+            if (!item) return;
+            // 忽略 checkbox、删除按钮、输入框
+            if (e.target.closest('.checkbox') || e.target.closest('.subtask-delete') || e.target.closest('input') || e
+                .target.closest('button')) {
+                return;
+            }
+            const taskId = item.dataset.taskId;
+            const subtaskId = item.dataset.subtaskId;
+            if (!taskId || !subtaskId) return;
+            // 记录点击，用于双击判断
+            clickPending = { taskId, subtaskId, item, time: Date.now() };
+        });
+
+        todoList.addEventListener('mouseup', (e) => {
+            if (!clickPending) return;
+            const now = Date.now();
+            const diff = now - clickPending.time;
+            // 如果时间差小于 300ms，视为单击
+            if (diff < 300) {
+                const { taskId, subtaskId, item } = clickPending;
+                // 检查是否被取消（如拖拽）
+                if (!item || !item.isConnected) { clickPending = null; return; }
+                // 切换选中状态（Ctrl 多选，Shift 范围选择暂不实现复杂逻辑）
+                const isCtrl = e.ctrlKey || e.metaKey;
+                const isShift = e.shiftKey;
+                if (isShift) {
+                    // Shift + 单击：范围选择（简化：切换当前项）
+                    toggleSubtaskSelection(taskId, subtaskId);
+                } else if (isCtrl) {
+                    // Ctrl + 单击：切换单个
+                    toggleSubtaskSelection(taskId, subtaskId);
+                } else {
+                    // 普通单击：切换单个
+                    toggleSubtaskSelection(taskId, subtaskId);
+                }
+                clickPending = null;
+            } else {
+                // 超过 300ms 视为双击，不做任何事（双击由 dblclick 处理）
+                clickPending = null;
+            }
+        });
+
+        // ---- 双击步骤文本编辑 ----
+        todoList.addEventListener('dblclick', (e) => {
+            const textEl = e.target.closest('.subtask-text');
+            if (!textEl) return;
+            const item = textEl.closest('.subtask-item');
+            if (!item) return;
+            const taskId = item.dataset.taskId;
+            const subtaskId = item.dataset.subtaskId;
+            if (!taskId || !subtaskId) return;
+            const task = findTask(taskId);
+            if (!task) return;
+            const subtask = task.subtasks.find(s => s.id === subtaskId);
+            if (!subtask) return;
+            // 取消待处理的单击
+            if (clickPending) { clickPending = null; }
+            // 弹出编辑框
+            showInputModal('编辑步骤', subtask.content).then(result => {
+                if (result !== null && result !== '') {
+                    subtask.content = result;
+                    saveAndSync();
+                }
+            });
+        });
+
+        // ---- 键盘快捷键 ----
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || modalOverlay.classList.contains(
+                    'active')) return;
+            const group = getCurrentGroup();
+            if (!group) return;
+            // Ctrl+A 全选当前任务的步骤
+            if (e.key === 'a' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                const expanded = Object.keys(STATE.expandedTasks).filter(id => STATE.expandedTasks[id]);
+                if (expanded.length > 0) {
+                    const taskId = expanded[expanded.length - 1];
+                    const task = findTask(taskId);
+                    if (task && task.subtasks && task.subtasks.length > 0) {
+                        selectAllSubtasks(taskId);
+                    }
+                }
+                return;
+            }
+            // Delete / Backspace 删除选中的步骤
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                const expanded = Object.keys(STATE.expandedTasks).filter(id => STATE.expandedTasks[id]);
+                if (expanded.length > 0) {
+                    const taskId = expanded[expanded.length - 1];
+                    const selected = getSelectedSubtasks(taskId);
+                    if (selected.size === 0) return;
+                    const ids = Array.from(selected);
+                    if (!confirm(`确定删除选中的 ${ids.length} 个步骤吗？`)) return;
+                    const task = findTask(taskId);
+                    if (!task) return;
+                    task.subtasks = task.subtasks.filter(s => !ids.includes(s.id));
+                    task.subtasks.forEach((s, idx) => s.order = idx);
+                    if (task.subtasks.length === 0) {
+                        // 无步骤
+                    } else {
+                        const allDone = task.subtasks.every(s => s.completed);
+                        if (allDone && !task.completed) {
+                            task.completed = true;
+                            task.completedAt = Date.now();
+                        } else if (!allDone && task.completed) {
+                            task.completed = false;
+                            task.completedAt = null;
+                        }
+                    }
+                    clearSubtaskSelection(taskId);
+                    renderTasks();
+                    const op = {
+                        id: uuid(),
+                        type: 'BATCH_DELETE_SUBTASKS',
+                        taskId: taskId,
+                        subtaskIds: ids,
+                        userId: STATE.currentUser,
+                        timestamp: Date.now(),
+                    };
+                    enqueueOperation(op);
+                    e.preventDefault();
+                }
+                return;
+            }
+            // Escape 取消所有选择
+            if (e.key === 'Escape') {
+                const expanded = Object.keys(STATE.expandedTasks).filter(id => STATE.expandedTasks[id]);
+                if (expanded.length > 0) {
+                    expanded.forEach(taskId => clearSubtaskSelection(taskId));
+                }
+                exitBatchMode();
+                return;
+            }
+        });
+
+        // ---- 添加步骤/任务输入框回车 ----
         todoList.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const target = e.target;
@@ -3132,13 +4080,12 @@ function parseRange(rangeStr) {
             }
         });
 
+        // ---- 双击任务内容编辑 ----
         todoList.addEventListener('dblclick', async (e) => {
             const target = e.target.closest('.content-text');
             if (!target) return;
             const taskId = target.dataset.taskId;
-            const group = getCurrentGroup();
-            if (!group) return;
-            const task = group.tasks.find(t => t.id === taskId);
+            const task = findTask(taskId);
             if (!task) return;
             const result = await showTaskEditModal(task);
             if (result) {
@@ -3151,7 +4098,7 @@ function parseRange(rangeStr) {
         });
 
         // ============================================================
-        //  批量操作
+        //  批量操作（任务级）
         // ============================================================
         function updateBatchBar() {
             const count = STATE.selectedTasks.size;
@@ -3384,7 +4331,7 @@ function parseRange(rangeStr) {
         }
 
         // ============================================================
-        //  登录 / 注册 + 持久化
+        //  登录 / 注册
         // ============================================================
         function switchMode() {
             if (isRegisterMode) {
@@ -3436,12 +4383,15 @@ function parseRange(rangeStr) {
                 STATE.calMonth = now.getMonth();
                 STATE.calSelectedDate = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(
                     now.getDate()).padStart(2, '0');
+                loadSelectionState();
+                loadQueueFromStorage();
                 renderAll();
                 startPolling();
                 setSyncStatus('已就绪');
                 if ('Notification' in window && Notification.permission === 'default') {
                     Notification.requestPermission();
                 }
+                if (STATE.queue.length > 0) processQueue();
             }
         }
 
@@ -3464,8 +4414,6 @@ function parseRange(rangeStr) {
             switchMode();
         }
 
-        function getCurrentGroup() { return STATE.groups.find(g => g.id === STATE.currentGroupId); }
-
         async function handleAddGroup() {
             const name = await showInputModal('新建任务组', '新列表');
             if (name !== null && name !== '') {
@@ -3480,7 +4428,7 @@ function parseRange(rangeStr) {
         }
 
         // ============================================================
-        //  每日总结 (浏览器通知)
+        //  每日总结
         // ============================================================
         function checkDailySummary() {
             const now = new Date();
@@ -3511,12 +4459,70 @@ function parseRange(rangeStr) {
         // ============================================================
         //  初始化
         // ============================================================
+        function bindEvents() {
+            loginBtn.removeEventListener('click', handleLogin);
+            loginBtn.addEventListener('click', handleLogin);
+            registerBtn.removeEventListener('click', () => {});
+            registerBtn.addEventListener('click', () => {
+                isRegisterMode = !isRegisterMode;
+                switchMode();
+            });
+            switchModeLink.removeEventListener('click', () => {});
+            switchModeLink.addEventListener('click', () => {
+                isRegisterMode = !isRegisterMode;
+                switchMode();
+            });
+            loginPassword.removeEventListener('keydown', handleLoginEnter);
+            loginPassword.addEventListener('keydown', handleLoginEnter);
+            loginUsername.removeEventListener('keydown', handleLoginEnter);
+            loginUsername.addEventListener('keydown', handleLoginEnter);
+            logoutBtn.removeEventListener('click', logout);
+            logoutBtn.addEventListener('click', logout);
+            exportWordBtn.removeEventListener('click', handleExportWord);
+            exportWordBtn.addEventListener('click', handleExportWord);
+            exportJsonBtn.removeEventListener('click', handleExportJson);
+            exportJsonBtn.addEventListener('click', handleExportJson);
+            importBtn.removeEventListener('click', handleImportJson);
+            importBtn.addEventListener('click', handleImportJson);
+            todoList.removeEventListener('focusin', todoList._focusinHandler);
+            todoList.removeEventListener('focusout', todoList._focusoutHandler);
+            todoList._focusinHandler = function(e) {
+                const target = e.target;
+                if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+                    STATE.isEditing = true;
+                }
+            };
+            todoList._focusoutHandler = function(e) {
+                const target = e.target;
+                if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+                    STATE.isEditing = false;
+                    if (STATE.pendingRender) {
+                        STATE.pendingRender = false;
+                        renderAll();
+                        setSyncStatus('已更新');
+                    }
+                }
+            };
+            todoList.addEventListener('focusin', todoList._focusinHandler);
+            todoList.addEventListener('focusout', todoList._focusoutHandler);
+        }
+
+        function handleLoginEnter(e) {
+            if (e.key === 'Enter') handleLogin();
+        }
+
+        document.addEventListener('touchstart', (e) => {
+            const target = e.target;
+            if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.closest('.modal-box')) {
+                e.stopPropagation();
+            }
+        }, { passive: true });
+
         async function init() {
             applyTheme(getPreferredTheme());
             const token = await fetchToken();
             if (!token) return;
             STATE.token = token;
-
             const data = await fetchAppData();
             if (data === null) {
                 alert('无法获取数据，请检查网络或 Token 权限');
@@ -3524,7 +4530,6 @@ function parseRange(rangeStr) {
             }
             STATE.users = data.users || {};
             STATE.todos = data.todos || {};
-
             const savedUser = localStorage.getItem('gittodo_user');
             if (savedUser && STATE.todos[savedUser]) {
                 STATE.currentUser = savedUser;
@@ -3536,18 +4541,20 @@ function parseRange(rangeStr) {
                 STATE.calMonth = now.getMonth();
                 STATE.calSelectedDate = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(
                     now.getDate()).padStart(2, '0');
+                loadSelectionState();
+                loadQueueFromStorage();
                 loginOverlay.classList.add('hidden');
                 appContainer.style.display = 'flex';
                 renderAll();
                 startPolling();
                 setSyncStatus('已就绪');
                 bindEvents();
+                if (STATE.queue.length > 0) processQueue();
                 if ('Notification' in window && Notification.permission === 'default') {
                     Notification.requestPermission();
                 }
                 return;
             }
-
             isRegisterMode = false;
             switchMode();
             loginOverlay.classList.remove('hidden');
@@ -3555,80 +4562,12 @@ function parseRange(rangeStr) {
             bindEvents();
         }
 
-        function bindEvents() {
-    // 登录相关
-    loginBtn.removeEventListener('click', handleLogin);
-    loginBtn.addEventListener('click', handleLogin);
-    registerBtn.removeEventListener('click', () => {});
-    registerBtn.addEventListener('click', () => {
-        isRegisterMode = !isRegisterMode;
-        switchMode();
-    });
-    switchModeLink.removeEventListener('click', () => {});
-    switchModeLink.addEventListener('click', () => {
-        isRegisterMode = !isRegisterMode;
-        switchMode();
-    });
-    loginPassword.removeEventListener('keydown', handleLoginEnter);
-    loginPassword.addEventListener('keydown', handleLoginEnter);
-    loginUsername.removeEventListener('keydown', handleLoginEnter);
-    loginUsername.addEventListener('keydown', handleLoginEnter);
-
-    // 退出登录
-    logoutBtn.removeEventListener('click', logout);
-    logoutBtn.addEventListener('click', logout);
-
-    // 导入/导出
-    exportWordBtn.removeEventListener('click', handleExportWord);
-    exportWordBtn.addEventListener('click', handleExportWord);
-    exportJsonBtn.removeEventListener('click', handleExportJson);
-    exportJsonBtn.addEventListener('click', handleExportJson);
-    importBtn.removeEventListener('click', handleImportJson);
-    importBtn.addEventListener('click', handleImportJson);
-
-    // ---- 新增：监听任务列表中的输入框焦点，防止自动刷新导致失焦 ----
-    todoList.removeEventListener('focusin', todoList._focusinHandler);
-    todoList.removeEventListener('focusout', todoList._focusoutHandler);
-    todoList._focusinHandler = function(e) {
-        const target = e.target;
-        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-            STATE.isEditing = true;   // 标记正在编辑，暂停自动刷新
-        }
-    };
-    todoList._focusoutHandler = function(e) {
-        const target = e.target;
-        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-            STATE.isEditing = false;
-            // 如果有待渲染的更新，立即执行
-            if (STATE.pendingRender) {
-                STATE.pendingRender = false;
-                renderAll();
-                setSyncStatus('已更新');
-            }
-        }
-    };
-    todoList.addEventListener('focusin', todoList._focusinHandler);
-    todoList.addEventListener('focusout', todoList._focusoutHandler);
-}
-
-        function handleLoginEnter(e) {
-            if (e.key === 'Enter') handleLogin();
-        }
-
-        // 修复移动端输入框焦点问题
-        document.addEventListener('touchstart', (e) => {
-            const target = e.target;
-            if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.closest('.modal-box')) {
-                e.stopPropagation();
-            }
-        }, { passive: true });
-
         init().catch(err => {
             console.error('初始化失败:', err);
             alert('初始化失败，请检查控制台错误');
         });
 
-        console.log('GitTodo 已加载（统计仅当前组，含步骤完成率）');
+        console.log('GitTodo 已加载（步骤批量选择交互优化版）');
     </script>
 </body>
 </html>
