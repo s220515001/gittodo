@@ -600,6 +600,49 @@
             text-decoration: line-through;
             color: var(--text-muted);
         }
+        /* ---- 步骤进度显示 (X/Y) ---- */
+        .task-step-progress {
+            font-size: 12px;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-radius: 10px;
+            padding: 0 10px;
+            line-height: 22px;
+            margin-left: 4px;
+            flex-shrink: 0;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        .task-step-progress.completed {
+            color: var(--success);
+            border-color: var(--success);
+            background: rgba(39, 174, 96, 0.12);
+        }
+        .task-step-progress.partial {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: rgba(58, 124, 174, 0.10);
+        }
+        .task-step-progress.empty {
+            color: var(--text-muted);
+            border-color: var(--border-color);
+            background: var(--bg-primary);
+        }
+        /* 保留旧的步骤徽章样式（兼容） */
+        .task-step-badge {
+            font-size: 11px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 12px;
+            padding: 0 10px;
+            line-height: 20px;
+            margin-left: 4px;
+            flex-shrink: 0;
+            opacity: 0.8;
+            font-weight: 500;
+        }
         .task-item .task-meta {
             display: flex;
             align-items: center;
@@ -676,18 +719,6 @@
             stroke-linecap: round;
             stroke-linejoin: round;
         }
-        .task-step-badge {
-            font-size: 11px;
-            background: var(--accent);
-            color: #fff;
-            border-radius: 12px;
-            padding: 0 10px;
-            line-height: 20px;
-            margin-left: 4px;
-            flex-shrink: 0;
-            opacity: 0.8;
-            font-weight: 500;
-        }
 
         /* ===== 子任务列表 ===== */
         .subtask-container {
@@ -703,7 +734,6 @@
         /* ===== 步骤批量工具栏 ===== */
         .subtask-batch-toolbar {
             display: none;
-            /* 默认隐藏，有选中时显示 */
             align-items: center;
             gap: 6px;
             padding: 6px 10px;
@@ -760,7 +790,7 @@
             pointer-events: none;
         }
 
-        /* ===== 步骤项 ———— 无独立复选框 ===== */
+        /* ===== 步骤项 ===== */
         .subtask-item {
             display: flex;
             align-items: center;
@@ -775,7 +805,6 @@
         .subtask-item:hover {
             background: var(--bg-task-hover);
         }
-        /* 选中状态：仅通过 .selected 类控制，无额外复选框 */
         .subtask-item.selected {
             background: var(--bg-task-hover);
             outline: 2px solid var(--accent);
@@ -1569,6 +1598,12 @@
             .subtask-batch-toolbar .stb-count {
                 font-size: 11px;
             }
+            /* 步骤进度在移动端缩小 */
+            .task-step-progress {
+                font-size: 11px;
+                padding: 0 8px;
+                line-height: 20px;
+            }
         }
         @media (max-width: 480px) {
             .sidebar {
@@ -1694,6 +1729,13 @@
                 font-size: 10px;
                 padding: 2px 6px;
                 height: 22px;
+            }
+            /* 步骤进度在极小屏幕下更紧凑 */
+            .task-step-progress {
+                font-size: 10px;
+                padding: 0 6px;
+                line-height: 18px;
+                margin-left: 2px;
             }
         }
 
@@ -2618,13 +2660,10 @@
             }
             if (set.size === 0) delete STATE.selectedSubtasks[taskId];
             saveSelectionState();
-            // 更新UI：工具栏可见性 + 步骤项高亮
             updateSubtaskBatchToolbarVisibility(taskId);
-            // 更新步骤项的 selected 类
             updateSubtaskItemsSelection(taskId);
         }
 
-        /** 更新单个任务下所有步骤项的 .selected 类（不重新渲染整个列表） */
         function updateSubtaskItemsSelection(taskId) {
             const container = document.querySelector(`.subtask-container[data-task-id="${taskId}"]`);
             if (!container) return;
@@ -2637,7 +2676,6 @@
                     item.classList.toggle('selected', isSel);
                 }
             });
-            // 更新工具栏计数
             const toolbar = container.querySelector('.subtask-batch-toolbar');
             if (toolbar) {
                 const countEl = toolbar.querySelector('.stb-count');
@@ -2690,7 +2728,6 @@
             } catch (e) {}
         }
 
-        /** 根据选中数量显示/隐藏工具栏 */
         function updateSubtaskBatchToolbarVisibility(taskId) {
             const container = document.querySelector(`.subtask-container[data-task-id="${taskId}"]`);
             if (!container) return;
@@ -2708,7 +2745,6 @@
             });
         }
 
-        /** 渲染步骤列表（不含独立复选框） */
         function renderSubtasksForTask(taskId) {
             const group = getCurrentGroup();
             if (!group) return;
@@ -2716,10 +2752,8 @@
             if (!task) return;
             const container = document.querySelector(`.subtask-container[data-task-id="${taskId}"]`);
             if (!container) return;
-            // 保留工具栏，重新生成步骤项
             const toolbar = container.querySelector('.subtask-batch-toolbar');
             container.innerHTML = '';
-            // 渲染工具栏（先不添加到DOM，由 updateSubtaskBatchToolbarVisibility 控制显示）
             const toolbarHtml = renderSubtaskBatchToolbar(taskId);
             const toolbarTemp = document.createElement('div');
             toolbarTemp.innerHTML = toolbarHtml;
@@ -2748,7 +2782,6 @@
                     `;
                 container.appendChild(div);
             });
-            // 添加步骤行
             const addRow = document.createElement('div');
             addRow.className = 'add-subtask-row';
             addRow.dataset.taskId = taskId;
@@ -2757,7 +2790,6 @@
                     <button class="add-subtask-confirm" data-task-id="${taskId}">添加</button>
                 `;
             container.appendChild(addRow);
-            // 更新工具栏可见性
             updateSubtaskBatchToolbarVisibility(taskId);
         }
 
@@ -2902,7 +2934,16 @@
                 const checked = task.completed ? 'checked' : '';
                 const completedClass = task.completed ? 'completed' : '';
                 const stepCount = subtasks.length;
-                const badgeHtml = stepCount > 0 ? `<span class="task-step-badge">${stepCount}</span>` : '';
+                // ---- 步骤进度：X/Y ----
+                const completedSteps = subtasks.filter(s => s.completed).length;
+                let stepProgressHtml = '';
+                if (stepCount > 0) {
+                    let progressClass = 'partial';
+                    if (completedSteps === stepCount) progressClass = 'completed';
+                    else if (completedSteps === 0) progressClass = 'empty';
+                    stepProgressHtml =
+                        `<span class="task-step-progress ${progressClass}">${completedSteps}/${stepCount}</span>`;
+                }
                 const dueHtml = task.dueDate ? `<span class="due-date ${isOverdue(task.dueDate) ? 'overdue' : isDueSoon(task.dueDate) ? 'due-soon' : ''}">[截止] ${formatDateDisplay(task.dueDate)}</span>` :
                     '';
                 const tagsHtml = (task.tags || []).map((tag, idx) =>
@@ -2927,7 +2968,7 @@
                                 <div class="content-area">
                                     <div class="content-text ${completedClass}" data-task-id="${task.id}">
                                         <span class="task-label">${escapeHtml(task.content)}</span>
-                                        ${badgeHtml}
+                                        ${stepProgressHtml}
                                     </div>
                                     <div class="task-meta">
                                         ${dueHtml}
@@ -2958,7 +2999,6 @@
             });
             html += renderAddTaskRow(group.id);
             todoList.innerHTML = html;
-            // 为每个任务渲染步骤列表
             filteredTasks.forEach(task => {
                 const container = todoList.querySelector(`.subtask-container[data-task-id="${task.id}"]`);
                 if (container) {
@@ -3030,7 +3070,7 @@
         }
 
         // ============================================================
-        //  框选功能（优化：框选自动勾选，无独立复选框）
+        //  框选功能
         // ============================================================
         function initBoxSelection() {
             document.querySelectorAll('.subtask-container:not(.hidden)').forEach(container => {
@@ -3064,7 +3104,6 @@
                     boxEl.style.top = startY + 'px';
                     boxEl.style.width = '0';
                     boxEl.style.height = '0';
-                    // 清除之前的 pending 状态
                     if (STATE.clickTimer) {
                         clearTimeout(STATE.clickTimer);
                         STATE.clickTimer = null;
@@ -3093,7 +3132,6 @@
                         right: left + width,
                         bottom: top + height
                     };
-                    // 直接在 DOM 上操作选中类，不修改 STATE（避免频繁渲染）
                     items.forEach(item => {
                         const rect2 = item.getBoundingClientRect();
                         const containerRect = container.getBoundingClientRect();
@@ -3122,7 +3160,6 @@
                     }
                     const taskId = container.dataset.taskId;
                     if (!taskId) return;
-                    // 根据 DOM 中的 .selected 类同步 STATE
                     const items = container.querySelectorAll('.subtask-item');
                     const set = new Set();
                     items.forEach(item => {
@@ -3131,7 +3168,6 @@
                             if (sid) set.add(sid);
                         }
                     });
-                    // 更新 STATE
                     if (set.size === 0) {
                         delete STATE.selectedSubtasks[taskId];
                     } else {
@@ -3139,7 +3175,6 @@
                     }
                     saveSelectionState();
                     updateSubtaskBatchToolbarVisibility(taskId);
-                    // 确保所有步骤项的类与 STATE 一致
                     updateSubtaskItemsSelection(taskId);
                     STATE.boxTaskId = null;
                 });
@@ -3607,7 +3642,6 @@
         todoList.addEventListener('click', async (e) => {
             const target = e.target.closest('button') || e.target;
 
-            // ---- 展开/收起 ----
             if (target.classList && target.classList.contains('expand-btn')) {
                 const taskId = target.dataset.taskId;
                 STATE.expandedTasks[taskId] = !STATE.expandedTasks[taskId];
@@ -3615,7 +3649,6 @@
                 return;
             }
 
-            // ---- 任务级完成切换 ----
             if (target.classList && target.classList.contains('checkbox') && target.closest('.task-item')) {
                 const taskId = target.dataset.taskId;
                 const group = getCurrentGroup();
@@ -3630,7 +3663,6 @@
                 return;
             }
 
-            // ---- 步骤级完成切换（圆形勾选框） ----
             if (target.classList && target.classList.contains('checkbox') && target.closest('.subtask-item')) {
                 const subtaskId = target.dataset.subtaskId;
                 const container = target.closest('.subtask-container');
@@ -3664,7 +3696,6 @@
                 return;
             }
 
-            // ---- 编辑任务 ----
             if (target.classList && target.classList.contains('edit-task-btn')) {
                 const taskId = target.dataset.taskId;
                 const group = getCurrentGroup();
@@ -3682,7 +3713,6 @@
                 return;
             }
 
-            // ---- 删除任务 ----
             if (target.classList && target.classList.contains('delete-task-btn')) {
                 const taskId = target.dataset.taskId;
                 if (!confirm('确定删除此任务吗？')) return;
@@ -3695,7 +3725,6 @@
                 return;
             }
 
-            // ---- 任务选择（批量） ----
             if (target.classList && target.classList.contains('task-select-btn')) {
                 const taskId = target.dataset.taskId;
                 const group = getCurrentGroup();
@@ -3709,7 +3738,6 @@
                 return;
             }
 
-            // ---- 添加步骤按钮 ----
             if (target.classList && target.classList.contains('add-subtask-btn')) {
                 const taskId = target.dataset.taskId;
                 STATE.expandedTasks[taskId] = true;
@@ -3737,7 +3765,6 @@
                 return;
             }
 
-            // ---- 添加步骤确认 ----
             if (target.classList && target.classList.contains('add-subtask-confirm')) {
                 const taskId = target.dataset.taskId;
                 const row = target.closest('.add-subtask-row');
@@ -3767,7 +3794,6 @@
                 return;
             }
 
-            // ---- 删除步骤 ----
             if (target.classList && target.classList.contains('subtask-delete')) {
                 const subtaskId = target.dataset.subtaskId;
                 const taskId = target.dataset.taskId;
@@ -3784,7 +3810,6 @@
                 return;
             }
 
-            // ---- 添加任务确认 ----
             if (target.classList && target.classList.contains('add-task-confirm')) {
                 const groupId = target.dataset.groupId;
                 const row = target.closest('.add-task-row');
@@ -3820,7 +3845,6 @@
                 return;
             }
 
-            // ---- 步骤批量工具栏按钮 ----
             if (target.closest('.subtask-batch-toolbar')) {
                 const action = target.dataset.action;
                 const taskId = target.dataset.taskId;
@@ -3920,14 +3944,11 @@
             }
         });
 
-        // ---- 步骤项单击选中（不含独立复选框） ----
-        // 使用 mousedown + mouseup 区分单击和双击，避免与双击编辑冲突
         let clickPending = null;
 
         todoList.addEventListener('mousedown', (e) => {
             const item = e.target.closest('.subtask-item');
             if (!item) return;
-            // 忽略 checkbox、删除按钮、输入框
             if (e.target.closest('.checkbox') || e.target.closest('.subtask-delete') || e.target.closest('input') || e
                 .target.closest('button')) {
                 return;
@@ -3935,7 +3956,6 @@
             const taskId = item.dataset.taskId;
             const subtaskId = item.dataset.subtaskId;
             if (!taskId || !subtaskId) return;
-            // 记录点击，用于双击判断
             clickPending = { taskId, subtaskId, item, time: Date.now() };
         });
 
@@ -3943,32 +3963,24 @@
             if (!clickPending) return;
             const now = Date.now();
             const diff = now - clickPending.time;
-            // 如果时间差小于 300ms，视为单击
             if (diff < 300) {
                 const { taskId, subtaskId, item } = clickPending;
-                // 检查是否被取消（如拖拽）
                 if (!item || !item.isConnected) { clickPending = null; return; }
-                // 切换选中状态（Ctrl 多选，Shift 范围选择暂不实现复杂逻辑）
                 const isCtrl = e.ctrlKey || e.metaKey;
                 const isShift = e.shiftKey;
                 if (isShift) {
-                    // Shift + 单击：范围选择（简化：切换当前项）
                     toggleSubtaskSelection(taskId, subtaskId);
                 } else if (isCtrl) {
-                    // Ctrl + 单击：切换单个
                     toggleSubtaskSelection(taskId, subtaskId);
                 } else {
-                    // 普通单击：切换单个
                     toggleSubtaskSelection(taskId, subtaskId);
                 }
                 clickPending = null;
             } else {
-                // 超过 300ms 视为双击，不做任何事（双击由 dblclick 处理）
                 clickPending = null;
             }
         });
 
-        // ---- 双击步骤文本编辑 ----
         todoList.addEventListener('dblclick', (e) => {
             const textEl = e.target.closest('.subtask-text');
             if (!textEl) return;
@@ -3981,9 +3993,7 @@
             if (!task) return;
             const subtask = task.subtasks.find(s => s.id === subtaskId);
             if (!subtask) return;
-            // 取消待处理的单击
             if (clickPending) { clickPending = null; }
-            // 弹出编辑框
             showInputModal('编辑步骤', subtask.content).then(result => {
                 if (result !== null && result !== '') {
                     subtask.content = result;
@@ -3992,13 +4002,11 @@
             });
         });
 
-        // ---- 键盘快捷键 ----
         document.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || modalOverlay.classList.contains(
                     'active')) return;
             const group = getCurrentGroup();
             if (!group) return;
-            // Ctrl+A 全选当前任务的步骤
             if (e.key === 'a' && (e.ctrlKey || e.metaKey)) {
                 e.preventDefault();
                 const expanded = Object.keys(STATE.expandedTasks).filter(id => STATE.expandedTasks[id]);
@@ -4011,7 +4019,6 @@
                 }
                 return;
             }
-            // Delete / Backspace 删除选中的步骤
             if (e.key === 'Delete' || e.key === 'Backspace') {
                 const expanded = Object.keys(STATE.expandedTasks).filter(id => STATE.expandedTasks[id]);
                 if (expanded.length > 0) {
@@ -4051,7 +4058,6 @@
                 }
                 return;
             }
-            // Escape 取消所有选择
             if (e.key === 'Escape') {
                 const expanded = Object.keys(STATE.expandedTasks).filter(id => STATE.expandedTasks[id]);
                 if (expanded.length > 0) {
@@ -4062,7 +4068,6 @@
             }
         });
 
-        // ---- 添加步骤/任务输入框回车 ----
         todoList.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const target = e.target;
@@ -4080,7 +4085,6 @@
             }
         });
 
-        // ---- 双击任务内容编辑 ----
         todoList.addEventListener('dblclick', async (e) => {
             const target = e.target.closest('.content-text');
             if (!target) return;
@@ -4567,7 +4571,7 @@
             alert('初始化失败，请检查控制台错误');
         });
 
-        console.log('GitTodo 已加载（步骤批量选择交互优化版）');
+        console.log('GitTodo 已加载（步骤进度 X/Y 显示）');
     </script>
 </body>
 </html>
