@@ -864,10 +864,10 @@
             {
               "id": "5fcecdc5-5752-4ddf-910b-2fd771e1758f",
               "content": "英语 练字",
-              "completed": false,
+              "completed": true,
               "order": 1,
               "createdAt": 1782899882458,
-              "completedAt": null,
+              "completedAt": 1783841575021,
               "subtasks": [
                 {
                   "id": "e8907595-3ac2-451c-abb6-92aa410649b5",
@@ -908,13 +908,13 @@
                 {
                   "id": "bf10dea2-b999-461c-aaf8-4666d79de39e",
                   "content": "第7页",
-                  "completed": false,
+                  "completed": true,
                   "order": 6
                 },
                 {
                   "id": "0e6b1749-20c6-4285-904a-c656b71fc1bc",
                   "content": "第8页",
-                  "completed": false,
+                  "completed": true,
                   "order": 7
                 }
               ]
