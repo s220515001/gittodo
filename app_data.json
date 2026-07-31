@@ -14,10 +14,10 @@
             {
               "id": "6cbf7e72-6bee-4835-a17a-0066925a212a",
               "content": "暑假作业本",
-              "completed": true,
+              "completed": false,
               "order": 0,
               "createdAt": 1782898493291,
-              "completedAt": 1785479008348,
+              "completedAt": null,
               "subtasks": [
                 {
                   "id": "9a3d88a5-51bd-4f29-9aed-a9b615e4139d",
@@ -208,49 +208,49 @@
                 {
                   "id": "207f13d5-c8d5-4192-944c-2892af06c29f",
                   "content": "第32页",
-                  "completed": true,
+                  "completed": false,
                   "order": 31
                 },
                 {
                   "id": "898c154f-3ba7-404f-a5fc-4912b07c563f",
                   "content": "第33页",
-                  "completed": true,
+                  "completed": false,
                   "order": 32
                 },
                 {
                   "id": "b2bb5221-664f-47d7-bce5-d800656c07ec",
                   "content": "第34页",
-                  "completed": true,
+                  "completed": false,
                   "order": 33
                 },
                 {
                   "id": "b2f3eddb-d27f-4f37-86fc-9bff8433c974",
                   "content": "第35页",
-                  "completed": true,
+                  "completed": false,
                   "order": 34
                 },
                 {
                   "id": "e76a632b-639f-4981-bcac-f2939dc6a9ba",
                   "content": "第36页",
-                  "completed": true,
+                  "completed": false,
                   "order": 35
                 },
                 {
                   "id": "a2ade0c7-1941-42ab-a6d9-d82957c6e146",
                   "content": "第37页",
-                  "completed": true,
+                  "completed": false,
                   "order": 36
                 },
                 {
                   "id": "5ecb449f-dcde-4912-b335-5d6ea9b47b25",
                   "content": "第38页",
-                  "completed": true,
+                  "completed": false,
                   "order": 37
                 },
                 {
                   "id": "1adc70e5-66f7-4a84-9e50-24a92091923b",
                   "content": "第39页",
-                  "completed": true,
+                  "completed": false,
                   "order": 38
                 },
                 {
