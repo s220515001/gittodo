@@ -1069,6 +1069,12 @@
                   "content": "第13天",
                   "completed": false,
                   "order": 12
+                },
+                {
+                  "id": "20b1851e-5b2d-4597-bc3b-623dff4f5766",
+                  "content": "人物档案",
+                  "completed": false,
+                  "order": 13
                 }
               ]
             },
