@@ -1081,10 +1081,10 @@
             {
               "id": "c72ccf62-648b-4411-bf16-282e5d492e06",
               "content": "数学 预习",
-              "completed": false,
+              "completed": true,
               "order": 6,
               "createdAt": 1783233070563,
-              "completedAt": null,
+              "completedAt": 1787886018240,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1146,7 +1146,7 @@
                 {
                   "id": "27612e2d-032c-4efe-bac0-76c428e0fd0f",
                   "content": "第二章 2.3",
-                  "completed": false,
+                  "completed": true,
                   "order": 9
                 },
                 {
@@ -1164,13 +1164,13 @@
                 {
                   "id": "504d7bf3-05ff-441d-bcae-e27a3c621372",
                   "content": "第二章 2.6",
-                  "completed": false,
+                  "completed": true,
                   "order": 12
                 },
                 {
                   "id": "372e1bb3-4836-4f82-8ba9-acd39accf05d",
                   "content": "第二章 2.7",
-                  "completed": false,
+                  "completed": true,
                   "order": 13
                 },
                 {
