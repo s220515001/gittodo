@@ -995,55 +995,55 @@
                 {
                   "id": "095fa039-caf8-4234-9a79-c6596682c224",
                   "content": "第1天",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "f18932b1-c8aa-43b5-bcd7-63613d1012a6",
                   "content": "第2天",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 },
                 {
                   "id": "3830c96c-88c9-4067-a032-2a677bb51946",
                   "content": "第3天",
-                  "completed": false,
+                  "completed": true,
                   "order": 2
                 },
                 {
                   "id": "0092c8c5-72b1-4efe-a146-b73801cb81dc",
                   "content": "第4天",
-                  "completed": false,
+                  "completed": true,
                   "order": 3
                 },
                 {
                   "id": "adccaf26-3ad2-48f1-a43c-3c33d4dae9a2",
                   "content": "第5天",
-                  "completed": false,
+                  "completed": true,
                   "order": 4
                 },
                 {
                   "id": "b35bd438-1aa5-418c-9b80-cff3250a2613",
                   "content": "第6天",
-                  "completed": false,
+                  "completed": true,
                   "order": 5
                 },
                 {
                   "id": "b665dd24-26a0-4eb9-9178-767ebdcfc70e",
                   "content": "第7天",
-                  "completed": false,
+                  "completed": true,
                   "order": 6
                 },
                 {
                   "id": "8803a229-5b0e-48ac-afda-1014cc99f64a",
                   "content": "第8天",
-                  "completed": false,
+                  "completed": true,
                   "order": 7
                 },
                 {
                   "id": "98ef7812-4421-4dba-b3a8-c221406a2f4a",
                   "content": "第9天",
-                  "completed": false,
+                  "completed": true,
                   "order": 8
                 },
                 {
