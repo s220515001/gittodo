@@ -1951,6 +1951,9 @@
             lastGroupId: null,
             isEditing: false,
             pendingRender: false,
+            // ---- 新增：暂存远程更新 ----
+            _pendingGroups: null,        // 暂存从远程拉取的新 groups
+            _userModified: false,        // 标记用户是否在编辑中保存了修改
             // ---- 步骤选择状态 ----
             selectedSubtasks: {}, // { taskId: Set(subtaskId) }
             // ---- 操作队列 ----
@@ -2130,6 +2133,26 @@
         let modalMode = 'input';
 
         function closeModal(result) {
+            STATE.isEditing = false;
+
+            // 如果存在待应用的远程更新，且用户没有保存过修改（即取消编辑），则应用远程更新
+            if (STATE._pendingGroups && !STATE._userModified) {
+                STATE.groups = STATE._pendingGroups;
+                STATE._pendingGroups = null;
+                STATE.pendingRender = false;
+                // 修复 currentGroupId
+                if (!STATE.groups.some(g => g.id === STATE.currentGroupId)) {
+                    STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
+                }
+                renderAll();
+                setSyncStatus('已应用远程更新');
+            } else {
+                // 丢弃暂存
+                STATE._pendingGroups = null;
+                STATE.pendingRender = false;
+                // 如果用户修改过，但可能没有保存？我们已经在 saveAndSync 中丢弃了 pending，这里安全
+            }
+
             modalOverlay.classList.remove('active');
             if (modalOverlay._closeHandler) {
                 modalOverlay.removeEventListener('click', modalOverlay._closeHandler);
@@ -2139,7 +2162,8 @@
                 modalResolve(result);
                 modalResolve = null;
             }
-            STATE.isEditing = false;
+            // 重置用户修改标志，避免下次误判
+            STATE._userModified = false;
             if (STATE.pendingRender) {
                 STATE.pendingRender = false;
                 renderAll();
@@ -2149,6 +2173,7 @@
 
         function openModal() {
             STATE.isEditing = true;
+            STATE._userModified = false;  // 打开模态框时重置
             modalOverlay.classList.add('active');
             if (modalOverlay._closeHandler) {
                 modalOverlay.removeEventListener('click', modalOverlay._closeHandler);
@@ -2231,6 +2256,8 @@
         modalConfirm.addEventListener('click', () => {
             if (modalMode === 'input') {
                 const inp = document.getElementById('modalInput');
+                // 用户确认操作，标记为已修改
+                STATE._userModified = true;
                 closeModal(inp ? inp.value.trim() : null);
             } else if (modalMode === 'taskEdit') {
                 const content = document.getElementById('editTaskContent');
@@ -2238,6 +2265,7 @@
                 const notes = document.getElementById('editTaskNotes');
                 const tags = document.getElementById('editTaskTags');
                 const tagArr = tags ? tags.value.split(',').map(s => s.trim()).filter(Boolean) : [];
+                STATE._userModified = true;
                 closeModal({
                     content: content ? content.value.trim() : '',
                     dueDate: dueDate ? dueDate.value : '',
@@ -2250,6 +2278,7 @@
                 let stepFormat = 'line';
                 document.querySelectorAll('input[name="stepFormat"]').forEach(r => { if (r.checked) stepFormat = r
                         .value; });
+                // 导出操作不视为修改数据，不标记 _userModified
                 closeModal({ includeSteps, stepFormat });
             }
         });
@@ -2406,10 +2435,32 @@
             processQueue();
         }
 
+        // 应用待处理的远程更新（如果存在且条件允许）
+        function applyPendingUpdate() {
+            if (!STATE._pendingGroups) return false;
+            // 如果正在编辑或队列未空，不应用
+            if (STATE.isEditing) return false;
+            const hasPendingQueue = STATE.queue.some(op => !op._done);
+            if (hasPendingQueue) return false;
+
+            // 应用暂存
+            STATE.groups = STATE._pendingGroups;
+            STATE._pendingGroups = null;
+            STATE.pendingRender = false;
+            if (!STATE.groups.some(g => g.id === STATE.currentGroupId)) {
+                STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
+            }
+            renderAll();
+            setSyncStatus('已应用远程更新');
+            return true;
+        }
+
         async function processQueue() {
             if (STATE.isProcessingQueue) return;
             if (STATE.queue.filter(op => !op._done).length === 0) {
                 updateQueueIndicator();
+                // 队列空了，尝试应用待处理的远程更新
+                applyPendingUpdate();
                 return;
             }
             STATE.isProcessingQueue = true;
@@ -3470,26 +3521,52 @@
         // ============================================================
         async function pullFromGitHub() {
             if (STATE.isSyncing) return false;
+
             const fetched = await fetchAppData();
             if (fetched === null) return false;
+
             STATE.users = fetched.users || {};
             STATE.todos = fetched.todos || {};
-            if (STATE.currentUser && STATE.todos[STATE.currentUser]) {
-                STATE.groups = STATE.todos[STATE.currentUser].groups || [];
-                sortByOrder(STATE.groups);
-                if (!STATE.groups.some(g => g.id === STATE.currentGroupId)) {
-                    STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
-                }
-                if (STATE.isEditing) {
-                    STATE.pendingRender = true;
-                    setSyncStatus('已更新（待应用）');
-                } else {
-                    renderAll();
-                    setSyncStatus('已更新');
-                }
-            } else {
+
+            if (!STATE.currentUser || !STATE.todos[STATE.currentUser]) {
                 setSyncStatus('已同步');
+                return true;
             }
+
+            const newGroups = STATE.todos[STATE.currentUser].groups || [];
+            sortByOrder(newGroups);
+
+            // 深度比较数据是否变化
+            const changed = JSON.stringify(newGroups) !== JSON.stringify(STATE.groups);
+            if (!changed) {
+                setSyncStatus('已同步');
+                STATE._pendingGroups = null;
+                STATE.pendingRender = false;
+                return true;
+            }
+
+            // 判断是否应该立即应用
+            const hasPendingQueue = STATE.queue.some(op => !op._done);
+            if (STATE.isEditing || hasPendingQueue) {
+                // 编辑中或队列未空：暂存
+                STATE._pendingGroups = newGroups;
+                STATE.pendingRender = true;
+                const reason = STATE.isEditing ? '编辑中' : '队列未完成';
+                setSyncStatus(`远程有更新（${reason}，待应用）`);
+                return true;
+            }
+
+            // 无障碍，直接应用
+            STATE.groups = newGroups;
+            STATE._pendingGroups = null;
+            STATE.pendingRender = false;
+
+            if (!STATE.groups.some(g => g.id === STATE.currentGroupId)) {
+                STATE.currentGroupId = STATE.groups.length > 0 ? STATE.groups[0].id : null;
+            }
+
+            renderAll();
+            setSyncStatus('已更新');
             return true;
         }
 
@@ -3509,6 +3586,10 @@
         }
 
         function saveAndSync() {
+            // 用户主动保存，丢弃暂存的远程更新，本地优先
+            STATE._pendingGroups = null;
+            STATE.pendingRender = false;
+
             if (STATE.currentUser) {
                 if (!STATE.todos[STATE.currentUser]) STATE.todos[STATE.currentUser] = { groups: [] };
                 STATE.todos[STATE.currentUser].groups = STATE.groups;
@@ -4571,7 +4652,7 @@
             alert('初始化失败，请检查控制台错误');
         });
 
-        console.log('GitTodo 已加载（步骤进度 X/Y 显示）');
+        console.log('GitTodo 已加载（步骤进度 X/Y 显示，增强冲突处理）');
     </script>
 </body>
 </html>
