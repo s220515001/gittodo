@@ -1280,6 +1280,18 @@
               "notes": "",
               "tags": [],
               "subtasks": []
+            },
+            {
+              "id": "acbcb335-4d3d-42a0-a44c-5e7b232116fb",
+              "content": "将聚合物品放入功能性容器时 光标悬停聚合物品 再点击界面空白处丢出 就会出现从n(原来聚合数)到1的同种聚合物品（刷物品）",
+              "completed": false,
+              "order": 4,
+              "createdAt": 1788570635175,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
             }
           ]
         }
