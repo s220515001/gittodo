@@ -1268,6 +1268,18 @@
               "notes": "",
               "tags": [],
               "subtasks": []
+            },
+            {
+              "id": "c6c9d0ff-5acc-44e1-8265-1c7200a93d97",
+              "content": "一些玩家喜欢按住Ctrl疾跑的同时玩物品栏（滚轮）添加配置项：按住{替换为用户按键配置中的疾跑键}疾跑时不切换顶层物品",
+              "completed": false,
+              "order": 3,
+              "createdAt": 1788570156624,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
             }
           ]
         }
