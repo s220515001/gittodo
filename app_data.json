@@ -1256,6 +1256,18 @@
               "notes": "",
               "tags": [],
               "subtasks": []
+            },
+            {
+              "id": "233ce1c6-39a1-44f6-99d1-dfab82836ded",
+              "content": "聚合三叉戟在丢出时会一起丢出而不是只丢出顶层物品收回时也收回到顶层物品",
+              "completed": false,
+              "order": 2,
+              "createdAt": 1788570004886,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
             }
           ]
         }
