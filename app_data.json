@@ -1225,7 +1225,20 @@
           "name": "mod",
           "order": 1,
           "createdAt": 1788569023742,
-          "tasks": []
+          "tasks": [
+            {
+              "id": "3908e55e-742b-4275-820b-564d6d6bdac4",
+              "content": "添加“聚合可堆叠物品”配置项",
+              "completed": false,
+              "order": 0,
+              "createdAt": 1788569062884,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
+            }
+          ]
         }
       ]
     }
