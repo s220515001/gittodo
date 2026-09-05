@@ -1244,6 +1244,18 @@
                   "order": 0
                 }
               ]
+            },
+            {
+              "id": "22e07f46-aab3-4276-b951-bd8b6ff96bf9",
+              "content": "clear指令无法一次清空",
+              "completed": false,
+              "order": 1,
+              "createdAt": 1788569796443,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
             }
           ]
         }
