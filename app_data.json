@@ -1236,7 +1236,14 @@
               "dueDate": "",
               "notes": "",
               "tags": [],
-              "subtasks": []
+              "subtasks": [
+                {
+                  "id": "0b150892-6c27-4bac-b580-9071b3b7f635",
+                  "content": "添加tooltip:可能导致聚合行为混乱",
+                  "completed": false,
+                  "order": 0
+                }
+              ]
             }
           ]
         }
