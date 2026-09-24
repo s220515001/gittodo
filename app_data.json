@@ -1184,10 +1184,10 @@
             {
               "id": "9852d207-0c5d-4eae-9405-de10fe3a4d7e",
               "content": "作文",
-              "completed": false,
+              "completed": true,
               "order": 6,
               "createdAt": 1787886102173,
-              "completedAt": null,
+              "completedAt": 1790245295696,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1213,7 +1213,7 @@
                 {
                   "id": "3408e216-0ba7-47fa-906a-94cbb512b7c0",
                   "content": "第4篇",
-                  "completed": false,
+                  "completed": true,
                   "order": 3
                 }
               ]
