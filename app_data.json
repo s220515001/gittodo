@@ -984,10 +984,10 @@
             {
               "id": "109607a8-5146-4d89-864f-b989ac9168e6",
               "content": "语文 名著",
-              "completed": false,
+              "completed": true,
               "order": 5,
               "createdAt": 1786260967299,
-              "completedAt": null,
+              "completedAt": 1790245294568,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1049,31 +1049,31 @@
                 {
                   "id": "62306943-1387-4658-a836-007c2518425d",
                   "content": "第10天",
-                  "completed": false,
+                  "completed": true,
                   "order": 9
                 },
                 {
                   "id": "3d7b23c3-0290-45d9-97da-06ab75a49ceb",
                   "content": "第11天",
-                  "completed": false,
+                  "completed": true,
                   "order": 10
                 },
                 {
                   "id": "d7b504a1-ab72-41a0-811c-aafb2f79b499",
                   "content": "第12天",
-                  "completed": false,
+                  "completed": true,
                   "order": 11
                 },
                 {
                   "id": "1e04de15-6bcf-4261-9a79-9ced857a613c",
                   "content": "第13天",
-                  "completed": false,
+                  "completed": true,
                   "order": 12
                 },
                 {
                   "id": "20b1851e-5b2d-4597-bc3b-623dff4f5766",
                   "content": "人物档案",
-                  "completed": false,
+                  "completed": true,
                   "order": 13
                 }
               ]
