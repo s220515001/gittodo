@@ -1458,10 +1458,10 @@
             {
               "id": "1c9c4d27-7d7f-4817-8600-6aca94bc0f53",
               "content": "英语 作业本A",
-              "completed": false,
+              "completed": true,
               "order": 4,
               "createdAt": 1790304811268,
-              "completedAt": null,
+              "completedAt": 1790305205075,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1469,13 +1469,13 @@
                 {
                   "id": "3acc9fe1-f6ba-4c6d-ba95-ba54cf80ab75",
                   "content": "第16页",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "a38afd62-a7cf-4753-9bf4-35f8dab55607",
                   "content": "第17页",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 }
               ]
