@@ -1570,10 +1570,10 @@
             {
               "id": "03736fa0-2a7e-4edb-9a53-ae409a2a40e3",
               "content": "科学 作业本B",
-              "completed": false,
+              "completed": true,
               "order": 9,
               "createdAt": 1790304971281,
-              "completedAt": null,
+              "completedAt": 1790305215058,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1581,19 +1581,19 @@
                 {
                   "id": "00f1d7ba-a701-44c3-ae52-f615b1a82fdb",
                   "content": "第15页",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "01cfd449-028d-431f-992c-f3a9aeed9670",
                   "content": "第16页",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 },
                 {
                   "id": "9024ec3b-63cb-4f2d-bbe3-f0971b1871ed",
                   "content": "第17页",
-                  "completed": false,
+                  "completed": true,
                   "order": 2
                 }
               ]
