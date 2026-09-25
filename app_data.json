@@ -1540,7 +1540,14 @@
               "dueDate": "",
               "notes": "",
               "tags": [],
-              "subtasks": []
+              "subtasks": [
+                {
+                  "id": "270dc49e-0f04-4827-a058-1fd4c3f24572",
+                  "content": "单词",
+                  "completed": false,
+                  "order": 0
+                }
+              ]
             },
             {
               "id": "441efca9-1f06-4499-98f4-2c7f94b7d758",
