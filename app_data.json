@@ -1483,10 +1483,10 @@
             {
               "id": "c5bf0292-fb06-49b2-abf2-bff204fa3aaa",
               "content": "英语 作业本B",
-              "completed": false,
+              "completed": true,
               "order": 5,
               "createdAt": 1790304849731,
-              "completedAt": null,
+              "completedAt": 1790305205688,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1494,13 +1494,13 @@
                 {
                   "id": "695dc39a-cf35-4deb-81d5-cb5de7a88370",
                   "content": "第18页",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "00922664-8b7e-46d1-83b0-5b6bb5537003",
                   "content": "第19页",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 }
               ]
