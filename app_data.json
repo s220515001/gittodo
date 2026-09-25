@@ -1601,10 +1601,10 @@
             {
               "id": "de223557-f655-49af-a6e9-a07228de5741",
               "content": "科学 阶段素养测评",
-              "completed": false,
+              "completed": true,
               "order": 10,
               "createdAt": 1790304991405,
-              "completedAt": null,
+              "completedAt": 1790305215636,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1612,25 +1612,25 @@
                 {
                   "id": "74735028-b03f-4971-ba9d-d7fdf27fa165",
                   "content": "第1页",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "1e6a9628-37b9-49a3-b88b-f289b9fe1793",
                   "content": "第2页",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 },
                 {
                   "id": "327f9352-cecf-4add-80df-3250db8b00a9",
                   "content": "第3页",
-                  "completed": false,
+                  "completed": true,
                   "order": 2
                 },
                 {
                   "id": "2d29a8f0-3527-451b-aca8-c1e1226f6a28",
                   "content": "第4页",
-                  "completed": false,
+                  "completed": true,
                   "order": 3
                 }
               ]
