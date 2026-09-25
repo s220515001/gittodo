@@ -1642,9 +1642,11 @@
               "order": 11,
               "createdAt": 1790305019855,
               "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
+              "dueDate": "2026-09-26",
+              "notes": "加油啊",
+              "tags": [
+                "中秋"
+              ],
               "subtasks": [
                 {
                   "id": "6a33cf32-936f-4b56-9b4b-090515ecf732",
