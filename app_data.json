@@ -1354,7 +1354,14 @@
               "dueDate": "",
               "notes": "",
               "tags": [],
-              "subtasks": []
+              "subtasks": [
+                {
+                  "id": "5015d1d8-9280-4a9e-94a8-1e32c1d559f1",
+                  "content": "%P16-19",
+                  "completed": false,
+                  "order": 0
+                }
+              ]
             }
           ]
         }
