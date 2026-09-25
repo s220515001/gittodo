@@ -1636,10 +1636,41 @@
               ]
             },
             {
+              "id": "62b07bf7-786e-408b-98ec-84bb930fb895",
+              "content": "地理 精彩",
+              "completed": true,
+              "order": 11,
+              "createdAt": 1790305003880,
+              "completedAt": 1790328520751,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": [
+                {
+                  "id": "e8f52a1c-a68a-49db-93d3-0fbf5908ae6d",
+                  "content": "第15页",
+                  "completed": true,
+                  "order": 0
+                },
+                {
+                  "id": "40909af6-0739-4aee-802c-6db9f929aa3b",
+                  "content": "第16页",
+                  "completed": true,
+                  "order": 1
+                },
+                {
+                  "id": "3aa40ff5-fcbf-4b50-9be0-4afb4f1c171a",
+                  "content": "第17页",
+                  "completed": true,
+                  "order": 2
+                }
+              ]
+            },
+            {
               "id": "5d761111-c1f3-414f-86a0-9c3ef0c5689b",
               "content": "历史 作业本",
               "completed": false,
-              "order": 11,
+              "order": 12,
               "createdAt": 1790305019855,
               "completedAt": null,
               "dueDate": "2026-09-26",
@@ -1671,37 +1702,6 @@
                   "content": "第17页",
                   "completed": false,
                   "order": 3
-                }
-              ]
-            },
-            {
-              "id": "62b07bf7-786e-408b-98ec-84bb930fb895",
-              "content": "地理 精彩",
-              "completed": true,
-              "order": 12,
-              "createdAt": 1790305003880,
-              "completedAt": 1790328520751,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": [
-                {
-                  "id": "e8f52a1c-a68a-49db-93d3-0fbf5908ae6d",
-                  "content": "第15页",
-                  "completed": true,
-                  "order": 0
-                },
-                {
-                  "id": "40909af6-0739-4aee-802c-6db9f929aa3b",
-                  "content": "第16页",
-                  "completed": true,
-                  "order": 1
-                },
-                {
-                  "id": "3aa40ff5-fcbf-4b50-9be0-4afb4f1c171a",
-                  "content": "第17页",
-                  "completed": true,
-                  "order": 2
                 }
               ]
             }
