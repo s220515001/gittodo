@@ -1675,10 +1675,10 @@
             {
               "id": "62b07bf7-786e-408b-98ec-84bb930fb895",
               "content": "地理 精彩",
-              "completed": false,
+              "completed": true,
               "order": 12,
               "createdAt": 1790305003880,
-              "completedAt": null,
+              "completedAt": 1790328520751,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1686,19 +1686,19 @@
                 {
                   "id": "e8f52a1c-a68a-49db-93d3-0fbf5908ae6d",
                   "content": "第15页",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "40909af6-0739-4aee-802c-6db9f929aa3b",
                   "content": "第16页",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 },
                 {
                   "id": "3aa40ff5-fcbf-4b50-9be0-4afb4f1c171a",
                   "content": "第17页",
-                  "completed": false,
+                  "completed": true,
                   "order": 2
                 }
               ]
