@@ -1300,7 +1300,20 @@
           "name": "中秋作业",
           "order": 2,
           "createdAt": 1790245336612,
-          "tasks": []
+          "tasks": [
+            {
+              "id": "16852ab9-331b-4ae5-8aeb-084c59af76b6",
+              "content": "语文",
+              "completed": false,
+              "order": 0,
+              "createdAt": 1790304576228,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
+            }
+          ]
         }
       ]
     }
