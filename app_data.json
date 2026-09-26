@@ -1309,10 +1309,10 @@
             {
               "id": "2dd68d8a-b98c-438b-bb8a-94b0da36091e",
               "content": "数学 精彩B",
-              "completed": false,
+              "completed": true,
               "order": 2,
               "createdAt": 1790304682784,
-              "completedAt": null,
+              "completedAt": 1790414230287,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1320,7 +1320,7 @@
                 {
                   "id": "47142ef9-6040-4ce5-84e5-594d44bfbf49",
                   "content": "P15 第10题订正",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 }
               ]
