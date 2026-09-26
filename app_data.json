@@ -1345,7 +1345,7 @@
                 {
                   "id": "2e63bc2c-8b34-496a-a059-d211668561d3",
                   "content": "19",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 },
                 {
