@@ -1369,7 +1369,7 @@
                 {
                   "id": "ad369614-9bd4-47f2-a02c-7ca93d74c6f8",
                   "content": "23",
-                  "completed": false,
+                  "completed": true,
                   "order": 5
                 },
                 {
