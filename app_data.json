@@ -1458,10 +1458,10 @@
             {
               "id": "737b71db-0c89-4dc8-8f56-72eeaca72a45",
               "content": "英语 预默",
-              "completed": true,
+              "completed": false,
               "order": 7,
               "createdAt": 1790304953745,
-              "completedAt": 1790414222179,
+              "completedAt": null,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1469,7 +1469,7 @@
                 {
                   "id": "270dc49e-0f04-4827-a058-1fd4c3f24572",
                   "content": "单词",
-                  "completed": true,
+                  "completed": false,
                   "order": 0
                 },
                 {
