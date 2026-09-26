@@ -1328,10 +1328,10 @@
             {
               "id": "ef66e63c-e795-4711-b393-9e9885f9c8b2",
               "content": "数学 书本",
-              "completed": false,
+              "completed": true,
               "order": 3,
               "createdAt": 1790304754030,
-              "completedAt": null,
+              "completedAt": 1790415007637,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1375,7 +1375,7 @@
                 {
                   "id": "938f1a6d-a743-4470-9708-459dc3f64947",
                   "content": "24",
-                  "completed": false,
+                  "completed": true,
                   "order": 6
                 }
               ]
