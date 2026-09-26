@@ -1363,7 +1363,7 @@
                 {
                   "id": "68e021b8-36ba-4efa-862f-29e3d15b46ce",
                   "content": "22",
-                  "completed": false,
+                  "completed": true,
                   "order": 4
                 },
                 {
