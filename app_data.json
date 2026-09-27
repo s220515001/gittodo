@@ -1594,10 +1594,10 @@
             {
               "id": "5d761111-c1f3-414f-86a0-9c3ef0c5689b",
               "content": "历史 作业本",
-              "completed": false,
+              "completed": true,
               "order": 12,
               "createdAt": 1790305019855,
-              "completedAt": null,
+              "completedAt": 1790490427762,
               "dueDate": "2026-09-27",
               "notes": "加油啊",
               "tags": [
@@ -1619,13 +1619,13 @@
                 {
                   "id": "e360ec47-4e95-4d86-bcbc-afee5e3615e0",
                   "content": "第16页",
-                  "completed": false,
+                  "completed": true,
                   "order": 2
                 },
                 {
                   "id": "0134bd3a-c955-466f-8f30-58613fcddfb2",
                   "content": "第17页",
-                  "completed": false,
+                  "completed": true,
                   "order": 3
                 }
               ]
