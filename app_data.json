@@ -1229,10 +1229,10 @@
             {
               "id": "16852ab9-331b-4ae5-8aeb-084c59af76b6",
               "content": "语文 试卷",
-              "completed": false,
+              "completed": true,
               "order": 0,
               "createdAt": 1790304576228,
-              "completedAt": null,
+              "completedAt": 1790491498311,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1240,25 +1240,25 @@
                 {
                   "id": "38f94652-df85-4bd5-a81c-1189cb818d62",
                   "content": "第1页",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "dfc41302-2ff3-4a2b-8154-5f6e08952571",
                   "content": "第2页",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 },
                 {
                   "id": "6234e104-113a-4b68-b21d-7898c956fd5b",
                   "content": "第3页",
-                  "completed": false,
+                  "completed": true,
                   "order": 2
                 },
                 {
                   "id": "6e9a2a78-eadf-476c-bd23-11ec0945ed12",
                   "content": "第4页",
-                  "completed": false,
+                  "completed": true,
                   "order": 3
                 },
                 {
