@@ -1966,10 +1966,10 @@
             {
               "id": "5d90d1c3-757e-4505-85a2-ec474d9e3c20",
               "content": "科学 试卷",
-              "completed": false,
+              "completed": true,
               "order": 8,
               "createdAt": 1790835721063,
-              "completedAt": null,
+              "completedAt": 1790835852775,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1977,13 +1977,13 @@
                 {
                   "id": "2b03890a-459a-4440-ace4-c1a9ac961303",
                   "content": "试卷一",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "71bfc565-c0af-4953-9f51-221dbca69de4",
                   "content": "试卷二",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 }
               ]
@@ -1991,10 +1991,10 @@
             {
               "id": "b828a680-0926-482d-8631-a78973bd07ab",
               "content": "历史 知识小测",
-              "completed": false,
+              "completed": true,
               "order": 9,
               "createdAt": 1790835815075,
-              "completedAt": null,
+              "completedAt": 1790835854236,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -2002,31 +2002,31 @@
                 {
                   "id": "bbb72266-003d-4b9e-8d13-17017fa2fb10",
                   "content": "第4课时",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "2f77f3d0-4054-4972-922c-cd8b92ec2e66",
                   "content": "第5课时",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 },
                 {
                   "id": "94678398-846f-45e7-be21-e3ea7d617693",
                   "content": "第6课时",
-                  "completed": false,
+                  "completed": true,
                   "order": 2
                 },
                 {
                   "id": "101b49c3-309e-4716-af20-1392f9ccc05d",
                   "content": "第7课时",
-                  "completed": false,
+                  "completed": true,
                   "order": 3
                 },
                 {
                   "id": "7521c3d5-2256-4c91-be4b-97918b7448fc",
                   "content": "第8课时",
-                  "completed": false,
+                  "completed": true,
                   "order": 4
                 }
               ]
