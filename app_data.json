@@ -1973,14 +1973,7 @@
               "dueDate": "",
               "notes": "",
               "tags": [],
-              "subtasks": [
-                {
-                  "id": "89251962-c7af-4d71-8c35-079780e2df51",
-                  "content": "试卷一",
-                  "completed": false,
-                  "order": 0
-                }
-              ]
+              "subtasks": []
             }
           ]
         }
