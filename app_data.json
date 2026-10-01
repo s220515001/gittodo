@@ -1948,7 +1948,14 @@
               "dueDate": "",
               "notes": "",
               "tags": [],
-              "subtasks": []
+              "subtasks": [
+                {
+                  "id": "c1fd1f37-bddf-4472-aace-61ad0541386a",
+                  "content": "精彩A",
+                  "completed": false,
+                  "order": 0
+                }
+              ]
             }
           ]
         }
