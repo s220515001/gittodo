@@ -1941,10 +1941,10 @@
             {
               "id": "5c18b169-570e-4b96-83eb-20c361126762",
               "content": "英语 抄错题",
-              "completed": false,
+              "completed": true,
               "order": 7,
               "createdAt": 1790835696426,
-              "completedAt": null,
+              "completedAt": 1790839244607,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1952,13 +1952,13 @@
                 {
                   "id": "c1fd1f37-bddf-4472-aace-61ad0541386a",
                   "content": "精彩A",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "e12350e1-de38-478c-a84e-00bd1fad32d7",
                   "content": "精彩B",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 }
               ]
