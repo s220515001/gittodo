@@ -1700,7 +1700,7 @@
                 {
                   "id": "47a8f7eb-179f-42a7-a9f5-e94e5d6c4a1d",
                   "content": "作文",
-                  "completed": false,
+                  "completed": true,
                   "order": 8
                 }
               ]
