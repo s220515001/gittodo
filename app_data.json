@@ -1652,25 +1652,25 @@
                 {
                   "id": "6eaf844e-6f43-42a4-9cbf-709901c86dab",
                   "content": "第1页",
-                  "completed": false,
+                  "completed": true,
                   "order": 0
                 },
                 {
                   "id": "adae311e-1258-4cee-ba23-fbc5b07123ed",
                   "content": "第2页",
-                  "completed": false,
+                  "completed": true,
                   "order": 1
                 },
                 {
                   "id": "fec039a4-1b11-434a-a4d1-9d69fbdd901d",
                   "content": "第3页",
-                  "completed": false,
+                  "completed": true,
                   "order": 2
                 },
                 {
                   "id": "c74a9ca6-fdfe-4d9e-908a-afd703168a3d",
                   "content": "第4页",
-                  "completed": false,
+                  "completed": true,
                   "order": 3
                 },
                 {
