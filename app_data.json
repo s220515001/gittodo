@@ -1641,10 +1641,10 @@
             {
               "id": "923668ab-d364-4444-95b1-8f30560baa0a",
               "content": "语文 试卷",
-              "completed": true,
+              "completed": false,
               "order": 0,
               "createdAt": 1790835549936,
-              "completedAt": 1791108131860,
+              "completedAt": null,
               "dueDate": "",
               "notes": "",
               "tags": [],
