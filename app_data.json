@@ -1794,10 +1794,10 @@
             {
               "id": "cb380244-0669-4dc2-98df-bfafae4c22dd",
               "content": "英语 作业本A",
-              "completed": true,
+              "completed": false,
               "order": 3,
               "createdAt": 1790835609381,
-              "completedAt": 1790835882944,
+              "completedAt": null,
               "dueDate": "",
               "notes": "",
               "tags": [],
@@ -1805,7 +1805,7 @@
                 {
                   "id": "02ed28be-3c3b-4ee6-b995-e701f336f676",
                   "content": "第18页",
-                  "completed": true,
+                  "completed": false,
                   "order": 0
                 },
                 {
