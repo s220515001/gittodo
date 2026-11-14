@@ -2187,10 +2187,22 @@
               "subtasks": []
             },
             {
+              "id": "04d5faa8-8e80-499f-970e-04c415b19cf7",
+              "content": "语文 手抄报",
+              "completed": false,
+              "order": 3,
+              "createdAt": 1794635690259,
+              "completedAt": null,
+              "dueDate": "",
+              "notes": "",
+              "tags": [],
+              "subtasks": []
+            },
+            {
               "id": "5a2b72f3-6241-4269-b08b-0aea11713216",
               "content": "数学 试卷",
               "completed": false,
-              "order": 3,
+              "order": 4,
               "createdAt": 1794635616878,
               "completedAt": null,
               "dueDate": "",
@@ -2251,7 +2263,7 @@
               "id": "c5d55d4a-9ba3-4355-9777-5527c411941a",
               "content": "英语 试卷",
               "completed": false,
-              "order": 4,
+              "order": 5,
               "createdAt": 1794635661816,
               "completedAt": null,
               "dueDate": "",
@@ -2307,18 +2319,6 @@
                   "order": 7
                 }
               ]
-            },
-            {
-              "id": "04d5faa8-8e80-499f-970e-04c415b19cf7",
-              "content": "语文 手抄报",
-              "completed": false,
-              "order": 5,
-              "createdAt": 1794635690259,
-              "completedAt": null,
-              "dueDate": "",
-              "notes": "",
-              "tags": [],
-              "subtasks": []
             },
             {
               "id": "29a66d10-beb4-4890-b5d1-11d6aab2b000",
